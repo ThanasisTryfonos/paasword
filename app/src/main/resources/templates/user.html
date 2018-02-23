@@ -1,0 +1,116 @@
+<!--USER LIST-->
+<div th:fragment="list">
+    <div class="container">
+
+        <div th:include="inc::sidebar-dashboard"></div>
+
+        <section id="main">
+
+            <!--<a href="/user/add" class="create"><span class="oi oi-plus"></span> Create New</a>-->
+
+            / <a href="/user">users</a>
+            <h3><a href="/dashboard">&larr;</a> Users<br/>
+                <small>User Management</small>
+            </h3>
+
+            <div class="wrapper">
+
+                <table th:if="${!#lists.isEmpty(page.getContent())}" class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="col-md-1 text-center">ID</th>
+                        <th class="col-md-2">First Name</th>
+                        <th class="col-md-2">Last Name</th>
+                        <th class="col-md-2">Username</th>
+                        <th class="col-md-3">E-mail</th>
+                        <th class="col-md-2"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${page.getContent()}" th:classappend="${!user.isEnabled()} ? 'active'">
+                        <td class="text-center"><span th:text="${user.id}"></span></td>
+                        <td><span th:text="${user.firstName}"></span></td>
+                        <td><span th:text="${user.lastName}"></span></td>
+                        <td><span th:text="${user.username}"></span></td>
+                        <td><span th:text="${user.email}"></span></td>
+                        <td><span class="oi" th:classappend="${user.isEnabled()} ? 'oi-check' : 'oi-ban'"></span>
+                            <!--<span class="oi oi-pencil" th:onclick="'page.redirect(\'/user/' + ${user.id} + '\')'"></span>-->
+                            <!--<span class="oi oi-trash" th:onclick="'deleteUserHandler(' + ${user.id} + ')'"></span>-->
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div th:include="inc::pagination" ></div>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!--USER ADD/EDIT-->
+<div th:fragment="edit">
+    <div class="container">
+
+        <div th:include="inc::sidebar-dashboard"></div>
+
+        <section id="main">
+
+            / <a href="/user">user</a> / <a th:href="${null == user} ? '/user/add' : '/user/edit'"><span
+                th:text="${null == user} ? 'add' : 'edit'"></span></a>
+            <h3><a href="/user">&larr;</a> <span th:text="${null == user} ? 'Add' : 'Edit'"></span> User<br/>
+                <small>User Management</small>
+            </h3>
+
+            <div class="wrapper">
+
+                <div class="form-group">
+
+                    <input th:if="${null != user}" th:value="${user.get().id}" type="hidden" id="uid"/>
+
+
+                    <label for="firstname">First Name</label>
+                    <input th:value="${null != user} ? ${user.get().firstName}" type="text" id="firstName"
+                           class="form-control" placeholder="First Name (Optional)"
+                           autocomplete="off"
+                           autofocus="true"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastname">Last Name</label>
+                    <input th:value="${null != user} ? ${user.get().lastName}" type="text" id="lastName"
+                           class="form-control" placeholder="Last Name (Optional)"
+                           autocomplete="off"
+                           autofocus="true"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input th:attr="disabled=${null !=user}?'disabled'"
+                           th:value="${null != user} ? ${user.get().username}" type="text" id="username"
+                           class="form-control" placeholder="Username" autocomplete="off"
+                           required="true" autofocus="true"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Password"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input th:value="${null != user} ? ${user.get().email}" type="email" id="email" class="form-control"
+                           placeholder="E-mail" autocomplete="off"
+                           required="true"/>
+                </div>
+
+                <button id="btn-useradd" th:onclick="${null != user} ? 'editUserHandler()' : 'addUserHandler()'"
+                        class="btn action"><span class="oi oi-task"></span> Save
+                </button>
+            </div>
+
+
+        </section>
+    </div>
+</div>

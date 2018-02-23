@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>eu.paasword</groupId>
+        <artifactId>resource-adapters</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <!-- Artifact Details -->
+    <name>adapter-bluemix</name>
+    <artifactId>adapter-bluemix</artifactId>
+    <version>${paasword.version}</version>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>eu.paasword</groupId>
+            <artifactId>spi</artifactId>
+            <version>${paasword.version}</version>
+        </dependency>
+
+        <!-- CloudFoundry API client dependency -->
+        <dependency>
+            <groupId>org.cloudfoundry</groupId>
+            <artifactId>cloudfoundry-client-lib</artifactId>
+            <version>1.1.4.RELEASE</version>
+            <exclusions>
+                <exclusion>  <!-- declare the exclusion here -->
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-core</artifactId>
+                </exclusion>
+                <exclusion>  <!-- declare the exclusion here -->
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                    <artifactId>jackson-databind</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+    </dependencies>
+
+</project>

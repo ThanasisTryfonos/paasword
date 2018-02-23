@@ -1,0 +1,64 @@
+<div th:fragment="home">
+    <div class="container">
+
+        <div th:include="inc::sidebar-dashboard"></div>
+
+        <section id="main">
+            / <a href="/dashboard">dashboard</a>
+            <h3>Dashboard<br/>
+                <small>Account overview</small>
+            </h3>
+
+            <ul class="paasword">
+                <li class="component policy">
+
+                    <div class="title">Policy Enforcement Mechanism</div>
+                    <div class="desc">Visit application activity to see performed actions from the Policy Enforcement Mechanism.</div>
+
+                    <div class="empty-icon"><span class="oi oi-lock-locked"></span></div>
+                    <div class="empty-title"><h4><span class="label label-default">Enabled</span></h4></div>
+
+                    <br/>
+                    <div style="text-align:center">
+                        <a href="javascript:synchronizeSemanticAuthorizationEngineHandler()" class="btn btn-warning">Synchronize</a>
+                    </div>
+
+                </li>
+            </ul>
+
+            <ul class="paasword">
+
+                <li class="component configure">
+
+                    <div class="actions pull-right">
+                        <div class="icon"><span class="oi oi-fork"></span></div>
+                    </div>
+
+                    <div class="dashboard-title"><a href="/model/policyset">PaaSword Models <span class="oi oi-arrow-right"></span></a></div>
+                    <div class="desc">Access context model, expression and policy editor</div>
+                </li>
+
+                <li class="component configure">
+
+                    <div class="actions pull-right">
+                        <div class="icon"><span class="oi oi-bolt"></span></div>
+                    </div>
+                    <div class="dashboard-title"><a href="/application">Applications (<span th:text="${applications}"></span>) <span class="oi oi-arrow-right"></span></a></div>
+                    <div class="desc">Registered applications</div>
+                </li>
+
+                <li class="component configure">
+
+                    <div class="actions pull-right">
+                        <div class="icon"><span class="oi oi oi-hard-drive"></span></div>
+                    </div>
+
+                    <div class="dashboard-title"><a href="/resource">Resources (<span th:text="${resources}"></span>) <span class="oi oi-arrow-right"></span></a></div>
+                    <div class="desc">Registered PaaS and IaaS providers</div>
+                </li>
+
+            </ul>
+        </section>
+
+    </div>
+</div>

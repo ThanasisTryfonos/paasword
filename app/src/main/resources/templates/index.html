@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/security/tags">
+<head>
+    <title>PAASWORD</title>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}"
+          rel="stylesheet" media="screen"/>
+    <link href="http://cdn.jsdelivr.net/webjars/org.webjars.bower/open-iconic/1.1.1/font/css/open-iconic-bootstrap.css"
+          th:href="@{/webjars/open-iconic/1.1.1/font/css/open-iconic-bootstrap.css}"
+          rel="stylesheet" media="screen"/>
+    <link href="http://cdn.jsdelivr.net/webjars/org.webjars/jquery-ui/1.11.4/jquery-ui.min.css"
+          th:href="@{/webjars/jquery-ui/1.11.4/jquery-ui.min.css}"
+          rel="stylesheet" media="screen"/>
+    <!--<link href="http://cdn.jsdelivr.net/webjars/org.webjars.npm/jqtree/1.4.2/jqtree.css"-->
+          <!--th:href="@{/webjars/jqtree/1.4.2/jqtree.css}"-->
+          <!--rel="stylesheet" media="screen"/>-->
+    <link rel="stylesheet" href="../static/css/jqtree.css" th:href="@{css/jqtree.css}"/>
+    <link href="http://cdn.jsdelivr.net/webjars/org.webjars.bower/jQuery-QueryBuilder/2.3.2/dist/css/query-builder.default.min.css"
+          th:href="@{/webjars/jQuery-QueryBuilder/2.3.2/dist/css/query-builder.default.min.css}"
+          rel="stylesheet" media="screen"/>
+    <link href="http://cdn.jsdelivr.net/webjars/org.webjars.bower/jquery-bootgrid/1.3.1/dist/jquery.bootgrid.css"
+          th:href="@{/webjars/jquery-bootgrid/1.3.1/dist/jquery.bootgrid.css}"
+          rel="stylesheet" media="screen"/>
+    <link href="http://cdn.jsdelivr.net/webjars/org.webjars.bower/multiselect/0.9.12/css/multi-select.css"
+          th:href="@{/webjars/multiselect/0.9.12/css/multi-select.css}"
+          rel="stylesheet" media="screen"/>
+    <link href="http://cdn.jsdelivr.net/webjars/org.webjars/Magnific-Popup/1.0.0/magnific-popup.css"
+          th:href="@{/webjars/Magnific-Popup/1.0.0/magnific-popup.css}"
+          rel="stylesheet" media="screen"/>
+    <link href="http://cdn.jsdelivr.net/webjars/org.webjars/chosen/1.3.0/chosen.min.css"
+          th:href="@{/webjars/chosen/1.3.0/chosen.min.css}"
+          rel="stylesheet" media="screen"/>
+    <link rel="stylesheet" href="../static/css/dashboard.css" th:href="@{css/dashboard.css}"/>
+</head>
+
+<body>
+<input id="redirect-to-page" th:if="${redirectToPage}" type="hidden" th:value="${redirectToPage}"/>
+
+<div id="header"></div>
+<div id="content"></div>
+
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars/jquery/2.2.0/jquery.min.js"
+        th:src="@{/webjars/jquery/2.2.0/jquery.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars/bootstrap/3.3.6/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars.bower/page/1.6.4/page.js"
+        th:src="@{/webjars/page/1.6.4/page.js}"></script>
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars/jquery-ui/1.11.4/jquery-ui.min.js"
+        th:src="@{/webjars/jquery-ui/1.11.4/jquery-ui.min.js}"></script>
+<!--<script src="http://cdn.jsdelivr.net/webjars/org.webjars.npm/jqtree/1.4.2/tree.jquery.js"-->
+        <!--th:src="@{/webjars/jqtree/1.4.2/tree.jquery.js}"></script>-->
+<script src="../static/js/tree.jquery.js" th:src="@{/js/tree.jquery.js}"></script>
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars/momentjs/2.12.0/moment.js"
+        th:src="@{/webjars/momentjs/2.12.0/moment.js}"></script>
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars.bower/jQuery-QueryBuilder/2.3.2/dist/js/query-builder.standalone.min.js"
+        th:src="@{/webjars/jQuery-QueryBuilder/2.3.2/dist/js/query-builder.standalone.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars.bower/jquery-bootgrid/1.3.1/dist/jquery.bootgrid.min.js"
+        th:src="@{/webjars/jquery-bootgrid/1.3.1/dist/jquery.bootgrid.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars.bower/multiselect/0.9.12/js/jquery.multi-select.js"
+        th:src="@{/webjars/multiselect/0.9.12/js/jquery.multi-select.js}"></script>
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars/Magnific-Popup/1.0.0/jquery.magnific-popup.min.js"
+        th:src="@{/webjars/Magnific-Popup/1.0.0/jquery.magnific-popup.min.js}"></script>
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars/chosen/1.3.0/chosen.jquery.min.js"
+        th:src="@{/webjars/chosen/1.3.0/chosen.jquery.min.js}"></script>
+<script src="../static/js/app.js" th:src="@{/js/app.js}"></script>
+<script src="../static/js/notifier.js" th:src="@{/js/notifier.js}"></script>
+<script src="../static/js/auth.js" th:src="@{/js/auth.js}"></script>
+<script src="../static/js/dashboard.js" th:src="@{/js/dashboard.js}"></script>
+<script src="../static/js/user.js" th:src="@{/js/user.js}"></script>
+<script src="../static/js/activity.js" th:src="@{/js/activity.js}"></script>
+<script src="../static/js/documentation.js" th:src="@{/js/documentation.js}"></script>
+<script src="../static/js/resource.js" th:src="@{/js/resource.js}"></script>
+<script src="../static/js/application.js" th:src="@{/js/application.js}"></script>
+<script src="../static/js/model.js" th:src="@{/js/model.js}"></script>
+<script src="../static/js/router.js" th:src="@{/js/router.js}"></script>
+
+</body>
+</html>

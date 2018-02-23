@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <name>handlers</name>
+    <artifactId>handlers</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0</version>
+    <parent>
+        <groupId>eu.paasword</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <!-- Define Modules -->
+    <modules>
+        <module>handler-location</module>
+        <module>handler-blacklisting</module>
+        <module>handler-vhost</module>
+        <module>handler-devicetype</module>
+        <module>handlermanager</module>        
+    </modules>
+</project>

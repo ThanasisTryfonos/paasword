@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/security/tags">
+<head>
+    <title>Error &mdash; PaaSword</title>
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.6/css/bootstrap.min.css"
+          th:href="@{/webjars/bootstrap/3.3.6/css/bootstrap.min.css}"
+          rel="stylesheet" media="screen"/>
+
+    <link rel="stylesheet" href="../static/css/dashboard.css" th:href="@{/css/dashboard.css}"/>
+</head>
+
+<body>
+
+<div id="content">
+    <div id="container">
+        <section id="sidebar" class="error">
+
+        </section>
+
+        <section id="main" class="error">
+            <img src="/images/error.png"/>
+            <h4>Error!!!</h4>
+            <p th:if="${httpStatus}">
+                Status code: <span th:text="${httpStatus.value()}"></span> <span
+                    th:text="${httpStatus.getReasonPhrase()}"></span> <br/>
+                Cause URL: <span th:text="${url}"></span>
+            </p>
+
+            <p th:if="${exception}">
+                Stacktrace: <span th:text="${exception}"></span>
+            </p>
+
+            <p th:if="${null == httpStatus}">
+                You shouldn't be here!
+            </p>
+        </section>
+    </div>
+</div>
+
+<div id="footer">
+    <p>PaaSword 1.0.0</p>
+</div>
+
+
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars/jquery/2.2.0/jquery.min.js"
+        th:src="@{/webjars/jquery/2.2.0/jquery.min.js}"></script>
+
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars/bootstrap/3.3.6/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/3.3.6/js/bootstrap.min.js}"></script>
+
+<script src="http://cdn.jsdelivr.net/webjars/org.webjars.bower/page/1.6.4/page.js"
+        th:src="@{/webjars/page/1.6.4/page.js}"></script>
+
+<script src="../static/js/app.js" th:src="@{/js/app.js}"></script>
+<script src="../static/js/router.js" th:src="@{/js/router.js}"></script>
+<script src="../static/js/auth.js" th:src="@{/js/auth.js}"></script>
+
+</body>
+</html>

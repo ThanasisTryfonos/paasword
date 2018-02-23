@@ -1,0 +1,205 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="xml2yaml.xsl"?>
+<!--
+INFROMATION:
+Use helper.TestQueryParser.java and call getQuery(name) to get the content of the queries that are specified here.
+
+EDITING:
+Each query is uniquely identified via the 'name' attribute.
+If two queries have the same value for this attribute then the last query will override all others.
+
+ESCAPING:
+Special symbols like "<" and ">" has do be escaped/replaced &lt; and &gt;
+-->
+<queries>
+    <query name="country_insert_simple">INSERT INTO countries (id, name, inhabitants) VALUES (1, 'country1', 100);</query>    
+    <query name="country_select_simple">SELECT * FROM countries;</query>    
+    <query name="country_delete_simple">DELETE FROM countries;</query>        
+    <query name="select_simple_where">SELECT * FROM students where students.semester &lt; 5;</query>
+    <query name="select_simple_where_and_binary_op">
+        select * from students where
+        students.semester = 6
+        and
+        students.fk_faculty = 7
+        and
+        students.fk_university in (1,2,3)
+    </query>
+    <query name="select_simple_where_or_binary_op">
+        select * from students where
+        students.semester = 6
+        or
+        students.fk_university = 1
+    </query>
+    <query name="select_simple_where_in">
+        select * from unis where
+        unis.fk_city in (1,2,3)
+        and
+        unis.number_of_lecutre_halls &gt; 40
+    </query>
+    <query name="select_simple_where_mixed">
+        select * from unis, students where
+        (
+        students.semester &lt; 5
+        and
+        unis.fk_city in (1,2,3)
+        or
+        students.name = 'Maria'
+        and
+        students.gender = 'm'
+        )
+        and
+        students.fk_university = unis.id
+    </query>
+
+    <query name="select_nested_from_subselects">
+        select distinct fk_university, semester, name, surname, fk_faculty, birth_date, gender from (
+            select * from (
+                select * from (
+                    select * from students where students.fk_university = 1
+                    )  as kitStudents where kitStudents.semester &lt;= 3 and kitStudents.fk_faculty = 3
+            ) as lowerKitSemesters where lowerKitSemesters.gender = 'm'
+        ) as youngMaleKitStudents;
+    </query>     );
+
+
+    <!-- Makes the where clause a BinaryOperatorNode -->
+    <query name="select_nested_where_binary_op_with">
+        select * from students
+        where students.semester &lt; (select avg(semester) from students )
+    </query>
+    <!-- Makes the where clause a BinaryOperatorNode -->
+    <query name="select_nested_where_binary_op_with_aggregates_nesting_level_1">
+        select * from students
+        where students.semester &lt; (select avg(semester)  from students);
+    </query>
+    <query name="select_nested_where_binary_op_with_aggregates_nesting_level_3">
+        select fk_university, semester, name, surname, fk_faculty, birth_date, gender, grade from students
+        where students.semester &lt; (select avg(semester) - 3 from students
+            where students.grade &lt; ( select avg(grade) from students
+                where students.gender = ( select distinct gender from students where students.gender = 'm')
+            )
+        )
+    </query>
+    <query name="select_where_binary_op_both_nested">
+        select  fk_university, semester, name, surname, fk_faculty, birth_date, gender, grade from students
+        where students.semester &lt;
+            (select avg(semester) from
+                (select * from students where gender = 'm') as subs_males
+                where subs_males.grade &lt;
+                    ( select avg(grade) from
+                        (select grade, birth_date from students) as subs_grade
+                where birth_date &lt;= ( select birth_date from students limit 1)
+        )
+        )
+    </query>
+    <query name="select_where_in">
+        select * from students where fk_university in (select id from unis where name in ('KIT'));
+    </query>
+    <!-- THROWS EXCEPTIONS -->
+    <query name="select_where_not_in">
+        select * from students
+        where
+        students.fk_faculty not in (select distinct id from faculties
+                                    where faculties.name not in ('Mathematics', 'Biology', 'Chemistry', 'Economy', 'Politics')
+        );
+    </query>
+    <query name="select_where_in_nested_nesting_level_3">
+        select * from students where students.fk_university
+            in ( select id from unis where unis.fk_city
+                in ( select id from cities where cities.fk_country
+                    in (select id from countries where countries.name
+                        in ('Germany')
+                    )
+                )
+            );
+    </query>
+    <query name="select_where_in_nested">
+        select * from students where fk_university
+            in ( select id from unis where fk_city
+                in ( select id from cities where fk_country
+                    in (select id from countries where id in
+                        ( select id from countries where name = 'France' or name = 'Sweden')
+                    )
+                )
+            );
+    </query>
+
+    <query name="select_where_nested_both_binary_op_and_in_with_and_or">
+        select distinct * from students where
+            fk_university in (
+                select id from unis where
+                    fk_city in (
+                        select id from cities where
+                            name in ('Karlsruhe', 'Mannheim')
+                        )
+                    and
+                    number_of_lecutre_halls &lt; 40
+            )
+            and
+            students.semester &lt; 3
+
+    </query>
+
+    <query name="select_where_nested_both_binary_op_and_in_with_and_or_irig">
+        select distinct * from students, unis where
+            fk_university in (
+                select id from unis where
+                    unis.number_of_lecutre_halls &lt; 125
+                    and
+                    unis.name in ('KIT')
+                    and
+                    unis.fk_city in (
+                        select id from cities where
+                            cities.name in ('Karlsruhe', 'Mannheim')
+                    )
+
+        );
+
+    </query>
+
+    <query name ="select_where_like">
+        select * from students where students.name like 'To%';
+    </query>
+
+    <query name="select_where_exists">
+        select * from students where exists (select * from students where semester = 5) and fk_university in (1,2,3);
+    </query>
+
+    <query name="select_where_not_exists">
+        select * from unis where not exists (select * from unis where unis.number_of_lecutre_halls &lt; 0)
+    </query>
+
+    <query name="select_simple_join">
+        select * from unis full join cities on unis.fk_city = cities.id
+    </query>
+
+    <query name="delete_from">
+        delete from students where students.name like 'To%';
+    </query>
+
+    <query name ="update_students_grade">
+        update students set grade='4.0' where students.name like 'To%';
+    </query>
+
+    <!--Examples that cause issues -->
+
+    <!--
+    Here the table countries is mentioned in the selection but it is not mentioned as a left hand operator
+    in the where statement.
+    The code currently only looks after the left hand columns
+    -->
+    <query name="issue_cross_product_fromtable_not_in_where_clause">
+        select distinct * from unis, cities, countries where
+        unis.fk_city = cities.id
+        and
+        unis.fk_city in (select distinct id from cities where id in (1,2,3))
+        and
+        cities.fk_country = countries.id
+    </query>
+
+    <!--This one is rather critical because in EXIST statements you might have the same tables and have to rename them -->
+    <query name="issue_rename_table_in_from_statement">
+        select * from students where students.semester &gt; 5;
+    </query>
+
+</queries>

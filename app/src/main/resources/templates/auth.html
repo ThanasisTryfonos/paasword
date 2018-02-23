@@ -1,0 +1,75 @@
+<!--LOGIN-->
+<div th:fragment="login">
+    <div class="container">
+        <section id="sidebar" class="auth">
+
+        </section>
+
+        <section id="main" class="auth">
+            <div class="login-body">
+
+                <div th:if="${param.error}" class="alert alert-danger" role="alert">Wrong username or password.</div>
+                <div th:if="${new_registration}" class="alert alert-success" role="alert">
+                    <p th:text="${new_registration}"></p>
+                </div>
+
+                <div class="form-group">
+                    <div class="title">Log in with your username</div>
+                    <input type="text" id="username" class="form-control" placeholder="Username" autocomplete="off"
+                           required="true" autofocus="true"/>
+                    <input type="password" id="password" class="form-control" placeholder="Password" autocomplete="off"
+                           required="true" onkeypress="keyPressedOnLoginPasswordField(event)"/>
+                </div>
+
+                <button id="btn-login" onclick="loginHandler()" class="btn btn-block btn-login">Sign in <span
+                        class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+                </button>
+
+                <!--<a href="/register" class="btn btn-link">Create a new account</a>-->
+
+            </div>
+        </section>
+    </div>
+</div>
+
+<!--REGISTER-->
+<div th:fragment="register">
+    <div class="container">
+
+        <section id="sidebar" class="auth">
+
+        </section>
+
+        <section id="main" class="auth">
+            <div class="login-body">
+
+                <div th:if="${param.error}" class="alert alert-danger" role="alert">Wrong username or password.</div>
+                <div th:if="${new_registration}" class="alert alert-success" role="alert">
+                    <p th:text="${new_registration}"></p>
+                </div>
+
+                <div class="form-group">
+                    <div class="title">Create new account</div>
+
+                    <input type="text" id="firstName" class="form-control" placeholder="First Name (Optional)"
+                           autocomplete="off"
+                           autofocus="true"/>
+                    <input type="text" id="lastName" class="form-control" placeholder="Last Name (Optional)"
+                           autocomplete="off"
+                           autofocus="true"/>
+                    <input type="text" id="username" class="form-control" placeholder="Username" autocomplete="off"
+                           required="true" autofocus="true"/>
+                    <input type="password" id="password" class="form-control" placeholder="Password" autocomplete="off"
+                           required="true"/>
+                    <input type="email" id="email" class="form-control" placeholder="E-mail" autocomplete="off"
+                           required="true"/>
+                </div>
+
+                <!--<button id="login-btn" onclick="registerHandler()" class="btn btn-block btn-login">Create account <span-->
+                        <!--class="glyphicon glyphicon-asterisk" aria-hidden="true"></span>-->
+                <!--</button>-->
+
+            </div>
+        </section>
+    </div>
+</div>

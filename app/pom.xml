@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>eu.paasword</groupId>
+    <artifactId>app</artifactId>
+    <name>app</name>
+    <version>${paasword.version}</version>
+
+    <parent>
+        <groupId>eu.paasword</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <dependencies>
+        <!-- internal dependencies-->
+        <dependency>
+            <groupId>eu.paasword</groupId>
+            <artifactId>api</artifactId>
+            <version>${paasword.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.paasword</groupId>
+            <artifactId>repository</artifactId>
+            <version>${paasword.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.paasword</groupId>
+            <artifactId>rest-api</artifactId>
+            <version>${paasword.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.paasword</groupId>
+            <artifactId>util</artifactId>
+            <version>${paasword.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.paasword</groupId>
+            <artifactId>triplestore-api</artifactId>
+            <version>${paasword.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.paasword</groupId>
+            <artifactId>database-proxy</artifactId>
+            <version>${paasword.version}</version>
+        </dependency>
+
+        <!-- SPI -->
+        <dependency>
+            <groupId>eu.paasword</groupId>
+            <artifactId>spi</artifactId>
+            <version>${paasword.version}</version>
+        </dependency>
+
+        <!-- Proxy -->
+
+        <dependency>
+            <groupId>eu.paasword</groupId>
+            <artifactId>adapter-slipstream</artifactId>
+            <version>${paasword.version}</version>
+        </dependency>
+
+        <!-- IaaS -->
+        <dependency>
+            <groupId>eu.paasword</groupId>
+            <artifactId>adapter-openstack</artifactId>
+            <version>${paasword.version}</version>
+        </dependency>
+
+        <!-- PaaS -->
+        <dependency>
+            <groupId>eu.paasword</groupId>
+            <artifactId>adapter-amazon</artifactId>
+            <version>${paasword.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.paasword</groupId>
+            <artifactId>adapter-azure</artifactId>
+            <version>${paasword.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.paasword</groupId>
+            <artifactId>adapter-bluemix</artifactId>
+            <version>${paasword.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.paasword</groupId>
+            <artifactId>adapter-cloudfoundry</artifactId>
+            <version>${paasword.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.paasword</groupId>
+            <artifactId>adapter-heroku</artifactId>
+            <version>${paasword.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>eu.paasword</groupId>
+            <artifactId>adapter-openshift</artifactId>
+            <version>${paasword.version}</version>
+        </dependency>
+
+        <!-- Relational Connectivity -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${com.mysql}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- UI dependencies -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>3.3.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>page</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>open-iconic</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>jQuery-QueryBuilder</artifactId>
+            <version>2.3.2</version>
+            <exclusions>
+                <exclusion>  <!-- declare the exclusion here -->
+                    <groupId>org.webjars.bower</groupId>
+                    <artifactId>jquery-extendext</artifactId>
+                </exclusion>
+                <exclusion>  <!-- declare the exclusion here -->
+                    <groupId>org.webjars.bower</groupId>
+                    <artifactId>doT</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>momentjs</artifactId>
+            <version>2.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery-ui</artifactId>
+            <version>1.11.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>jquery-bootgrid</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>multiselect</artifactId>
+            <version>0.9.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>Magnific-Popup</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>chosen</artifactId>
+            <version>1.3.0</version>
+        </dependency>
+        <!-- Framework dependencies -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>${org.springframework.boot}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${org.springframework.boot}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+            <version>${org.springframework.boot}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>${org.springframework.boot}</version>
+        </dependency>
+
+        <!-- Tomcat Embedded application server -->
+        <!--<dependency>-->
+        <!--<groupId>org.apache.tomcat.embed</groupId>-->
+        <!--<artifactId>tomcat-embed-jasper</artifactId>-->
+        <!--<scope>provided</scope>-->
+        <!--<version>8.0.26</version>-->
+        <!--</dependency>-->
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${org.springframework.test}</version>
+            <scope>test</scope>
+            <type>jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Thymeleaf template engine for User JPA rendering -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <version>${org.springframework.boot}</version>
+        </dependency>
+
+        <!-- Integrate Spring Security in Thymeleaf Templates -->
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity4</artifactId>
+            <version>2.1.2.RELEASE</version>
+        </dependency>
+
+        <!-- Spring Boot Developer tools -->
+        <!--        <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-devtools</artifactId>
+                    <version>${org.springframework.boot}</version>
+                    <optional>true</optional>
+                </dependency>-->
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- JAVA compatibility-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin}</version>
+                <configuration>
+                    <encoding>${project.source.encoding}</encoding>
+                    <source>${java.version.source}</source>
+                    <target>${java.version.target}</target>
+                </configuration>
+            </plugin>
+            <!-- enables mvn spring-boot:run -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${org.springframework.boot}</version>
+                <!--Necessary for dynamic reloading -->
+                <configuration>
+                    <fork>true</fork>
+                    <addResources>true</addResources>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

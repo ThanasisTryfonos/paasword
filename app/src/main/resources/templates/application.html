@@ -1,0 +1,2167 @@
+<!-- APPLICATION LIST -->
+<div th:fragment="list">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            <a href="/application/add" class="create"><span class="oi oi-plus"></span> Add New</a>
+
+            / <a href="/application">application</a>
+            <h3>Application<br/>
+                <small>List of available applications</small>
+            </h3>
+
+            <ul th:if="${#lists.isEmpty(page.getContent())}" class="empty" id="placeholder">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-bolt"></span></div>
+                    <div class="empty-title">No available applications</div>
+                    <div class="empty-text">Create a new <a href="/application/add">application</a></div>
+                </li>
+            </ul>
+
+            <div class="wrapper" th:if="${!#lists.isEmpty(page.getContent())}">
+
+                <table id="applications-table"  class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th class="col-md-3">Name</th>
+                        <th class="col-md-5">Details</th>
+                        <th class="col-md-2">Creation Date</th>
+                        <th class="col-md-2"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="application : ${page.getContent()}">
+                        <td>
+                            <a th:href="'/application/' + ${application.id}">
+                                <span th:text="${application.name}"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <div class="show-field"><strong>Version: </strong> <span th:text="${application.version}"></span></div>
+                            <div class="show-field"><strong>Package: </strong> <span th:text="${application.rootPackage}"></span></div>
+                            <!--<div th:if="${application.pep}" class="show-field"><strong>Policy Enforcement Points exist</strong></div>-->
+                            <!--<div th:if="${application.dataModel}" class="show-field"><strong>Entities exist</strong></div>-->
+                        </td>
+                        <td><span th:text="${#calendars.format(application.dateCreated,'dd/MM/yyyy - HH:mm:ss')}"></span></td>
+                        <td>
+                            <span class="oi oi-pencil" th:onclick="'page.redirect(\'/application/' + ${application.id} + '\')'"></span>
+                            <span class="oi oi-trash" th:onclick="'deleteApplicationHandler(' + ${application.id} + ')'"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div th:include="inc::pagination" ></div>
+
+            </div>
+
+            <div class="wrapper" th:if="${!#lists.isEmpty(applications)}">
+
+                <table  class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="col-md-1 text-center">ID</th>
+                        <th class="col-md-2">Application Name</th>
+                        <th class="col-md-1">Version</th>
+                        <th class="col-md-2">Package Name</th>
+                        <th class="col-md-2"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="application : ${applications}">
+                        <td class="text-center">
+                            <span th:text="${application.id}"></span>
+                        </td>
+                        <td>
+                            <a th:href="'/application/' + ${application.id}">
+                                <span th:text="${application.name}"></span>
+                            </a>
+                        </td>
+                        <td><span th:text="${application.version}"></span></td>
+                        <td><span th:text="${application.rootPackage}"></span></td>
+                        <td>
+                            <!--<span class="oi" th:classappend="${application.isEnabled()} ? 'oi-check' : 'oi-ban'"></span> -->
+                            <span class="oi oi-pencil" th:onclick="'page.redirect(\'/application/' + ${application.id} + '\')'"></span>
+                            <span class="oi oi-trash" th:onclick="'deleteApplicationHandler(' + ${application.id} + ')'"></span></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION PROFILE -->
+<div th:fragment="edit">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            <a th:href="'/application/' + ${currentApp.get().id} + '/upload'" class="create"><span class="oi oi-data-transfer-upload"></span> Upload Application</a>
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id}">profile</a>
+            <h3><a href="/application">&larr;</a> Application Profile<br/>
+                <small>Application Management</small>
+            </h3>
+
+            <!--<ul th:if="${null != currentApp}" class="secondary">-->
+                <!--<li><a id="menu-application-info" th:href="'/application/' + ${currentApp.get().id}"><span class="oi oi-info"></span> Info</a></li>-->
+                <!--<li><a id="menu-application-keys" th:href="'/application/' + ${currentApp.get().id} + '/apikey'"><span class="oi oi-key"></span> Developer Keys</a></li>-->
+                <!--<li><a id="menu-application-pep" th:href="'/application/' + ${currentApp.get().id} + '/pep'"><span class="oi oi-code"></span> PEPs</a></li>-->
+                <!--<li><a id="menu-application-datamodel" th:href="'/application/' + ${currentApp.get().id} + '/entity'"><span class="oi oi-code"></span> Entities</a></li>-->
+                <!--&lt;!&ndash;<li><a id="menu-application-keymgmt" th:href="'/application/' + ${currentApp.get().id} + '/keymgmt'"><span class="oi oi-people"></span> User Key Management</a></li>&ndash;&gt;-->
+                <!--<li><a id="menu-application-privacy" th:href="'/application/' + ${currentApp.get().id} + '/privacy'"><span class="oi oi-document"></span> Privacy Constraints</a></li>-->
+                <!--<li><a id="menu-application-instance" th:href="'/application/' + ${currentApp.get().id} + '/instance'"><span class="oi oi-sun"></span> Instances</a></li>-->
+            <!--</ul>-->
+
+            <div class="wrapper">
+
+                <div class="form-group">
+
+                    <input th:if="${null != currentApp}" th:value="${currentApp.get().id}" type="hidden" id="uid"/>
+
+
+                    <label for="applicationname">Application Name:</label>
+
+                    <input th:value="${currentApp.get().name}" type="text" id="applicationName"
+                           class="form-control" placeholder="Application Name"
+                           disabled="true"/>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="version">Version:</label>
+
+                    <input th:value="${currentApp.get().version}" type="text" id="version" disabled="true"
+                           class="form-control" placeholder="Version" />
+                </div>
+
+                <div class="form-group">
+
+                    <label for="version">Description:</label>
+
+                    <input th:value="${currentApp.get().description}" type="text" id="description" disabled="true"
+                           class="form-control" placeholder="Description" />
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Package Name:</label>
+                    <input th:value="${currentApp.get().rootPackage}" type="text" id="status" class="form-control" disabled="true"/>
+                </div>
+
+                <!--<hr/>-->
+
+                <!--<button id="btn-deployApplication" th:disabled="true" th:onclick="'deployApplicationHandler(' + ${currentApp.get().id} + ')'" class="btn action"><span class="oi oi-transfer"></span> Deploy Application </button>-->
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION API KEYS -->
+<div th:fragment="apikey">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            <a th:if="${#lists.isEmpty(apiKeys)}" th:href="${!#lists.isEmpty(apiKeys)} ? '' : 'javascript:generateAPIKeyHandler(' + ${currentApp.get().id} + ')'" th:onclick="${!#lists.isEmpty(apiKeys)} ? 'return false;'" class="create"><span class="oi oi-key"></span> Generate Key </a>
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/appkey'">application keys</a>
+            <h3><a th:href="'/application/' + ${currentApp.get().id}">&larr;</a> Application Keys<br/>
+                <small>Application Management</small>
+            </h3>
+
+            <!--<ul th:if="${null != currentApp}" class="secondary">-->
+                <!--<li><a id="menu-application-info" th:href="'/application/' + ${currentApp.get().id}"><span class="oi oi-info"></span> Info</a></li>-->
+                <!--<li><a id="menu-application-keys" th:href="'/application/' + ${currentApp.get().id} + '/apikey'"><span class="oi oi-key"></span> Developer Keys</a></li>-->
+                <!--<li><a id="menu-application-pep" th:href="'/application/' + ${currentApp.get().id} + '/pep'"><span class="oi oi-code"></span> PEPs</a></li>-->
+                <!--<li><a id="menu-application-datamodel" th:href="'/application/' + ${currentApp.get().id} + '/entity'"><span class="oi oi-code"></span> Entities</a></li>-->
+                <!--&lt;!&ndash;<li><a id="menu-application-keymgmt" th:href="'/application/' + ${currentApp.get().id} + '/keymgmt'"><span class="oi oi-people"></span> User Key Management</a></li>&ndash;&gt;-->
+                <!--<li><a id="menu-application-privacy" th:href="'/application/' + ${currentApp.get().id} + '/privacy'"><span class="oi oi-document"></span> Privacy Constraints</a></li>-->
+                <!--<li><a id="menu-application-instance" th:href="'/application/' + ${currentApp.get().id} + '/instance'"><span class="oi oi-sun"></span> Instances</a></li>-->
+            <!--</ul>-->
+
+            <ul th:if="${#lists.isEmpty(apiKeys)}" class="empty" id="placeholder">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-key"></span></div>
+                    <div class="empty-title">No available keys</div>
+                    <div class="empty-text">Generate a new <a th:href="'javascript:generateAPIKeyHandler(' + ${currentApp.get().id} + ')'">application key</a></div>
+                </li>
+            </ul>
+
+            <div class="wrapper" th:if="${!#lists.isEmpty(apiKeys)}" >
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="col-md-1 text-center">ID</th>
+                        <th class="col-md-2">Description</th>
+                        <th class="col-md-2">Key</th>
+                        <th class="col-md-1">Last Used</th>
+                        <th class="col-md-2"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="appKey : ${apiKeys}">
+                        <td class="text-center"><span th:text="${appKey.id}"></span></td>
+                        <td><span th:text="${appKey.description}"></span></td>
+                        <td><span th:text="${appKey.uniqueID}"></span></td>
+                        <td><span th:text="${appKey.lastModified}"></span></td>
+                        <td><span class="oi oi-trash" th:onclick="'deleteAPIKeyHandler(' + ${appKey.id} + ',' + ${currentApp.get().id} + ')'"></span></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <!--<button id="btn-generateAPIKey" th:disabled="${!#lists.isEmpty(apiKeys)} ? 'true' : 'false'" th:onclick="'generateAPIKeyHandler(' + ${currentApp.get().id} + ')'" class="btn action"><span class="oi oi-key"></span> Generate API Key </button>-->
+            </div>
+
+            <div id="apikey-token" class="apikey"></div>
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION PRIVACY CONSTRAINTS SETS -->
+<div th:fragment="privacy">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            <a th:if="${isDataModel == true}" th:href="'/application/' + ${currentApp.get().id} + '/privacy/add'" class="create"><span class="oi oi-plus"></span> Add Privacy Constraint Set</a>
+            <!--<a th:if="${isDataModel == false}" href="/application" class="back"><span class="oi oi-arrow-left"></span> Go Back</a>-->
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/privacy'">privacy constraints</a>
+            <h3><a th:href="'/application/' + ${currentApp.get().id}">&larr;</a> Privacy Constraints<br/>
+                <small>Application Management</small>
+            </h3>
+
+            <!--<ul th:if="${null != currentApp}" class="secondary">-->
+                <!--<li><a id="menu-application-info" th:href="'/application/' + ${currentApp.get().id}"><span class="oi oi-info"></span> Info</a></li>-->
+                <!--<li><a id="menu-application-keys" th:href="'/application/' + ${currentApp.get().id} + '/apikey'"><span class="oi oi-key"></span> Developer Keys</a></li>-->
+                <!--<li><a id="menu-application-pep" th:href="'/application/' + ${currentApp.get().id} + '/pep'"><span class="oi oi-code"></span> PEPs</a></li>-->
+                <!--<li><a id="menu-application-datamodel" th:href="'/application/' + ${currentApp.get().id} + '/entity'"><span class="oi oi-code"></span> Entities</a></li>-->
+                <!--&lt;!&ndash;<li><a id="menu-application-keymgmt" th:href="'/application/' + ${currentApp.get().id} + '/keymgmt'"><span class="oi oi-people"></span> User Key Management</a></li>&ndash;&gt;-->
+                <!--<li><a id="menu-application-privacy" th:href="'/application/' + ${currentApp.get().id} + '/privacy'"><span class="oi oi-document"></span> Privacy Constraints</a></li>-->
+                <!--<li><a id="menu-application-instance" th:href="'/application/' + ${currentApp.get().id} + '/instance'"><span class="oi oi-sun"></span> Instances</a></li>-->
+            <!--</ul>-->
+
+            <ul th:if="${#lists.isEmpty(privacyConstraints) and isDataModel == true}" class="empty">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-document"></span></div>
+                    <div class="empty-title">No available privacy constraint sets</div>
+                    <div class="empty-text"><a th:href="'/application/' + ${currentApp.get().id} + '/privacy/add'">Add</a> a privacy constraint set</div>
+                </li>
+            </ul>
+
+            <ul th:if="${isDataModel == false}" class="empty">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-document"></span></div>
+                    <div class="empty-title">Application does not use any PaaSwordEntity annotations</div>
+                    <div class="empty-text">Upload a new <a th:href="'/application/' + ${currentApp.get().id} + '/upload'">version</a></div>
+                </li>
+            </ul>
+
+            <div class="wrapper" th:if="${!#lists.isEmpty(privacyConstraints) and isDataModel == true}">
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="col-md-1 text-center">ID</th>
+                        <th class="col-md-1">Name</th>
+                        <th class="col-md-9">Constraints</th>
+                        <th class="col-md-1"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="privacyConstraint : ${privacyConstraints}">
+                        <td class="text-center">
+                                <span th:text="${privacyConstraint.id}"></span>
+                        </td>
+                        <td>
+                                <span th:text="${privacyConstraint.name}"></span>
+                        </td>
+                        <td>
+                            <span class="wrap" th:text="${privacyConstraint.privacyConstraint}"></span></td>
+                        <td>
+                            <span class="oi oi-pencil" th:onclick="'page.redirect(\'/application/' + ${currentApp.get().id} + '/privacy/' +  ${privacyConstraint.id} + '\')'"></span>
+                            <span class="oi oi-trash" th:onclick="'deletePrivacyConstraintHandler(' + ${currentApp.get().id} + ',' + ${privacyConstraint.id} + ')'"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION ADD PRIVACY CONSTRAINTS SETS -->
+<div th:fragment="privacy-add">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/privacy'">privacy constraints</a> / <a th:href="'/application/' + ${currentApp.get().id} + '/privacy/add'">add</a>
+            <h3><a th:href="'/application/' + ${currentApp.get().id} + '/privacy'">&larr;</a> Add Privacy Constraint<br/>
+                <small>Application Management</small>
+            </h3>
+
+            <!--<ul th:if="${null != currentApp}" class="secondary">-->
+                <!--<li><a id="menu-application-info" th:href="'/application/' + ${currentApp.get().id}"><span class="oi oi-info"></span> Info</a></li>-->
+                <!--<li><a id="menu-application-keys" th:href="'/application/' + ${currentApp.get().id} + '/apikey'"><span class="oi oi-key"></span> Developer Keys</a></li>-->
+                <!--<li><a id="menu-application-pep" th:href="'/application/' + ${currentApp.get().id} + '/pep'"><span class="oi oi-code"></span> PEPs</a></li>-->
+                <!--<li><a id="menu-application-datamodel" th:href="'/application/' + ${currentApp.get().id} + '/entity'"><span class="oi oi-code"></span> Entities</a></li>-->
+                <!--&lt;!&ndash;<li><a id="menu-application-keymgmt" th:href="'/application/' + ${currentApp.get().id} + '/keymgmt'"><span class="oi oi-people"></span> User Key Management</a></li>&ndash;&gt;-->
+                <!--<li><a id="menu-application-privacy" th:href="'/application/' + ${currentApp.get().id} + '/privacy'"><span class="oi oi-document"></span> Privacy Constraints</a></li>-->
+                <!--<li><a id="menu-application-instance" th:href="'/application/' + ${currentApp.get().id} + '/instance'"><span class="oi oi-sun"></span> Instances</a></li>-->
+            <!--</ul>-->
+
+            <div class="wrapper">
+
+                <div class="form-group">
+                    <label for="constraintName">Name:</label>
+                    <input type="text" id="constraintName" class="form-control" placeholder="Name"
+                           autocomplete="off" autofocus="true" />
+                </div>
+
+                <div class="form-group">
+                    <label for="privacyConstraints">Privacy Constraints: </label><br/>
+
+                    <select id="privacyConstraints" data-placeholder="Choose fields..." style="width:350px; height:40px;" multiple="true" class="chosen-select">
+                        <option th:each="privacyConstraint : ${privacyConstraints}" th:value="${privacyConstraint}" th:text="${privacyConstraint}" />
+                    </select>
+                </div>
+
+                <button id="btn-privacyconstraintsetadd" th:onclick="'addPrivacyConstraintSetHandler(' + ${currentApp.get().id} +')'"
+                        class="btn action"><span class="oi oi-plus"></span> Add Privacy Constraint Set
+                </button>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION EDIT PRIVACY CONSTRAINTS SETS -->
+<div th:fragment="privacy-edit">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/privacy'">privacy constraints</a> / <a th:href="'/application/' + ${currentApp.get().id} + '/privacy/' + ${privacyConstraint.id}"><span th:text="${privacyConstraint.name}"></span></a>
+            <h3><a th:href="'/application/' + ${currentApp.get().id} + '/privacy'">&larr;</a> Update Privacy Constraint<br/>
+                <small>Application Management</small>
+            </h3>
+
+            <!--<ul th:if="${null != currentApp}" class="secondary">-->
+                <!--<li><a id="menu-application-info" th:href="'/application/' + ${currentApp.get().id}"><span class="oi oi-info"></span> Info</a></li>-->
+                <!--<li><a id="menu-application-keys" th:href="'/application/' + ${currentApp.get().id} + '/apikey'"><span class="oi oi-key"></span> Developer Keys</a></li>-->
+                <!--<li><a id="menu-application-pep" th:href="'/application/' + ${currentApp.get().id} + '/pep'"><span class="oi oi-code"></span> PEPs</a></li>-->
+                <!--<li><a id="menu-application-datamodel" th:href="'/application/' + ${currentApp.get().id} + '/entity'"><span class="oi oi-code"></span> Entities</a></li>-->
+                <!--&lt;!&ndash;<li><a id="menu-application-keymgmt" th:href="'/application/' + ${currentApp.get().id} + '/keymgmt'"><span class="oi oi-people"></span> User Key Management</a></li>&ndash;&gt;-->
+                <!--<li><a id="menu-application-privacy" th:href="'/application/' + ${currentApp.get().id} + '/privacy'"><span class="oi oi-document"></span> Privacy Constraints</a></li>-->
+                <!--<li><a id="menu-application-instance" th:href="'/application/' + ${currentApp.get().id} + '/instance'"><span class="oi oi-sun"></span> Instances</a></li>-->
+            <!--</ul>-->
+
+            <div class="wrapper">
+
+                <div class="form-group">
+                    <label for="constraintName">Name:</label>
+                    <input type="text" id="constraintName" class="form-control" placeholder="Name" th:value="${privacyConstraint.name}"
+                           autocomplete="off" autofocus="true" />
+                </div>
+
+                <div class="form-group">
+                    <label for="privacyConstraints">Privacy Constraints: </label><br/>
+
+                    <select id="privacyConstraints" data-placeholder="Choose fields..." style="width:350px; height:40px;" multiple="true" class="chosen-select">
+                        <option th:each="privacyCon : ${privacyConstraints}" th:value="${privacyCon}" th:text="${privacyCon}" th:selected="${#lists.contains(privacyConstraint.getConstraints(), privacyCon)}"/>
+                    </select>
+                </div>
+
+                <button id="btn-privacyconstraintsetedit" th:onclick="'editPrivacyConstraintSetHandler(' + ${currentApp.get().id} + ',' + ${privacyConstraint.id} +')'"
+                        class="btn action"><span class="oi oi-plus"></span> Update Privacy Constraint Set
+                </button>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION AFFINITY CONSTRAINTS SETS -->
+<div th:fragment="affinity">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            <a th:if="${isDataModel == true}" th:href="'/application/' + ${currentApp.get().id} + '/affinity/add'" class="create"><span class="oi oi-plus"></span> Add Affinity Constraint Set</a>
+            <!--<a th:if="${isDataModel == false}" href="/application" class="back"><span class="oi oi-arrow-left"></span> Go Back</a>-->
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/affinity'">affinity constraints</a>
+            <h3><a th:href="'/application/' + ${currentApp.get().id}">&larr;</a> Affinity Constraints<br/>
+                <small>Application Management</small>
+            </h3>
+
+            <!--<ul th:if="${null != currentApp}" class="secondary">-->
+            <!--<li><a id="menu-application-info" th:href="'/application/' + ${currentApp.get().id}"><span class="oi oi-info"></span> Info</a></li>-->
+            <!--<li><a id="menu-application-keys" th:href="'/application/' + ${currentApp.get().id} + '/apikey'"><span class="oi oi-key"></span> Developer Keys</a></li>-->
+            <!--<li><a id="menu-application-pep" th:href="'/application/' + ${currentApp.get().id} + '/pep'"><span class="oi oi-code"></span> PEPs</a></li>-->
+            <!--<li><a id="menu-application-datamodel" th:href="'/application/' + ${currentApp.get().id} + '/entity'"><span class="oi oi-code"></span> Entities</a></li>-->
+            <!--&lt;!&ndash;<li><a id="menu-application-keymgmt" th:href="'/application/' + ${currentApp.get().id} + '/keymgmt'"><span class="oi oi-people"></span> User Key Management</a></li>&ndash;&gt;-->
+            <!--<li><a id="menu-application-privacy" th:href="'/application/' + ${currentApp.get().id} + '/privacy'"><span class="oi oi-document"></span> Privacy Constraints</a></li>-->
+            <!--<li><a id="menu-application-instance" th:href="'/application/' + ${currentApp.get().id} + '/instance'"><span class="oi oi-sun"></span> Instances</a></li>-->
+            <!--</ul>-->
+
+            <ul th:if="${#lists.isEmpty(affinityConstraints) and isDataModel == true}" class="empty">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-document"></span></div>
+                    <div class="empty-title">No available affinity constraint sets</div>
+                    <div class="empty-text"><a th:href="'/application/' + ${currentApp.get().id} + '/affinity/add'">Add</a> an affinity constraint set</div>
+                </li>
+            </ul>
+
+            <ul th:if="${isDataModel == false}" class="empty">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-document"></span></div>
+                    <div class="empty-title">Application does not use any PaaSwordEntity annotations</div>
+                    <div class="empty-text">Upload a new <a th:href="'/application/' + ${currentApp.get().id} + '/upload'">version</a></div>
+                </li>
+            </ul>
+
+            <div class="wrapper" th:if="${!#lists.isEmpty(affinityConstraints) and isDataModel == true}">
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="col-md-1 text-center">ID</th>
+                        <th class="col-md-1">Name</th>
+                        <th class="col-md-9">Constraints</th>
+                        <th class="col-md-1"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="affinityConstraint : ${affinityConstraints}">
+                        <td class="text-center">
+                            <span th:text="${affinityConstraint.id}"></span>
+                        </td>
+                        <td>
+                            <span th:text="${affinityConstraint.name}"></span>
+                        </td>
+                        <td>
+                            <span class="wrap" th:text="${affinityConstraint.affinityConstraint}"></span></td>
+                        <td>
+                            <span class="oi oi-pencil" th:onclick="'page.redirect(\'/application/' + ${currentApp.get().id} + '/affinity/' +  ${affinityConstraint.id} + '\')'"></span>
+                            <span class="oi oi-trash" th:onclick="'deleteAffinityConstraintHandler(' + ${currentApp.get().id} + ',' + ${affinityConstraint.id} + ')'"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION ADD AFFINITY CONSTRAINTS SETS -->
+<div th:fragment="affinity-add">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/affinity'">affinity constraints</a> / <a th:href="'/application/' + ${currentApp.get().id} + '/affinity/add'">add</a>
+            <h3><a th:href="'/application/' + ${currentApp.get().id} + '/affinity'">&larr;</a> Aff Affinity Constraint<br/>
+                <small>Application Management</small>
+            </h3>
+
+            <!--<ul th:if="${null != currentApp}" class="secondary">-->
+            <!--<li><a id="menu-application-info" th:href="'/application/' + ${currentApp.get().id}"><span class="oi oi-info"></span> Info</a></li>-->
+            <!--<li><a id="menu-application-keys" th:href="'/application/' + ${currentApp.get().id} + '/apikey'"><span class="oi oi-key"></span> Developer Keys</a></li>-->
+            <!--<li><a id="menu-application-pep" th:href="'/application/' + ${currentApp.get().id} + '/pep'"><span class="oi oi-code"></span> PEPs</a></li>-->
+            <!--<li><a id="menu-application-datamodel" th:href="'/application/' + ${currentApp.get().id} + '/entity'"><span class="oi oi-code"></span> Entities</a></li>-->
+            <!--&lt;!&ndash;<li><a id="menu-application-keymgmt" th:href="'/application/' + ${currentApp.get().id} + '/keymgmt'"><span class="oi oi-people"></span> User Key Management</a></li>&ndash;&gt;-->
+            <!--<li><a id="menu-application-privacy" th:href="'/application/' + ${currentApp.get().id} + '/privacy'"><span class="oi oi-document"></span> Privacy Constraints</a></li>-->
+            <!--<li><a id="menu-application-instance" th:href="'/application/' + ${currentApp.get().id} + '/instance'"><span class="oi oi-sun"></span> Instances</a></li>-->
+            <!--</ul>-->
+
+            <div class="wrapper">
+
+                <div class="form-group">
+                    <label for="constraintName">Name:</label>
+                    <input type="text" id="constraintName" class="form-control" placeholder="Name"
+                           autocomplete="off" autofocus="true" />
+                </div>
+
+                <div class="form-group">
+                    <label for="affinityConstraints">Affinity Constraints: </label><br/>
+
+                    <select id="affinityConstraints" data-placeholder="Choose fields..." style="width:350px; height:40px;" multiple="true" class="chosen-select">
+                        <option th:each="affinityConstraint : ${affinityConstraints}" th:value="${affinityConstraint}" th:text="${affinityConstraint}" />
+                    </select>
+                </div>
+
+                <button id="btn-affinityconstraintsetadd" th:onclick="'addAffinityConstraintSetHandler(' + ${currentApp.get().id} +')'"
+                        class="btn action"><span class="oi oi-plus"></span> Add Affinity Constraint Set
+                </button>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION EDIT AFFINITY CONSTRAINTS SETS -->
+<div th:fragment="affinity-edit">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/affinity'">affinity constraints</a> / <a th:href="'/application/' + ${currentApp.get().id} + '/affinity/' + ${affinityConstraint.id}"><span th:text="${affinityConstraint.name}"></span></a>
+            <h3><a th:href="'/application/' + ${currentApp.get().id} + '/affinity'">&larr;</a> Edit Affinity Constraint<br/>
+                <small>Application Management</small>
+            </h3>
+
+            <!--<ul th:if="${null != currentApp}" class="secondary">-->
+            <!--<li><a id="menu-application-info" th:href="'/application/' + ${currentApp.get().id}"><span class="oi oi-info"></span> Info</a></li>-->
+            <!--<li><a id="menu-application-keys" th:href="'/application/' + ${currentApp.get().id} + '/apikey'"><span class="oi oi-key"></span> Developer Keys</a></li>-->
+            <!--<li><a id="menu-application-pep" th:href="'/application/' + ${currentApp.get().id} + '/pep'"><span class="oi oi-code"></span> PEPs</a></li>-->
+            <!--<li><a id="menu-application-datamodel" th:href="'/application/' + ${currentApp.get().id} + '/entity'"><span class="oi oi-code"></span> Entities</a></li>-->
+            <!--&lt;!&ndash;<li><a id="menu-application-keymgmt" th:href="'/application/' + ${currentApp.get().id} + '/keymgmt'"><span class="oi oi-people"></span> User Key Management</a></li>&ndash;&gt;-->
+            <!--<li><a id="menu-application-privacy" th:href="'/application/' + ${currentApp.get().id} + '/privacy'"><span class="oi oi-document"></span> Privacy Constraints</a></li>-->
+            <!--<li><a id="menu-application-instance" th:href="'/application/' + ${currentApp.get().id} + '/instance'"><span class="oi oi-sun"></span> Instances</a></li>-->
+            <!--</ul>-->
+
+            <div class="wrapper">
+
+                <div class="form-group">
+                    <label for="constraintName">Name:</label>
+                    <input type="text" id="constraintName" class="form-control" placeholder="Name" th:value="${affinityConstraint.name}"
+                           autocomplete="off" autofocus="true" />
+                </div>
+
+                <div class="form-group">
+                    <label for="affinityConstraints">Affinity Constraints: </label><br/>
+
+                    <select id="affinityConstraints" data-placeholder="Choose fields..." style="width:350px; height:40px;" multiple="true" class="chosen-select">
+                        <option th:each="affinityCon : ${affinityConstraints}" th:value="${affinityCon}" th:text="${affinityCon}" th:selected="${#lists.contains(affinityConstraint.getConstraints(), affinityCon)}"/>
+                    </select>
+                </div>
+
+                <button id="btn-affinityconstraintsetedit" th:onclick="'editAffinityConstraintSetHandler(' + ${currentApp.get().id} + ',' + ${affinityConstraint.id} +')'"
+                        class="btn action"><span class="oi oi-plus"></span> Update Affinity Constraint Set
+                </button>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION PEP -->
+<div th:fragment="pep">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/pep'">peps</a>
+            <h3><a th:href="'/application/' + ${currentApp.get().id}">&larr;</a> Policy Enforcement Points<br/>
+                <small>Application Management</small>
+            </h3>
+
+            <!--<ul th:if="${null != currentApp}" class="secondary">-->
+                <!--<li><a id="menu-application-info" th:href="'/application/' + ${currentApp.get().id}"><span class="oi oi-info"></span> Info</a></li>-->
+                <!--<li><a id="menu-application-keys" th:href="'/application/' + ${currentApp.get().id} + '/apikey'"><span class="oi oi-key"></span> Developer Keys</a></li>-->
+                <!--<li><a id="menu-application-pep" th:href="'/application/' + ${currentApp.get().id} + '/pep'"><span class="oi oi-code"></span> PEPs</a></li>-->
+                <!--<li><a id="menu-application-datamodel" th:href="'/application/' + ${currentApp.get().id} + '/entity'"><span class="oi oi-code"></span> Entities</a></li>-->
+                <!--&lt;!&ndash;<li><a id="menu-application-keymgmt" th:href="'/application/' + ${currentApp.get().id} + '/keymgmt'"><span class="oi oi-people"></span> User Key Management</a></li>&ndash;&gt;-->
+                <!--<li><a id="menu-application-privacy" th:href="'/application/' + ${currentApp.get().id} + '/privacy'"><span class="oi oi-document"></span> Privacy Constraints</a></li>-->
+                <!--<li><a id="menu-application-instance" th:href="'/application/' + ${currentApp.get().id} + '/instance'"><span class="oi oi-sun"></span> Instances</a></li>-->
+            <!--</ul>-->
+
+            <ul th:if="${#lists.isEmpty(listOfAnnotatedCode)}" class="empty">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-code"></span></div>
+                    <div class="empty-title">No available versions</div>
+                    <div class="empty-text">Upload a new <a th:href="'/application/' + ${currentApp.get().id} + '/upload'">version</a></div>
+                </li>
+            </ul>
+
+            <!--<ul class="paasword" th:if="${!#lists.isEmpty(listOfAnnotatedCode)}">-->
+
+                <table class="table table-hover table-striped" id="entities-table" th:if="${!#lists.isEmpty(listOfAnnotatedCode)}">
+                    <thead>
+                    <tr>
+                        <th class="col-md-1">Annotation</th>
+                        <th class="col-md-6">Class</th>
+                        <th class="col-md-6">Method</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="annotatedCode : ${listOfAnnotatedCode}">
+                        <!--<td th:if="${!#lists.isEmpty(annotatedCode.annotations)}"><span class="label label-default" th:each="annotation : ${annotatedCode.annotations}" th:text="${annotation.name}"></span></td>-->
+                        <td><span class="label label-default" th:text="'PaaSwordPEP'"></span></td>
+                        <td>
+                            <span th:text="${annotatedCode.name}"></span>
+                            <strong><a th:if="${null != annotatedCode.annotations}" th:each="annotation : ${annotatedCode.annotations}" th:class="${annotation.exists ? '' : 'inactive'}" th:href="${annotation.redirectURL}"><span th:text="${annotation.name} + ' (' + ${annotation.value} + ')'"></span></a></strong><br />
+
+                        </td>
+                        <td th:if="${#lists.isEmpty(annotatedCode.methods)}">-</td>
+                        <td th:if="${!#lists.isEmpty(annotatedCode.methods)}">
+                            <span th:each="method : ${annotatedCode.methods}">
+                               <span th:text="${method.name}"></span> <strong><a th:if="${null != method.methodAnnotations}" th:each="annotation : ${method.methodAnnotations}"  th:class="${annotation.exists ? '' : 'inactive'}" th:href="${annotation.redirectURL}"><span th:text="${annotation.name} + ' (' + ${annotation.value} + ')'"></span></a></strong> <br />
+                            </span>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+
+                <!--<li  class="application" th:each="annotatedCode : ${listOfAnnotatedCode}">-->
+                    <!--<div class="title"><span class="minor" th:text="${annotatedCode.type}"></span>: <a><span th:text="${annotatedCode.name}"></span></a></div>-->
+                    <!--&lt;!&ndash;<div class="desc">xxxx</div>&ndash;&gt;-->
+                    <!--<ul class="tag" th:if="${!#lists.isEmpty(annotatedCode.annotations)}">-->
+                        <!--<li class="label">Annotations</li>-->
+                        <!--<li th:each="annotation : ${annotatedCode.annotations}" class="value"><a href=""><span th:text="${annotation.name} + ' ' + ${annotation.value}"></span></a></li>-->
+                    <!--</ul>-->
+                    <!--<ul class="tag" th:if="${!#lists.isEmpty(annotatedCode.methods)}">-->
+                        <!--<li class="label">Methods</li>-->
+                        <!--<li th:each="method : ${annotatedCode.methods}" class="value">-->
+                            <!--<a href="">-->
+                                <!--<span th:text="${method.name}"></span>-->
+
+                            <!--</a>-->
+                            <!--<li class="value">(</li>-->
+                            <!--<li th:if="${null != method.parameters}" th:each="param : ${method.parameters}" class="value">-->
+                                <!--<a href=""><span th:text="${param.type} + ' ' + ${param.name}"></span></a>-->
+                            <!--</li>-->
+                            <!--<li class="value">)</li>-->
+
+                            <!--<li class="value">[</li>-->
+                            <!--<li th:if="${null != method.methodAnnotations}" th:each="annotation : ${method.methodAnnotations}" class="value">-->
+                                <!--<a href=""><span th:text="${annotation.name} + ' (' + ${annotation.value} + ')'"></span></a>-->
+                            <!--</li>-->
+                            <!--<li class="value">]</li>-->
+                        <!--</li>-->
+
+                    <!--</ul>-->
+                    <!--<ul class="tag" th:if="${!#lists.isEmpty(annotatedCode.fields)}">-->
+                        <!--<li class="label">Fields</li>-->
+                        <!--<li th:each="field : ${annotatedCode.fields}" class="value">-->
+                            <!--<a href="">-->
+                                <!--<span th:text="${field.name} + ' (' + ${field.type} + ')'"></span>-->
+                            <!--</a>-->
+                            <!--<li class="value">[</li>-->
+                            <!--<li th:if="${null != field.fieldAnnotations}" th:each="an : ${field.fieldAnnotations}" class="value2">-->
+                                <!--<a href=""><span th:text="${an.name} + ' (' + ${an.value} + ')'"></span></a>-->
+                            <!--</li>-->
+                            <!--<li class="value">]</li>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</li>-->
+            <!--</ul>-->
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION DATA MODEL -->
+<div th:fragment="datamodel">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/entity'">entities</a>
+            <h3><a th:href="'/application/' + ${currentApp.get().id}">&larr;</a> Entities<br/>
+                <small>Application Management</small>
+            </h3>
+
+            <!--<ul th:if="${null != currentApp}" class="secondary">-->
+                <!--<li><a id="menu-application-info" th:href="'/application/' + ${currentApp.get().id}"><span class="oi oi-info"></span> Info</a></li>-->
+                <!--<li><a id="menu-application-keys" th:href="'/application/' + ${currentApp.get().id} + '/apikey'"><span class="oi oi-key"></span> Developer Keys</a></li>-->
+                <!--<li><a id="menu-application-pep" th:href="'/application/' + ${currentApp.get().id} + '/pep'"><span class="oi oi-code"></span> PEPs</a></li>-->
+                <!--<li><a id="menu-application-datamodel" th:href="'/application/' + ${currentApp.get().id} + '/entity'"><span class="oi oi-code"></span> Entities</a></li>-->
+                <!--&lt;!&ndash;<li><a id="menu-application-keymgmt" th:href="'/application/' + ${currentApp.get().id} + '/keymgmt'"><span class="oi oi-people"></span> User Key Management</a></li>&ndash;&gt;-->
+                <!--<li><a id="menu-application-privacy" th:href="'/application/' + ${currentApp.get().id} + '/privacy'"><span class="oi oi-document"></span> Privacy Constraints</a></li>-->
+                <!--<li><a id="menu-application-instance" th:href="'/application/' + ${currentApp.get().id} + '/instance'"><span class="oi oi-sun"></span> Instances</a></li>-->
+            <!--</ul>-->
+
+            <ul th:if="${#lists.isEmpty(listOfAnnotatedCode)}" class="empty">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-code"></span></div>
+                    <div class="empty-title">No available versions</div>
+                    <div class="empty-text">Upload a new <a th:href="'/application/' + ${currentApp.get().id} + '/upload'">version</a></div>
+                </li>
+            </ul>
+
+            <!--<ul class="paasword" >-->
+
+                <table class="table table-hover table-striped" id="entities-table" th:if="${!#lists.isEmpty(listOfAnnotatedCode)}">
+                    <thead>
+                    <tr>
+                        <th class="col-md-2">Annotation</th>
+                        <th class="col-md-4">Class</th>
+                        <th class="col-md-6">Fields</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="annotatedCode : ${listOfAnnotatedCode}">
+                        <td th:if="${!#lists.isEmpty(annotatedCode.annotations)}"><span class="label label-default" th:each="annotation : ${annotatedCode.annotations}" th:text="${annotation.name}"></span></td>
+                        <td><span th:text="${annotatedCode.name}"></span></td>
+                        <td th:if="${!#lists.isEmpty(annotatedCode.fields)}">
+                            <span th:each="field : ${annotatedCode.fields}">
+                                <strong><span th:text="${field.name}"></span></strong> <span th:text="${field.type}"></span><br />
+                            </span>
+                        </td>
+
+                    </tr>
+                    </tbody>
+                </table>
+
+                <!--<li th:if="${!#lists.isEmpty(listOfAnnotatedCode)}" class="application" th:each="annotatedCode : ${listOfAnnotatedCode}">-->
+                    <!--<div class="title"><span class="minor" th:text="${annotatedCode.type}"></span>: <a><span th:text="${annotatedCode.name}"></span></a></div>-->
+                    <!--&lt;!&ndash;<div class="desc">xxxx</div>&ndash;&gt;-->
+                    <!--<ul class="tag" th:if="${!#lists.isEmpty(annotatedCode.annotations)}">-->
+                        <!--<li class="label">Annotations</li>-->
+                        <!--<li th:each="annotation : ${annotatedCode.annotations}" class="value"><a href=""><span th:text="${annotation.name} + ' ' + ${annotation.value}"></span></a></li>-->
+                    <!--</ul>-->
+                    <!--<ul class="tag" th:if="${!#lists.isEmpty(annotatedCode.methods)}">-->
+                        <!--<li class="label">Methods</li>-->
+                        <!--<li th:each="method : ${annotatedCode.methods}" class="value">-->
+                            <!--<a href="">-->
+                                <!--<span th:text="${method.name}"></span>-->
+
+                            <!--</a>-->
+                        <!--<li class="value">(</li>-->
+                        <!--<li th:if="${null != method.parameters}" th:each="param : ${method.parameters}" class="value">-->
+                            <!--<a href=""><span th:text="${param.type} + ' ' + ${param.name}"></span></a>-->
+                        <!--</li>-->
+                        <!--<li class="value">)</li>-->
+
+                        <!--<li class="value">[</li>-->
+                        <!--<li th:if="${null != method.methodAnnotations}" th:each="annotation : ${method.methodAnnotations}" class="value">-->
+                            <!--<a href=""><span th:text="${annotation.name} + ' (' + ${annotation.value} + ')'"></span></a>-->
+                        <!--</li>-->
+                        <!--<li class="value">]</li>-->
+                        <!--</li>-->
+
+                    <!--</ul>-->
+                    <!--<ul class="tag" th:if="${!#lists.isEmpty(annotatedCode.fields)}">-->
+                        <!--<li class="label">Fields</li>-->
+                        <!--<li th:each="field : ${annotatedCode.fields}" class="value">-->
+                            <!--<a href="">-->
+                                <!--<span th:text="${field.name} + ' (' + ${field.type} + ')'"></span>-->
+                            <!--</a>-->
+                        <!--<li class="value">[</li>-->
+                        <!--<li th:if="${null != field.fieldAnnotations}" th:each="an : ${field.fieldAnnotations}" class="value2">-->
+                            <!--<a href=""><span th:text="${an.name} + ' (' + ${an.value} + ')'"></span></a>-->
+                        <!--</li>-->
+                        <!--<li class="value">]</li>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</li>-->
+            <!--</ul>-->
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION INSTANCES -->
+<div th:fragment="instance">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            <!--<a th:if="${#lists.isEmpty(instances)}" th:href="'/application/' + ${currentApp.get().id} + '/instance/new'" class="create"><span class="oi oi-plus"></span> Boot new Instance</a>-->
+            <a th:if="${null == appInstance}" th:href="'/application/' + ${currentApp.get().id} + '/instance/new'" class="create"><span class="oi oi-plus"></span> Boot new Instance</a>
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance'">instances</a>
+            <h3><a th:href="'/application/' + ${currentApp.get().id}">&larr;</a> Application Instances<br/>
+                <small>Application Management</small>
+            </h3>
+
+            <ul th:if="${null == appInstance}" class="empty">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-document"></span></div>
+                    <div class="empty-title">No available instances</div>
+                    <div class="empty-text"><a th:href="'/application/' + ${currentApp.get().id} + '/instance/new'">Boot</a> a new instance</div>
+                </li>
+            </ul>
+
+            <div class="wrapper" th:if="${null != appInstance}">
+
+                <table id="rules-table"  class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th class="col-md-3">Name</th>
+                        <th class="col-md-5">Details</th>
+                        <th class="col-md-2">Creation Date</th>
+                        <th class="col-md-2"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id}">
+                                <span th:text="${appInstance.name}"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <div th:if="${currentApp.get().dataModel and appInstance.dbProxyDeploymentType == 0}" class="show-field show-field-provider-type"><strong>DB Proxy not deployed yet</strong></div>
+                            <div th:if="${currentApp.get().dataModel and appInstance.dbProxyDeploymentType == 1}" class="show-field show-field-provider-type"><strong>DB Proxy deployed to:</strong> IaaS Providers</div>
+                            <div th:if="${currentApp.get().dataModel and appInstance.dbProxyDeploymentType == 2}" class="show-field show-field-provider-type"><strong>DB Proxy deployed to:</strong> SlipStream</div>
+                            <div th:if="${currentApp.get().dataModel}" class="show-field"><strong>Privacy Constraints:</strong> <span th:text="${null != appInstance.getConstraints() and #lists.isEmpty(appInstance.getConstraints())} ? 'N/A'"></span> <span th:each="privacyCon : ${privacyConstraints}" th:if="${null != appInstance.getConstraints() and #lists.contains(appInstance.getConstraints(), #strings.toString(privacyCon.id))}"><span th:text="${privacyCon.privacyConstraint}"></span><br/></span></div>
+                            <!--<div th:if="${currentApp.get().dataModel}" class="show-field"><strong>Affinity Constraints:</strong> <span th:text="${#lists.isEmpty(appInstance.getAffinityConstraints())} ? 'N/A'"></span> <span th:each="affinityCon : ${affinityConstraints}" th:if="${appInstance.getAffinityConstraints() != null and #lists.contains(appInstance.getAffinityConstraints(), #strings.toString(affinityCon.id))}"><span th:text="${affinityCon.affinityConstraint}"></span><br/></span></div>-->
+
+                            <div th:if="${appInstance.deploymentType == 0}" class="show-field show-field-provider-type"><strong>Instance not deployed yet</strong></div>
+                            <div th:if="${appInstance.deploymentType == 1}" class="show-field show-field-provider-type"><strong>Instance deployed to: </strong>PaaS Providers</div>
+                            <div th:if="${appInstance.deploymentType == 2}" class="show-field show-field-provider-type"><strong>Instance deployed to: </strong>SlipStream</div>
+                            <div class="show-field show-field-provider"><strong>Running URL:</strong> <a th:if="${null != appInstance.runningEndpointURL}" th:href="${appInstance.runningEndpointURL}" target="_blank"><span th:text="${appInstance.runningEndpointURL}"></span></a> <span th:text="${null == appInstance.runningEndpointURL} ? 'N/A'"></span></div>
+                            <div class="show-field show-field-auth"><strong>Status:</strong> <span th:text="${appInstance.getOverallStatusMSG()}"></span></div>
+                        </td>
+                        <td><span th:text="${#calendars.format(appInstance.dateCreated,'dd/MM/yyyy - HH:mm:ss')}"></span></td>
+                        <td>
+                            <span th:onclick="'editApplicationInstanceRedirect(' +  ${currentApp.get().id} + ','  +  ${appInstance.id} + ')'" class='oi oi-pencil'></span>
+                            <span th:onclick="'deleteApplicationInstanceHandler(' + ${appInstance.id} + ')'" class='oi oi-trash'></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION KEY MANAGEMENT -->
+<div th:fragment="instance-keymgmt">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            <div class="btn-group create-dropdown" th:if="${isDataModel and keyMgmtConfigured}">
+                <button type="button" class="btn btn-default btn-default-main-text" th:onclick="'page.redirect(\'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/keymgmt/adduser\');'"><span class="oi oi-plus"></span> Add User</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-expanded="false">
+                    <li><a th:href="'javascript:revokeAllKeys(' + ${currentApp.get().id} + ');'" target="_blank">Revoke all keys</a></li>
+                </ul>
+            </div>
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance'">instances</a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id}"><span th:text="${appInstance.name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/keymgmt'">key management</a>
+
+            <h3><a th:href="'/application/' + ${currentApp.get().id} + '/instance/'">&larr;</a> Key Management<br/>
+                <small>Application Instance Management</small>
+            </h3>
+
+            <ul th:if="${null != currentApp and null != appInstance}" class="secondary">
+                <li><a id="menu-application-instance-info" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id}">Info</a></li>
+                <li><a id="menu-application-instance-keymgmt" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/keymgmt'">Key Management</a></li>
+                <li><a id="menu-application-instance-dbproxy" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/proxy'">DB Proxy</a></li>
+                <li><a id="menu-application-instance-handler" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/handler'">Handlers</a></li>
+                <li><a id="menu-application-instance-deploy" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/deploy'">Deployment</a></li>
+                <li><a id="menu-application-instance-activity" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/activity'">Activity</a></li>
+            </ul>
+
+            <ul class="empty" th:if="${!isDataModel}">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-key"></span></div>
+                    <div class="empty-title">Key management is not available for this application instance</div>
+                </li>
+            </ul>
+
+            <ul class="empty" th:if="${isDataModel and !keyMgmtConfigured}">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-key"></span></div>
+                    <div class="empty-title">Key Management not available yet</div>
+                    <!--<div class="empty-text"><a th:href="'javascript:createDBProxyKey(' + ${appInstance.id} + ','  + ${currentApp.get().id} + ');'">Create</a> Tenant Admin Key</div>-->
+                </li>
+            </ul>
+
+            <ul class="empty" th:if="${isDataModel and keyMgmtConfigured and #lists.isEmpty(page.getContent())}">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-key"></span></div>
+                    <div class="empty-title">No users registered</div>
+                    <div class="empty-text"><a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/keymgmt/adduser'">Add</a> a new user to this application instance</div>
+                </li>
+            </ul>
+
+            <div class="wrapper" th:if="${isDataModel and keyMgmtConfigured and !#lists.isEmpty(page.getContent())}">
+
+                <table id="table"  class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th class="col-md-3">Friendly Name</th>
+                        <th class="col-md-3">User Principal</th>
+                        <th class="col-md-3">Creation Date</th>
+                        <th class="col-md-2"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="applicationInstanceUser : ${page.getContent()}">
+                        <td><span th:text="${applicationInstanceUser.friendlyName}"></span></td>
+                        <td><span th:text="${applicationInstanceUser.principal}"></span></td>
+                        <td><span th:text="${#calendars.format(applicationInstanceUser.dateCreated,'dd/MM/yyyy - HH:mm:ss')}"></span></td>
+                        <td>
+                            <span th:onclick="'deleteApplicationInstanceUserHandler(' + ${currentApp.get().id} + ',' + ${applicationInstanceUser.id} + ')'" class='oi oi-trash'></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div th:include="inc::pagination"></div>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION INSTANCE INFO -->
+<div th:fragment="instance-keymgmt-add-user">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance'">instances</a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id}"><span th:text="${appInstance.name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/keymgmt'">key management</a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/keymgmt/adduser'">add user</a>
+
+            <h3><a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/keymgmt'">&larr;</a> Application Instance User<br/>
+                <small>Application Instance Users Management</small>
+            </h3>
+
+            <div class="wrapper">
+
+                <div class="form-group">
+                    <label for="friendlyName">User Friendly Name:</label><br/>
+                    <input type="text" id="friendlyName" class="form-control" placeholder="Friendly Name" autocomplete="off" autofocus="true" />
+                </div>
+
+                <div class="form-group">
+                    <label for="principal">User Principal:</label><br/>
+                    <input type="text" id="principal" class="form-control" placeholder="Principal" autocomplete="off" autofocus="true" />
+                </div>
+
+                <div class="form-group">
+                    <label for="email">User's Email:</label><br/>
+                    <input type="text" id="email" class="form-control" placeholder="User's Email" autocomplete="off" autofocus="true" />
+                </div>
+
+                <input type="hidden" id="applicationInstanceKey" name="applicationInstanceKey" th:value="${appInstance.uniqueID}"/>
+                <input type="hidden" id="applicationInstanceID" name="applicationInstanceID" th:value="${appInstance.id}"/>
+
+                <button id="btn-appInstanceUserAdd" th:onclick="'authorizeAppInstanceUserHandler(' + ${currentApp.get().id} + ')'" class="btn action"><span class="oi oi-key"></span> Authorize</button>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION INSTANCE HANDLERS -->
+<div th:fragment="instance-handler">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            <a th:if="${null != appInstance}" th:href="'javascript:deleteApplicationInstanceHandler(' + ${appInstance.id} + ')'" class="create"><span class="oi oi-trash"></span> Delete Instance</a>
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance'">instances</a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id}"><span th:text="${appInstance.name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/handler'">handlers</a>
+
+            <h3><a th:href="'/application/' + ${currentApp.get().id} + '/instance/'">&larr;</a> Handlers<br/>
+                <small>Application Instance Management</small>
+            </h3>
+
+            <ul th:if="${null != currentApp and null != appInstance}" class="secondary">
+                <li><a id="menu-application-instance-info" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id}">Info</a></li>
+                <li><a id="menu-application-instance-keymgmt" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/keymgmt'">Key Management</a></li>
+                <li><a id="menu-application-instance-dbproxy" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/proxy'">DB Proxy</a></li>
+                <li><a id="menu-application-instance-handler" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/handler'">Handlers</a></li>
+                <li><a id="menu-application-instance-deploy" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/deploy'">Deployment</a></li>
+                <li><a id="menu-application-instance-activity" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/activity'">Activity</a></li>
+            </ul>
+
+            <div class="wrapper">
+
+                <label class="heading">Assigned Handlers</label>
+                <br/>
+                <label th:if="${#lists.isEmpty(assignedHandlers)}">No assigned handlers</label>
+
+                <br/>
+
+                <table class="table table-hover" th:if="!${#lists.isEmpty(assignedHandlers)}">
+                    <thead>
+                    <tr>
+                        <th class="col-md-2">Name</th>
+                        <th class="col-md-2">Input</th>
+                        <th class="col-md-2">Output</th>
+                        <th class="col-md-5">Rest Endpoint URI</th>
+                        <th class="col-md-1"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="value : ${assignedHandlers}">
+                        <td><a th:href="'/model/handler/' + ${value.handlerID.id}" target="_blank"><span
+                                th:text="${value.handlerID.handlerName}"></span></a></td>
+                        <td>
+                            <span th:text="${value.handlerID.hasInput.className}"></span>
+                        </td>
+                        <td>
+                            <span th:text="${value.handlerID.hasOutput.className}"></span>
+                        </td>
+                        <td>
+                            <span
+                                    th:utext="${!#lists.isEmpty(value.handlerID.restEndpointURI)} ? ${#strings.replace(#strings.escapeXml(value.handlerID.restEndpointURI), T(java.lang.System).getProperty('line.separator'), '&lt;br /&gt;')} : 'N/A'"></span>
+                        </td>
+                        <td>
+                            <span class="oi oi-link-broken"
+                                  th:onclick="'unassignHandlerToApplicationInstanceHandler(' + ${currentApp.get().id} + ',' + ${appInstance.id} + ', ' + ${value.handlerID.id} + ')'"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <label class="heading">Existing Required Handlers</label>
+                <br/>
+                <label th:if="${#lists.isEmpty(identifiedHandlers)}">No more existing required handlers</label>
+
+                <br/>
+
+                <table class="table table-hover" th:if="!${#lists.isEmpty(identifiedHandlers)}">
+                    <thead>
+                    <tr>
+                        <th class="col-md-2">Name</th>
+                        <th class="col-md-2">Input</th>
+                        <th class="col-md-2">Output</th>
+                        <th class="col-md-5">Rest Endpoint URI</th>
+                        <th class="col-md-1"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="value : ${identifiedHandlers}">
+                        <td><a th:href="'/model/handler/' + ${value.id}" target="_blank"><span
+                                th:text="${value.handlerName}"></span></a></td>
+                        <td>
+                            <span th:text="${value.hasInput.className}"></span>
+                        </td>
+                        <td>
+                            <span th:text="${value.hasOutput.className}"></span>
+                        </td>
+                        <td>
+                            <span
+                                th:utext="${!#lists.isEmpty(value.restEndpointURI)} ? ${#strings.replace(#strings.escapeXml(value.restEndpointURI), T(java.lang.System).getProperty('line.separator'), '&lt;br /&gt;')} : 'N/A'"></span>
+                        </td>
+                        <td>
+                            <span class="oi oi-link-intact"
+                                  th:onclick="'assignHandlerToApplicationInstanceHandler(' + ${currentApp.get().id} + ',' + ${appInstance.id} + ', ' + ${value.id} + ')'"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <label class="heading">Not Existing Required Handlers</label><br/>
+                <label th:if="${#lists.isEmpty(missingHandlers)}">No more required handlers</label>
+
+                <table class="table table-hover" th:if="!${#lists.isEmpty(missingHandlers)}">
+                    <thead>
+                    <tr>
+                        <th class="col-md-2">Input</th>
+                        <th class="col-md-2">Output</th>
+                        <th class="col-md-2"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="value : ${missingHandlers}">
+                        <td>
+                            <span th:text="${value.hasInput.className}"></span>
+                        </td>
+                        <td>
+                            <span th:text="${value.hasOutput.className}"></span>
+                        </td>
+                        <td>
+                            <span class="oi oi-plus" th:onclick="'window.open(\'/model/handler/add?input=' + ${value.hasInput.id} + '&amp;output=' + ${value.hasOutput.id} + '\',\'_self\');'"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION INSTANCE INFO -->
+<div th:fragment="instance-info">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            <a th:if="${null != appInstance}" th:href="'javascript:deleteApplicationInstanceHandler(' + ${appInstance.id} + ')'" class="create"><span class="oi oi-trash"></span> Delete Instance</a>
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance'">instances</a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id}"><span th:text="${appInstance.name}"></span></a>
+
+            <h3><a th:href="'/application/' + ${currentApp.get().id} + '/instance/'">&larr;</a> Application Instance Information<br/>
+                <small>Application Instance Management</small>
+            </h3>
+
+            <ul th:if="${null != currentApp and null != appInstance}" class="secondary">
+                <li><a id="menu-application-instance-info" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id}">Info</a></li>
+                <li><a id="menu-application-instance-keymgmt" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/keymgmt'">Key Management</a></li>
+                <li><a id="menu-application-instance-dbproxy" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/proxy'">DB Proxy</a></li>
+                <li><a id="menu-application-instance-handler" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/handler'">Handlers</a></li>
+                <li><a id="menu-application-instance-deploy" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/deploy'">Deployment</a></li>
+                <li><a id="menu-application-instance-activity" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/activity'">Activity</a></li>
+            </ul>
+
+            <div class="wrapper">
+
+                <input type="hidden" id="applicationID" th:value="${currentApp.get().id}" />
+                <input type="hidden" id="instanceID" th:value="${appInstance.id}" />
+
+                <div class="form-group">
+                    <label for="instanceName">Instance Name: </label>
+                    <input type="text" id="instanceName" class="form-control" th:value="${appInstance.name}" disabled="true"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description: </label>
+                    <textarea id="description" class="form-control"  th:text="${appInstance.description}" disabled="true"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="instanceKey">Application Key: </label>
+                    <input type="text" id="instanceKey" class="form-control" th:value="${appInstance.uniqueID}" disabled="true"/>
+                </div>
+
+                <!--<div class="form-group">-->
+                    <!--<label for="instanceStatus">Status: </label>-->
+                    <!--<input type="text" id="instanceStatus" class="form-control" th:value="${appInstance.getOverallStatusMSG()}" disabled="true"/>-->
+                <!--</div>-->
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION INSTANCE DEPLOY -->
+<div th:fragment="instance-deploy">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            <a th:if="${null != appInstance}" th:href="'javascript:deleteApplicationInstanceHandler(' + ${appInstance.id} + ')'" class="create"><span class="oi oi-trash"></span> Delete Instance</a>
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance'">instances</a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id}"><span th:text="${appInstance.name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/deploy'">deploy</a>
+
+            <h3><a th:href="'/application/' + ${currentApp.get().id} + '/instance/'">&larr;</a> Deploy Instance<br/>
+                <small>Application Instance Management</small>
+            </h3>
+
+            <ul th:if="${null != currentApp and null != appInstance}" class="secondary">
+                <li><a id="menu-application-instance-info" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id}">Info</a></li>
+                <li><a id="menu-application-instance-keymgmt" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/keymgmt'">Key Management</a></li>
+                <li><a id="menu-application-instance-dbproxy" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/proxy'">DB Proxy</a></li>
+                <li><a id="menu-application-instance-handler" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/handler'">Handlers</a></li>
+                <li><a id="menu-application-instance-deploy" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/deploy'">Deployment</a></li>
+                <li><a id="menu-application-instance-activity" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/activity'">Activity</a></li>
+            </ul>
+
+            <ul th:if="${!(dbProxyReady and pepsReady and handlersReady)}" class="empty">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-sun"></span></div>
+                    <div class="empty-title">Application Instance not ready for deployment</div>
+                    <div th:if="${!dbProxyReady and isDataModel}" class="empty-text"><a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/proxy'">Fix</a> issues with DB Proxy</div>
+                    <div th:if="${!pepsReady}" class="empty-text"><a th:href="'/application/' + ${currentApp.get().id} + '/pep'">Fix</a> issues with PEPs</div>
+                    <div th:if="${!handlersReady}" class="empty-text"><a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/handler'">Fix</a> issues with Handlers</div>
+                </li>
+            </ul>
+
+            <div id="errorMessage" th:if="${dbProxyReady and pepsReady and handlersReady and appInstance.overallStatus != 10 and appInstance.overallStatus != 11 and appInstance.overallStatus != 12}" class="alert alert-warning">Step 3: Choose Deployment Type</div>
+
+            <div th:if="${dbProxyReady and pepsReady and handlersReady and appInstance.overallStatus != 10 and appInstance.overallStatus != 11 and appInstance.overallStatus != 12}" class="wrapper">
+
+                <input type="hidden" id="applicationID" th:value="${currentApp.get().id}" />
+                <input type="hidden" id="instanceID" th:value="${appInstance.id}" />
+                <input type="hidden" id="appKey" th:value="${null != appInstance} ? ${appKey}" />
+                <input type="hidden" id="appInstanceKey" th:value="${null != appInstance} ? ${appInstance.uniqueID}" />
+
+                <div class="meta">
+
+                    <div class="form-group">
+                        <label for="instanceName">Instance Name: </label>
+                        <input type="text" id="instanceName" class="form-control" th:value="${null != appInstance} ? ${appInstance.name}" disabled="true"/>
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+                    <label for="deploymentType">Deployment Type: </label><br/>
+                    <select id="deploymentType" class="form-control">
+                        <option value="0">Please choose..</option>
+                        <option value="1">PaaS Providers</option>
+                        <option value="2">SlipStream</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="paasProvider">PaaS Provider:
+                        <!--<a href="" title='Choose where do you need to distribute your data' rel='tooltip' data-trigger='hover' data-placement='right' data-html='true'>-->
+                        <!--<span class="oi oi-info"></span>-->
+                        <!--</a>-->
+                    </label><br/>
+                    <select id="paasProviderSelectBox" class="form-control" disabled="true">
+                        <option th:each="paasProvider : ${paasProviders}" th:value="${paasProvider.id}" th:text="${paasProvider.friendlyName}"/>
+                    </select>
+                </div>
+
+                <button id="btn-applicationinstancedeployinstance" onclick="deployApplicationInstanceHandler()"
+                        class="btn action"><span class="oi oi-cog"></span> Deploy Instance
+                </button>
+
+                <!--<button id="btn-applicationinstancedeployinstanceself" onclick="initializeInstanceSelfDeployInstanceHandler()"-->
+                        <!--class="btn action"><span class="oi oi-cog"></span> Self Deployment-->
+                <!--</button>-->
+
+
+            </div>
+
+            <div id="errorMessage" th:if="${dbProxyReady and pepsReady and handlersReady and appInstance.overallStatus == 10}" class="alert alert-warning">Step 4: Start Application Instance</div>
+
+            <div th:if="${dbProxyReady and pepsReady and handlersReady and appInstance.overallStatus == 10}" class="wrapper">
+
+                <input type="hidden" id="applicationID" th:value="${currentApp.get().id}" />
+                <input type="hidden" id="instanceID" th:value="${appInstance.id}" />
+                <input type="hidden" id="appKey" th:value="${null != appInstance} ? ${appKey}" />
+                <input type="hidden" id="appInstanceKey" th:value="${null != appInstance} ? ${appInstance.uniqueID}" />
+
+                <div class="meta">
+
+                    <div class="form-group">
+                        <label for="instanceName">Instance Name: </label>
+                        <input type="text" id="instanceName" class="form-control" th:value="${null != appInstance} ? ${appInstance.name}" disabled="true"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deploymentType">Deployment Type: </label>
+                        <input th:if="${'0' != appInstance.deploymentType}" type="hidden" id="deploymentTypeID" th:value="${appInstance.deploymentType == 1} ? 1 : 2"/>
+                        <input th:if="${'0' != appInstance.deploymentType}" type="text" id="deploymentType" class="form-control" th:value="${appInstance.deploymentType == 1} ? 'PaaS Provider' : 'SlipStream'" disabled="true"/>
+                    </div>
+
+                    <div class="form-group" th:if="${appInstance.deploymentType == 1}">
+                        <label for="paasProvider">PaaS Provider: </label>
+                        <input type="text" id="paasProvider" class="form-control" th:value="${appInstance.paaSProviderID.friendlyName}" disabled="true"/>
+                    </div>
+
+                    <!-- TODO SlipStream -->
+                    <div class="form-group" th:if="${appInstance.deploymentType == 2}">
+                        <label for="paasProvider">PaaS Provider: </label>
+                        <input type="text" id="paasProvider" class="form-control" th:value="${appInstance.paaSProviderID.friendlyName}" disabled="true"/>
+                    </div>
+
+                    <!--<div class="form-group">-->
+                        <!--<label for="runningEndpointURL">Running Endpoint: </label><br/>-->
+                        <!--<a th:href="${appInstance.runningEndpointURL}" target="_blank"><span th:text="${appInstance.runningEndpointURL}"></span></a>-->
+                    <!--</div>-->
+
+                    <div class="form-group">
+                        <label for="runningEndpointURL">Running Endpoint: </label>
+                        <input type="text" id="runningEndpointURL" class="form-control" th:value="${appInstance.runningEndpointURL}" disabled="true"/>
+                    </div>
+
+                </div>
+
+                <button id="btn-applicationinstancedeployinstance" onclick="startApplicationInstanceHandler()"
+                        class="btn action"><span class="oi oi-cog"></span> Start Instance
+                </button>
+
+                <!--<button id="btn-applicationinstancedeployinstanceself" onclick="initializeInstanceSelfDeployInstanceHandler()"-->
+                <!--class="btn action"><span class="oi oi-cog"></span> Self Deployment-->
+                <!--</button>-->
+
+            </div>
+
+            <div id="errorMessage" th:if="${dbProxyReady and pepsReady and handlersReady and appInstance.overallStatus == 12}" class="alert alert-warning">Application Instance is deploying to SlipStream</div>
+
+            <div th:if="${dbProxyReady and pepsReady and handlersReady and appInstance.overallStatus == 12}" class="wrapper">
+
+                <input type="hidden" id="applicationID" th:value="${currentApp.get().id}" />
+                <input type="hidden" id="instanceID" th:value="${appInstance.id}" />
+                <input type="hidden" id="appKey" th:value="${null != appInstance} ? ${appKey}" />
+                <input type="hidden" id="appInstanceKey" th:value="${null != appInstance} ? ${appInstance.uniqueID}" />
+
+                <div class="meta">
+
+                    <div class="form-group">
+                        <label for="instanceName">Instance Name: </label>
+                        <input type="text" id="instanceName" class="form-control" th:value="${null != appInstance} ? ${appInstance.name}" disabled="true"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deploymentType">Deployment Type: </label>
+                        <input th:if="${'0' != appInstance.deploymentType}" type="hidden" id="deploymentTypeID" th:value="${appInstance.deploymentType == 1} ? 1 : 2"/>
+                        <input th:if="${'0' != appInstance.deploymentType}" type="text" id="deploymentType" class="form-control" th:value="${appInstance.deploymentType == 1} ? 'PaaS Provider' : 'SlipStream'" disabled="true"/>
+                    </div>
+
+                    <div class="form-group" th:if="${appInstance.deploymentType == 1}">
+                        <label for="paasProvider">PaaS Provider: </label>
+                        <input type="text" id="paasProvider" class="form-control" th:value="${appInstance.paaSProviderID.friendlyName}" disabled="true"/>
+                    </div>
+
+                    <!--<div class="form-group" th:if="${appInstance.deploymentType == 2}">-->
+                        <!--<label for="paasProvider">PaaS Provider: </label>-->
+                        <!--<input type="text" id="paasProvider" class="form-control" th:value="${appInstance.paaSProviderID.friendlyName}" disabled="true"/>-->
+                    <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                    <!--<label for="runningEndpointURL">Running Endpoint: </label><br/>-->
+                    <!--<a th:href="${appInstance.runningEndpointURL}" target="_blank"><span th:text="${appInstance.runningEndpointURL}"></span></a>-->
+                    <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                        <!--<label for="runningEndpointURL">Running Endpoint: </label>-->
+                        <!--<input type="text" id="runningEndpointURL" class="form-control" th:value="${appInstance.runningEndpointURL}" disabled="true"/>-->
+                    <!--</div>-->
+
+                </div>
+
+                <!--<button id="btn-applicationinstancedeployinstance" onclick="startApplicationInstanceHandler()"-->
+                        <!--class="btn action"><span class="oi oi-cog"></span> Start Instance-->
+                <!--</button>-->
+
+                <!--<button id="btn-applicationinstancedeployinstanceself" onclick="initializeInstanceSelfDeployInstanceHandler()"-->
+                <!--class="btn action"><span class="oi oi-cog"></span> Self Deployment-->
+                <!--</button>-->
+
+            </div>
+
+            <div id="errorMessage" th:if="${dbProxyReady and pepsReady and handlersReady and appInstance.overallStatus == 11}" class="alert alert-warning">Application Instance is running</div>
+
+            <div th:if="${dbProxyReady and pepsReady and handlersReady and appInstance.overallStatus == 11}" class="wrapper">
+
+                <input type="hidden" id="applicationID" th:value="${currentApp.get().id}" />
+                <input type="hidden" id="instanceID" th:value="${appInstance.id}" />
+                <input type="hidden" id="appKey" th:value="${null != appInstance} ? ${appKey}" />
+                <input type="hidden" id="appInstanceKey" th:value="${null != appInstance} ? ${appInstance.uniqueID}" />
+
+                <div class="meta">
+
+                    <div class="form-group">
+                        <label for="instanceName">Instance Name: </label>
+                        <input type="text" id="instanceName" class="form-control" th:value="${null != appInstance} ? ${appInstance.name}" disabled="true"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deploymentType">Deployment Type: </label>
+                        <input th:if="${'0' != appInstance.deploymentType}" type="hidden" id="deploymentTypeID" th:value="${appInstance.deploymentType == 1} ? 1 : 2"/>
+                        <input th:if="${'0' != appInstance.deploymentType}" type="text" id="deploymentType" class="form-control" th:value="${appInstance.deploymentType == 1} ? 'PaaS Provider' : 'SlipStream'" disabled="true"/>
+                    </div>
+
+                    <div class="form-group" th:if="${appInstance.deploymentType == 1}">
+                        <label for="paasProvider">PaaS Provider: </label>
+                        <input type="text" id="paasProvider" class="form-control" th:value="${appInstance.paaSProviderID.friendlyName}" disabled="true"/>
+                    </div>
+
+                    <!--&lt;!&ndash; TODO SlipStream &ndash;&gt;-->
+                    <!--<div class="form-group" th:if="${appInstance.deploymentType == 2}">-->
+                        <!--<label for="paasProvider">PaaS Provider: </label>-->
+                        <!--<input type="text" id="paasProvider" class="form-control" th:value="${appInstance.paaSProviderID.friendlyName}" disabled="true"/>-->
+                    <!--</div>-->
+
+                    <div class="form-group">
+                        <label for="runningEndpointURL">Running Endpoint: </label><br/>
+                        <!--TODO-->
+                        <!--<a th:href="'http://' + ${appInstance.runningEndpointURL} + ':8081'" target="_blank"><span th:text="'http://' + ${appInstance.runningEndpointURL} + ':8081'"></span></a>-->
+                        <a th:href="${#strings.contains(appInstance.runningEndpointURL,'http')} ? ${appInstance.runningEndpointURL} : 'http://' + ${appInstance.runningEndpointURL} + ':8081'" target="_blank"><span th:text="${#strings.contains(appInstance.runningEndpointURL,'http')} ? ${appInstance.runningEndpointURL} : 'http://' + ${appInstance.runningEndpointURL} + ':8081'"></span></a>
+                    </div>
+
+                </div>
+
+                <button id="btn-applicationinstancedeployinstance" onclick="stopApplicationInstanceHandler()" style="margin-left:200px; margin-top:100px"
+                        class="btn action"><span class="oi oi-cog"></span> Stop Instance
+                </button>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<div th:fragment="instance-proxy">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            <a th:if="${null != appInstance}" th:href="'javascript:deleteApplicationInstanceHandler(' + ${appInstance.id} + ')'" class="create"><span class="oi oi-trash"></span> Delete Instance</a>
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance'">instances</a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id}"><span th:text="${appInstance.name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/proxy'">db proxy</a>
+
+            <h3><a th:href="'/application/' + ${currentApp.get().id} + '/instance/'">&larr;</a> DB Proxy<br/>
+                <small>Application Instance Management</small>
+            </h3>
+
+            <ul th:if="${null != currentApp and null != appInstance}" class="secondary">
+                <li><a id="menu-application-instance-info" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id}">Info</a></li>
+                <li><a id="menu-application-instance-keymgmt" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/keymgmt'">Key Management</a></li>
+                <li><a id="menu-application-instance-dbproxy" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/proxy'">DB Proxy</a></li>
+                <li><a id="menu-application-instance-handler" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/handler'">Handlers</a></li>
+                <li><a id="menu-application-instance-deploy" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/deploy'">Deployment</a></li>
+                <li><a id="menu-application-instance-activity" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/activity'">Activity</a></li>
+            </ul>
+
+            <ul th:if="${!isDataModel}" class="empty">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-sun"></span></div>
+                    <div class="empty-title">DB Proxy is not required for this application instance</div>
+                </li>
+            </ul>
+
+            <div th:if="${isDataModel and dbProxyReady and appInstance.overallStatus != 6}" class="wrapper" id="debug">
+
+                <p class="top-desc">
+                    <!--<span th:text="${null != appInstance} ? ${appInstance.getOverallStatusMSG()}"></span>. -->Debug console for this instance. Try running an SQL query.
+                </p>
+
+                <div class="form-group">
+                    <label for="description">SQL Query</label>
+                    <textarea id="query" class="form-control" placeholder="i.e. SELECT *  FROM COUNTRY;"/>
+                </div>
+
+                <button id="btn-applicationinstancedebug" onclick="executeQueryHandler()"
+                        class="btn action"><span class="oi oi-bolt"></span> Execute Query
+                </button>
+                <br/><br/>
+                <div class="form-group">
+
+                    <textarea id="queryResults" class="form-control" rows="10" placeholder="Query results" disabled="disabled"/>
+                </div>
+
+            </div>
+
+            <div th:if="${isDataModel and dbProxyReady and appInstance.overallStatus != 6}" class="wrapper">
+
+                <input type="hidden" id="applicationID" th:value="${currentApp.get().id}" />
+                <input type="hidden" id="instanceID" th:value="${appInstance.id}" />
+                <input type="hidden" id="appKey" th:value="${null != appInstance} ? ${appKey}" />
+                <input type="hidden" id="appInstanceKey" th:value="${null != appInstance} ? ${appInstance.uniqueID}" />
+
+                <div class="meta">
+
+                    <div class="form-group">
+                        <label for="instanceName">Instance Name: </label>
+                        <input type="text" id="instanceName" class="form-control" th:value="${null != appInstance} ? ${appInstance.name}" disabled="true"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="privacyConstraints">Privacy Constraints: </label><br/>
+                        <select id="privacyConstraints" data-placeholder="Choose constraints..." style="width:350px; height:40px;" multiple="true" class="chosen-select" disabled="true">
+                            <option th:each="privacyCon : ${privacyConstraints}" th:value="${privacyCon.id}" th:text="${privacyCon.name}" th:selected="${#lists.contains(appInstance.getConstraints(), #strings.toString(privacyCon.id))}"/>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <span th:each="privacyCon : ${privacyConstraints}" th:if="${#lists.contains(appInstance.getConstraints(), #strings.toString(privacyCon.id))}"><span th:text="${privacyCon.privacyConstraint}"></span><br/></span>
+                    </div>
+
+                    <!--<div class="form-group">-->
+                        <!--<label for="affinityConstraints">Affinity Constraints: </label><br/>-->
+                        <!--<select id="affinityConstraints" data-placeholder="Choose constraints..." style="width:350px; height:40px;" multiple="true" class="chosen-select" disabled="true">-->
+                            <!--<option th:each="affinityCon : ${affinityConstraints}" th:value="${affinityCon.id}" th:text="${affinityCon.name}" th:selected="${#lists.contains(appInstance.getAffinityConstraints(), #strings.toString(affinityCon.id))}"/>-->
+                        <!--</select>-->
+                    <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                        <!--<span th:each="affinityCon : ${affinityConstraints}" th:if="${#lists.contains(appInstance.getAffinityConstraints(), #strings.toString(affinityCon.id))}"><span th:text="${affinityCon.affinityConstraint}"></span><br/></span>-->
+                    <!--</div>-->
+
+                    <div class="form-group">
+                        <label for="deploymentType">Deployment Type: </label>
+                        <input th:if="${'0' != appInstance.dbProxyDeploymentType}" type="text" id="deploymentType" class="form-control" th:value="${appInstance.dbProxyDeploymentType == 1} ? 'IaaS Providers' : 'SlipStream'" disabled="true"/>
+                    </div>
+
+                </div>
+
+                <label>Fragments:</label><br/>
+                <p class="top-text" th:each="fragment : ${appInstance.getFragmentsForUI()}">
+                    <span th:text="${fragment}"/>
+                </p>
+
+                <br/>
+                <label for="paasProvider">Fragmentation Servers:</label><br/>
+                    <p class="msg-h4" th:each="fragmentInstance : ${appInstance.getFragmentationInstancesForUI()}">
+                    <span th:text="${fragmentInstance}"/>
+                </p>
+
+            </div>
+
+
+            <div th:if="${appInstance.overallStatus == 2}" class="wrapper">
+
+                <div id="errorMessage" class="alert alert-warning">Step 1: Choose Privacy Constraints</div>
+
+                <input type="hidden" id="applicationID" th:value="${currentApp.get().id}" />
+                <input type="hidden" id="instanceID" th:value="${appInstance.id}" />
+
+                <div class="form-group" th:if="${isDataModel == true}">
+                    <label for="privacyConstraints">Privacy Constraints: </label><br/>
+                    <select id="privacyConstraints" data-placeholder="Choose constraints..." style="width:350px; height:40px;" multiple="true" class="chosen-select">
+                        <option th:each="privacyCon : ${privacyConstraints}" th:value="${privacyCon.id}" th:text="${privacyCon.name}" />
+                    </select>
+                </div>
+
+                <!--<div class="form-group" th:if="${isDataModel == true}">-->
+                    <!--<label for="affinityConstraints">Affinity Constraints: </label><br/>-->
+                    <!--<select id="affinityConstraints" data-placeholder="Choose constraints..." style="width:350px; height:40px;" multiple="true" class="chosen-select">-->
+                        <!--<option th:each="affinityCon : ${affinityConstraints}" th:value="${affinityCon.id}" th:text="${affinityCon.name}" />-->
+                    <!--</select>-->
+                <!--</div>-->
+
+                <button id="btn-applicationinstancevalidateconstraints" onclick="validateInstanceConstraintsHandler()"
+                        class="btn action"><span class="oi oi-bolt"></span> Validate Constraints
+                </button>
+
+            </div>
+
+            <div th:if="${appInstance.overallStatus == 3 or appInstance.overallStatus == 4}" class="wrapper">
+
+                <!-- TODO Handle SlipStream case with pending functionality -->
+
+                <div id="errorMessage" class="alert alert-warning">Step 2: Choose Deployment Type for DB Proxy</div>
+
+                <input type="hidden" id="applicationID" th:value="${currentApp.get().id}" />
+                <input type="hidden" id="instanceID" th:value="${appInstance.id}" />
+                <input type="hidden" id="appKey" th:value="${null != appInstance} ? ${appKey}" />
+
+                <div class="meta">
+
+                    <div class="label-desc instance">
+                        <span th:text="${null != appInstance} ? ${appInstance.getOverallStatusMSG()}"></span>
+                        <span class="oi oi-clock status pull-right"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="instanceName">Instance Name: </label>
+                        <input type="text" id="instanceName" class="form-control" th:value="${null != appInstance} ? ${appInstance.name}" disabled="true"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="privacyConstraints">Privacy Constraints: </label><br/>
+                        <select id="privacyConstraints" data-placeholder="Choose constraints..." style="width:350px; height:40px;" multiple="true" class="chosen-select" disabled="true">
+                            <option th:each="privacyCon : ${privacyConstraints}" th:value="${privacyCon.id}" th:text="${privacyCon.name}" th:selected="${#lists.contains(appInstance.getConstraints(), #strings.toString(privacyCon.id))}"/>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <span th:each="privacyCon : ${privacyConstraints}" th:if="${#lists.contains(appInstance.getConstraints(), #strings.toString(privacyCon.id))}"><span th:text="${privacyCon.privacyConstraint}"></span><br/></span>
+                    </div>
+
+                    <!--<div class="form-group">-->
+                        <!--<label for="affinityConstraints">Affinity Constraints: </label><br/>-->
+                        <!--<select id="affinityConstraints" data-placeholder="Choose constraints..." style="width:350px; height:40px;" multiple="true" class="chosen-select" disabled="true">-->
+                            <!--<option th:each="affinityCon : ${affinityConstraints}" th:value="${affinityCon.id}" th:text="${affinityCon.name}" th:selected="${#lists.contains(appInstance.getAffinityConstraints(), #strings.toString(affinityCon.id))}"/>-->
+                        <!--</select>-->
+                    <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                        <!--<span th:each="affinityCon : ${affinityConstraints}" th:if="${#lists.contains(appInstance.getAffinityConstraints(), #strings.toString(affinityCon.id))}"><span th:text="${affinityCon.affinityConstraint}"></span><br/></span>-->
+                    <!--</div>-->
+
+                </div>
+
+                <p class="top-desc">
+                    Database proxy in order to distribute your data with the chosen privacy/affinity constraints needs <span th:text="${null != appInstance} ? ${appInstance.getNeededServers()}"></span> database instances (including 2 coordination servers)
+                </p>
+                <br/>
+                <label>Fragments:</label><br/>
+                <p class="top-text" th:each="fragment : ${appInstance.getFragmentsForUI()}">
+                    <span th:text="${fragment}"/>
+                </p>
+
+                <div class="form-group">
+                    <label for="deploymentType">Deployment Type: </label><br/>
+                    <select id="deploymentType" class="form-control">
+                        <option value="0">Please choose..</option>
+                        <option value="1">IaaS Providers</option>
+                        <option value="2">SlipStream</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="iaasProvider">IaaS Provider:
+                        <!--<a href="" title='Choose where do you need to distribute your data' rel='tooltip' data-trigger='hover' data-placement='right' data-html='true'>-->
+                            <!--<span class="oi oi-info"></span>-->
+                        <!--</a>-->
+                    </label><br/>
+                    <select id="iaasProviderSelectBox" data-placeholder="Choose providers..." style="width:350px; height:40px;" multiple="true" class="chosen-select" disabled="true">
+                        <option th:each="iaasProvider : ${iaasProviders}" th:value="${iaasProvider.id}" th:text="${iaasProvider.friendlyName}"/>
+                    </select>
+                </div>
+
+                <button id="btn-applicationinstance" onclick="changeInstanceConstraintsHandler()" class="btn action"><span class="oi oi-cog"></span> Change Constraints
+                </button>
+
+                <button id="btn-applicationinstancedeploydbproxy" onclick="initializeInstanceDeployDBProxyHandler()"
+                        class="btn action"><span class="oi oi-cog"></span> Deploy DB Proxy
+                </button>
+
+            </div>
+
+            <div th:if="${appInstance.overallStatus == 6}" class="wrapper">
+
+                <div id="errorMessage" class="alert alert-warning">DB Proxy is deploying to SlipStream</div>
+
+                <input type="hidden" id="applicationID" th:value="${currentApp.get().id}" />
+                <input type="hidden" id="instanceID" th:value="${appInstance.id}" />
+                <input type="hidden" id="appKey" th:value="${null != appInstance} ? ${appKey}" />
+
+                <div class="meta">
+
+                    <div class="label-desc instance">
+                        <span th:text="${null != appInstance} ? ${appInstance.getOverallStatusMSG()}"></span>
+                        <span class="oi oi-clock status pull-right"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="instanceName">Instance Name: </label>
+                        <input type="text" id="instanceName" class="form-control" th:value="${null != appInstance} ? ${appInstance.name}" disabled="true"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="privacyConstraints">Privacy Constraints: </label><br/>
+                        <select id="privacyConstraints" data-placeholder="Choose constraints..." style="width:350px; height:40px;" multiple="true" class="chosen-select" disabled="true">
+                            <option th:each="privacyCon : ${privacyConstraints}" th:value="${privacyCon.id}" th:text="${privacyCon.name}" th:selected="${#lists.contains(appInstance.getConstraints(), #strings.toString(privacyCon.id))}"/>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <span th:each="privacyCon : ${privacyConstraints}" th:if="${#lists.contains(appInstance.getConstraints(), #strings.toString(privacyCon.id))}"><span th:text="${privacyCon.privacyConstraint}"></span><br/></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deploymentType">Deployment Type: </label>
+                        <input th:if="${'0' != appInstance.dbProxyDeploymentType}" type="text" id="deploymentType" class="form-control" th:value="${appInstance.dbProxyDeploymentType == 1} ? 'IaaS Providers' : 'SlipStream'" disabled="true"/>
+                    </div>
+
+                    <!--<div class="form-group">-->
+                    <!--<label for="affinityConstraints">Affinity Constraints: </label><br/>-->
+                    <!--<select id="affinityConstraints" data-placeholder="Choose constraints..." style="width:350px; height:40px;" multiple="true" class="chosen-select" disabled="true">-->
+                    <!--<option th:each="affinityCon : ${affinityConstraints}" th:value="${affinityCon.id}" th:text="${affinityCon.name}" th:selected="${#lists.contains(appInstance.getAffinityConstraints(), #strings.toString(affinityCon.id))}"/>-->
+                    <!--</select>-->
+                    <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                    <!--<span th:each="affinityCon : ${affinityConstraints}" th:if="${#lists.contains(appInstance.getAffinityConstraints(), #strings.toString(affinityCon.id))}"><span th:text="${affinityCon.affinityConstraint}"></span><br/></span>-->
+                    <!--</div>-->
+
+                </div>
+
+                <p class="top-desc">
+                    Database proxy in order to distribute your data with the chosen privacy/affinity constraints needs <span th:text="${null != appInstance} ? ${appInstance.getNeededServers()}"></span> database instances (including 2 coordination servers)
+                </p>
+                <br/>
+                <label>Fragments:</label><br/>
+                <p class="top-text" th:each="fragment : ${appInstance.getFragmentsForUI()}">
+                    <span th:text="${fragment}"/>
+                </p>
+
+                <!--<div class="form-group">-->
+                    <!--<label for="deploymentType">Deployment Type: </label><br/>-->
+                    <!--<select id="deploymentType" class="form-control">-->
+                        <!--<option value="2">SlipStream</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+
+                <!--<div class="form-group">-->
+                    <!--<label for="iaasProvider">IaaS Provider:-->
+                        <!--&lt;!&ndash;<a href="" title='Choose where do you need to distribute your data' rel='tooltip' data-trigger='hover' data-placement='right' data-html='true'>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<span class="oi oi-info"></span>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</a>&ndash;&gt;-->
+                    <!--</label><br/>-->
+                    <!--<select id="iaasProviderSelectBox" data-placeholder="Choose providers..." style="width:350px; height:40px;" multiple="true" class="chosen-select" disabled="true">-->
+                        <!--<option th:each="iaasProvider : ${iaasProviders}" th:value="${iaasProvider.id}" th:text="${iaasProvider.friendlyName}"/>-->
+                    <!--</select>-->
+                <!--</div>-->
+
+                <!--<button id="btn-applicationinstance" onclick="changeInstanceConstraintsHandler()" class="btn action"><span class="oi oi-cog"></span> Change Constraints-->
+                <!--</button>-->
+
+                <!--<button id="btn-applicationinstancedeploydbproxy" onclick="initializeInstanceDeployDBProxyHandler()"-->
+                        <!--class="btn action"><span class="oi oi-cog"></span> Deploy DB Proxy-->
+                <!--</button>-->
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION INSTANCE ACTIVITY -->
+<div th:fragment="instance-activity">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            <a th:if="${null != appInstance}" th:href="'javascript:deleteApplicationInstanceHandler(' + ${appInstance.id} + ')'" class="create"><span class="oi oi-trash"></span> Delete Instance</a>
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance'">instances</a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id}"><span th:text="${appInstance.name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/activity'">activity</a>
+
+            <h3><a th:href="'/application/' + ${currentApp.get().id} + '/instance/'">&larr;</a> Activity<br/>
+                <small>Application Instance Management</small>
+            </h3>
+
+            <ul th:if="${null != currentApp and null != appInstance}" class="secondary">
+                <li><a id="menu-application-instance-info" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id}">Info</a></li>
+                <li><a id="menu-application-instance-keymgmt" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/keymgmt'">Key Management</a></li>
+                <li><a id="menu-application-instance-dbproxy" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/proxy'">DB Proxy</a></li>
+                <li><a id="menu-application-instance-handler" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/handler'">Handlers</a></li>
+                <li><a id="menu-application-instance-deploy" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/deploy'">Deployment</a></li>
+                <li><a id="menu-application-instance-activity" th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/activity'">Activity</a></li>
+            </ul>
+
+            <ul th:if="${#lists.isEmpty(activities)}" class="empty">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-menu"></span></div>
+                    <div class="empty-title">No recent activity</div>
+                    <div class="empty-text"><a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id} + '/deploy'">Start</a> the application instance</div>
+                </li>
+            </ul>
+
+            <div class="wrapper" th:if="${!#lists.isEmpty(activities)}" >
+                <table class="table table-hover table-striped" id="activities-table">
+                    <thead>
+                    <tr>
+                        <th class="col-md-2">Permission</th>
+                        <th class="col-md-6">Description</th>
+                        <th class="col-md-4">Timestamp</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="activity : ${activities}">
+                        <td><span class="label label-default" th:text="${activity.permission}"></span></td>
+                        <td>
+                            <strong>Object:</strong> <span th:text="${activity.object}"></span><br/>
+                            <strong>Actor:</strong> <span th:text="${activity.actor}"></span><br/>
+                            <strong>Agent:</strong> <span th:text="${activity.agent}"></span><br/>
+                            <strong>Remote IP Address:</strong> <span th:text="${activity.remoteAddress}"></span><br/>
+                            <!--<strong>Local IP Address:</strong> <span th:text="${activity.localAddress}"></span><br/>-->
+                            <strong>Referrer:</strong> <span th:text="${activity.getReferrer()}"></span><br/>
+                            <!--<strong>Policies:</strong> - -->
+                            <strong>PEP:</strong> <span th:text="${activity.annotatedCode}"></span>
+                        </td>
+                        <td><span th:text="${activity.getTimestamp()}"></span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION INSTANCE NEW -->
+<div th:fragment="instance-new">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance'">instances</a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance/new'"><span>boot new instance</span></a>
+
+            <h3><a th:href="'/application/' + ${currentApp.get().id} + '/instance'">&larr;</a> Boot new Instance<br/>
+                <small>Application Management</small>
+            </h3>
+
+            <div id="errorMessage" class="alert alert-warning"></div>
+
+            <div class="wrapper">
+
+                <input type="hidden" id="applicationID" th:value="${currentApp.get().id}" />
+                <input type="hidden" id="dataModel" th:value="${isDataModel == true} ? '1' : '0'" />
+                <input type="hidden" id="pep" th:value="${isPEP == true} ? '1' : '0'" />
+
+                <div class="form-group">
+                    <label for="instanceName">Instance Name: </label>
+                    <input type="text" id="instanceName" class="form-control" placeholder="Instance Name"
+                           autocomplete="off" autofocus="true" />
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description: </label>
+                    <textarea id="description" class="form-control" placeholder="Description"/>
+                </div>
+
+                <div th:if="${isDataModel}" id="errorMessage" class="alert alert-warning">This instance requires initialization of a DB Proxy!</div>
+                <div th:if="${isPEP}" id="errorMessage" class="alert alert-warning">This instance requires validation of all the PEPs!</div>
+
+                <button id="btn-applicationinstancenextstep" onclick="nextStepApplicationInstanceHandler()"
+                        class="btn action"><span class="oi oi-arrow-thick-right"></span> Next Step
+                </button>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION INSTANCE VALIDATE -->
+<div th:fragment="instance-add">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance/validate'"><span>add</span></a>
+
+            <h3><a th:href="'/application/' + ${currentApp.get().id} + '/instance'">&larr;</a> Add new Instance<br/>
+                <small>Application Management</small>
+            </h3>
+
+            <div id="errorMessage" class="alert alert-warning"></div>
+
+            <div class="wrapper">
+
+                <input type="hidden" id="applicationID" th:value="${currentApp.get().id}" />
+                <input type="hidden" id="dataModel" th:value="${isDataModel == true} ? '1' : '0'" />
+
+                <div class="form-group">
+                    <label for="instanceName">Instance Name: </label>
+                    <input type="text" id="instanceName" class="form-control" placeholder="Instance Name"
+                           autocomplete="off" autofocus="true" />
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description: </label>
+                    <textarea id="description" class="form-control" placeholder="Description"/>
+                </div>
+
+                <div class="form-group" th:if="${isDataModel == true}">
+                    <label for="privacyConstraints">Privacy Constraints: </label><br/>
+                    <select id="privacyConstraints" data-placeholder="Choose constraints..." style="width:350px; height:40px;" multiple="true" class="chosen-select">
+                        <option th:each="privacyCon : ${privacyConstraints}" th:value="${privacyCon.id}" th:text="${privacyCon.name}" />
+                    </select>
+                </div>
+
+                <!--<div class="form-group" th:if="${isDataModel == true}">-->
+                    <!--<label for="affinityConstraints">Affinity Constraints: </label><br/>-->
+                    <!--<select id="affinityConstraints" data-placeholder="Choose constraints..." style="width:350px; height:40px;" multiple="true" class="chosen-select">-->
+                        <!--<option th:each="affinityCon : ${affinityConstraints}" th:value="${affinityCon.id}" th:text="${affinityCon.name}" />-->
+                    <!--</select>-->
+                <!--</div>-->
+
+                <button id="btn-applicationinstancevalidate" onclick="validateApplicationInstanceHandler()"
+                        class="btn action"><span class="oi oi-bolt"></span> Validate Instance
+                </button>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION INSTANCE EDIT -->
+<div th:fragment="instance-edit">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span
+                th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/instance/' + ${appInstance.id}"><span th:text="${null != appInstance} ? ${appInstance.name}"></span></a>
+
+            <h3><a th:href="'/application/' + ${currentApp.get().id} + '/instance'">&larr;</a> <span th:text="${null != appInstance} ? ${appInstance.name}"></span> <br/>
+                <small>Application Instance Management</small>
+            </h3>
+
+            <div id="errorMessage" class="alert alert-warning"></div>
+
+            <div class="wrapper">
+
+                <div class="meta">
+
+                    <div class="label-desc instance">
+                        <span th:text="${null != appInstance} ? ${appInstance.getOverallStatusMSG()}"></span>
+                        <span class="oi oi-clock status pull-right"></span>
+                    </div>
+
+                    <input type="hidden" id="applicationID" th:value="${currentApp.get().id}" />
+                    <input type="hidden" id="dataModel" th:value="${isDataModel == true} ? '1' : '0'" />
+                    <input type="hidden" id="instanceID" th:value="${null != appInstance} ? ${appInstance.id}" />
+                    <input type="hidden" id="appKey" th:value="${null != appInstance} ? ${appKey}" />
+
+                    <div class="form-group">
+                        <label for="instanceName">Instance Name: </label>
+                        <input type="text" id="instanceName" class="form-control" th:value="${null != appInstance} ? ${appInstance.name}" disabled="true"/>
+                    </div>
+
+                    <div class="form-group" th:if="${isDataModel == true and appInstance.overallStatus != 0}">
+                        <label for="privacyConstraints">Privacy Constraints: </label><br/>
+                        <select id="privacyContraints" data-placeholder="Choose constraints..." style="width:350px; height:40px;" multiple="true" class="chosen-select" disabled="true">
+                            <option th:each="privacyCon : ${privacyConstraints}" th:value="${privacyCon.id}" th:text="${privacyCon.name}" th:selected="${#lists.contains(appInstance.getConstraints(), #strings.toString(privacyCon.id))}"/>
+                        </select>
+                    </div>
+
+                    <div class="form-group" th:if="${isDataModel == true and appInstance.overallStatus != 0}">
+                        <span th:each="privacyCon : ${privacyConstraints}" th:if="${#lists.contains(appInstance.getConstraints(), #strings.toString(privacyCon.id))}"><span th:text="${privacyCon.privacyConstraint}"></span><br/></span>
+                    </div>
+
+                    <div class="form-group" th:if="${isDataModel == true and appInstance.overallStatus == 2}">
+                        <label for="iaasProvider">IaaS Provider: </label><br/>
+                        <select id="iaasProvider" data-placeholder="Choose providers..." style="width:350px; height:40px;" multiple="true" class="chosen-select" disabled="false">
+                            <option th:each="iaasProvider : ${iaasProviders}" th:value="${iaasProvider.id}" th:text="${iaasProvider.friendlyName}" th:selected="${#lists.contains(appInstance.getUsedIaaSProviders(), #strings.toString(iaasProvider.id))}"/>
+                        </select>
+                    </div>
+
+                    <!--<div class="form-group" th:if="${isDataModel == true and appInstance.overallStatus == 2}">-->
+                        <!--<span th:each="iaasProvider : ${iaasProviders}" th:if="${#lists.contains(appInstance.getUsedIaaSProviders(), #strings.toString(iaasProvider.id))}"><span th:text="${iaasProvider.connectionURL}"></span><br/></span>-->
+                    <!--</div>-->
+
+                    <div class="form-group" th:if="${appInstance.overallStatus == 3}">
+                        <label for="paasProvider">PaaS Provider: </label><br/>
+                        <select id="paasProvider" class="form-control" disabled="true">
+                            <option th:each="paasProvider : ${paasProviders}" th:value="${paasProvider.id}" th:text="${paasProvider.friendlyName}"
+                                    th:selected="${null != appInstance and null != appInstance.paaSProviderID and paasProvider.id == appInstance.paaSProviderID.id}"/>
+                        </select>
+                    </div>
+
+                </div>
+
+                <p class="top-desc" th:if="${isDataModel == true and appInstance.overallStatus == 1}">
+                    Database proxy in order to distribute your data with the chosen privacy constraints needs <span th:text="${null != appInstance} ? ${appInstance.getNeededServers()}"></span> database instances (including 2 coordination servers)
+                </p>
+
+                <p class="top-text" th:if="${isDataModel == true and appInstance.overallStatus == 1}" th:each="fragment : ${appInstance.getFragmentsForUI()}">
+                    <span th:text="${fragment}"/>
+                </p>
+
+                <p class="top-desc" th:if="${isDataModel == true and (appInstance.overallStatus == 2 or appInstance.overallStatus == 3)}">
+                    Database proxy in order to distribute your data with the chosen privacy constraints needs <span th:text="${null != appInstance} ? ${appInstance.getNeededServers()}"></span> database instances (including 2 coordination servers)
+                </p>
+                <br/>
+                <label th:if="${isDataModel == true and (appInstance.overallStatus == 2 or appInstance.overallStatus == 3)}" for="paasProvider">Fragments:</label><br/>
+                <p class="msg-h3" th:if="${isDataModel == true and (appInstance.overallStatus == 2 or appInstance.overallStatus == 3)}" th:each="fragment : ${appInstance.getFragmentsForUI()}">
+                    <span th:text="${fragment}"/>
+                </p>
+
+                <br/>
+
+                <label th:if="${isDataModel == true and (appInstance.overallStatus == 2 or appInstance.overallStatus == 3)}" for="paasProvider">Fragmentation Servers:</label><br/>
+                <p class="msg-h4" th:if="${isDataModel == true and (appInstance.overallStatus == 2 or appInstance.overallStatus == 3)}" th:each="fragmentInstance : ${appInstance.getFragmentationInstancesForUI()}">
+                    <span th:text="${fragmentInstance}"/>
+                </p>
+
+                <div class="form-group" th:if="${isDataModel == true and appInstance.overallStatus == 1}">
+                    <label for="iaasProvider">IaaS Provider:
+                        <a href="" title='Choose where do you need to distribute your data' rel='tooltip' data-trigger='hover' data-placement='right' data-html='true'>
+                            <span class="oi oi-info"></span>
+                        </a>
+                    </label><br/>
+                    <select id="iaasProvider" data-placeholder="Choose providers..." style="width:350px; height:40px;" multiple="true" class="chosen-select">
+                        <option th:each="iaasProvider : ${iaasProviders}" th:value="${iaasProvider.id}" th:text="${iaasProvider.friendlyName}"/>
+                    </select>
+                </div>
+
+                <div class="form-group" th:if="${appInstance.overallStatus == 2}">
+                    <label for="paasProvider">PaaS Provider: </label><br/>
+                    <select id="paasProvider" class="form-control">
+                        <option value="0">Please choose..</option>
+                        <option th:each="paasProvider : ${paasProviders}" th:value="${paasProvider.id}" th:text="${paasProvider.friendlyName}"/>
+                    </select>
+                </div>
+
+                <!--<button th:if="${appInstance.overallStatus == 1}" id="btn-applicationinstancee" onclick="changeFragmentationOfApplicationInstanceHandler()"-->
+                        <!--class="btn action"><span class="oi oi-cog"></span> Change Fragmentation Schema-->
+                <!--</button>-->
+
+                <button th:if="${appInstance.overallStatus == 1}" id="btn-applicationinstanceconfigure" onclick="initializeInfrastructureOfApplicationInstanceHandler()"
+                        class="btn action"><span class="oi oi-cog"></span> Initialize Infrastructure
+                </button>
+
+                <button th:if="${appInstance.configured and appInstance.overallStatus == 2}" id="btn-applicationinstancedeploy" onclick="deployApplicationInstanceHandler()"
+                        class="btn action"><span class="oi oi-cloud-upload"></span> Deploy Instance
+                </button>
+
+                <br/>
+
+                <button th:if="${appInstance.configured and appInstance.overallStatus == 3}" id="btn-applicationinstanceundeploy" onclick="undeployApplicationInstanceHandler()"
+                        class="btn action"><span class="oi oi-cloud-download"></span> Undeploy Instance
+                </button>
+
+                <a th:if="${appInstance.configured and appInstance.overallStatus == 3}" id="btn-applicationinstanceundeploy" th:href="'http://' + ${appInstance.publicURL}" target="_blank"
+                        class="btn action"><span class="oi oi-external-link"></span> View Application
+                </a>
+
+            </div>
+
+            <div th:if="${appInstance.configured} and ${appInstance.overallStatus == 2 or appInstance.overallStatus == 3}" class="wrapper" id="debug">
+
+                <p class="top-desc">
+                    Debug console for this instance. Try running an SQL query.
+                </p>
+
+                <div class="form-group">
+                    <label for="description">SQL Query</label>
+                    <textarea id="query" class="form-control" placeholder="i.e. SELECT *  FROM COUNTRY;"/>
+                </div>
+
+                <button id="btn-applicationinstancedebug" onclick="executeQueryHandler()"
+                        class="btn action"><span class="oi oi-bolt"></span> Execute Query
+                </button>
+                <br/><br/>
+                <div class="form-group">
+
+                    <textarea id="queryResults" class="form-control" rows="10" placeholder="Query results" disabled="disabled"/>
+                </div>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION ADD -->
+<div th:fragment="add">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            / <a href="/application">application</a> / <a href="/application/add"><span>add</span></a>
+
+            <h3><a href="/application">&larr;</a> Add new Application<br/>
+                <small>Application Management</small>
+            </h3>
+
+            <div class="wrapper">
+
+                <div class="form-group">
+                    <label for="applicationName">Application Name:</label>
+                    <input type="text" id="applicationName" class="form-control" placeholder="Application Name"
+                           autocomplete="off" autofocus="true" />
+                </div>
+
+                <div class="form-group">
+                    <label for="version">Version:</label>
+                    <input type="text" id="version" class="form-control" placeholder="Version" />
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <input type="text" id="description" class="form-control" placeholder="Description" />
+                </div>
+
+                <div class="form-group">
+                    <label for="rootPackage">Root Package Name:</label>
+                    <input type="text" id="rootPackage" class="form-control" placeholder="Root Package Name" />
+                </div>
+
+                <button id="btn-applicationadd" onclick="addApplicationHandler()"
+                        class="btn action"><span class="oi oi-plus"></span> Add Application
+                </button>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- APPLICATION UPLOAD SOURCE CODE -->
+<div th:fragment="upload">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/upload'">upload source code</a>
+
+            <h3><a th:href="'/application/' + ${currentApp.get().id}">&larr;</a> Upload Source Code<br/>
+                <small>Application Management</small>
+            </h3>
+
+            <div class="wrapper">
+
+                <input th:if="${null != currentApp}" th:value="${currentApp.get().id}" type="hidden" id="aid"/>
+
+                <div class="form-group">
+                    <label for="uploadNewVersion"><i class="oi oi-data-transfer-upload"></i> Upload new version (*.war , *.ear, *.jar):</label><br/>
+                    <input class="btn btn-default fileinput-button" id="uploadNewVersion" type="file" name="uploadNewVersion" />
+                </div>
+
+                <button id="btn-uploadApplication" th:onclick="'uploadNewVersionHandler(' + ${currentApp.get().id} + ')'" class="btn action"><span class="oi oi-data-transfer-upload"></span> Upload New Version </button>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,2091 @@
+<!-- NAMESPACES LIST-->
+<div th:fragment="model-namespace">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            <a href="/model/namespace/add" class="create"><span class="oi oi-plus"></span> Add Namespace</a>
+
+            / <a href="/model/context">models</a> / <a href="/model/namespace">namespaces</a>
+
+            <h3>Namespaces<br/>
+                <small>List of Namespaces</small>
+            </h3>
+
+            <div class="wrapper">
+
+                <ul th:if="${#lists.isEmpty(page.getContent())}" class="empty" id="placeholder">
+                    <li class="item">
+                        <div class="empty-icon"><span class="oi oi-link-intact"></span></div>
+                        <div class="empty-title">No available namespaces</div>
+                        <div class="empty-text">Create a new <a th:href="/model/namespace/add">namespace</a></div>
+                    </li>
+                </ul>
+
+                <table id="namespaces-table" class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th class="col-md-3">Name</th>
+                        <th class="col-md-8">Details</th>
+                        <th class="col-md-1"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="namespace : ${page.getContent()}">
+                        <td><span th:text="${namespace.name}"></span></td>
+                        <td>
+                            <div class="show-field"><strong>Prefix:</strong> <span th:text="${namespace.prefix}"></span></div>
+                            <div class="show-field"><strong>URI:</strong> <span th:text="${namespace.uri}"></span></div>
+                        </td>
+                        <td>
+                            <span th:onclick="'editNamespaceRedirect('  +  ${namespace.id}  + ')'"
+                                  class='oi oi-pencil'></span>
+                            <span th:onclick="'deleteNamespaceHandler('  +  ${namespace.id}  + ')'"
+                                  class='oi oi-trash'></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div th:include="inc::pagination"></div>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- ADD NAMESPACE -->
+<div th:fragment="model-namespace-add">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            / <a href="/model/context">models</a> / <a href="/model/namespace">namespaces</a> / <a
+                href="/model/namespace/add">add</a>
+
+            <h3><a href="/model/namespace">&larr;</a> Add Namespace<br/>
+                <small>Namespaces</small>
+            </h3>
+
+            <div class="wrapper">
+
+                <div class="form-group">
+
+                    <label for="namespaceName">Name:</label>
+                    <input type="text" id="namespaceName"
+                           class="form-control" placeholder="Name"
+                           autocomplete="off"
+                           autofocus="true"/>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="namespacePrefix">Prefix:</label>
+                    <input type="text" id="namespacePrefix"
+                           class="form-control" placeholder="Prefix"/>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="namespaceURI">URI:</label>
+                    <input type="text" id="namespaceURI"
+                           class="form-control" placeholder="URI"/>
+                </div>
+
+                <button id="btn-namespaceadd" onclick="addNamespaceHandler()" class="btn action"><span
+                        class="oi oi-task"></span> Save
+                </button>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- EDIT NAMESPACE -->
+<div th:fragment="model-namespace-edit">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            / <a href="/model/context">models</a> / <a href="/model/namespace">namespaces</a> / <a
+                th:href="${null != namespace} ? '/model/namespace/' + ${namespace.get().id}"><span
+                th:text="${namespace.get().prefix}"></span></a>
+
+            <h3><a href="/model/namespace">&larr;</a> Edit Namespace<br/>
+                <small>Namespaces</small>
+            </h3>
+
+            <div class="wrapper">
+
+                <input th:if="${null != namespace}" th:value="${namespace.get().id}" type="hidden" id="nid"/>
+
+                <div class="form-group">
+
+                    <label for="namespaceName">Name:</label>
+                    <input type="text" id="namespaceName" th:value="${null != namespace} ? ${namespace.get().name}"
+                           class="form-control" placeholder="Name"
+                           autocomplete="off"
+                           autofocus="true"/>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="namespacePrefix">Prefix:</label>
+                    <input type="text" id="namespacePrefix" th:value="${null != namespace} ? ${namespace.get().prefix}"
+                           class="form-control" placeholder="Prefix"/>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="namespaceURI">URI:</label>
+                    <input type="text" id="namespaceURI" th:value="${null != namespace} ? ${namespace.get().uri}"
+                           class="form-control" placeholder="URI"/>
+                </div>
+
+                <button id="btn-namespaceadd" th:onclick="'editNamespaceHandler(' + ${namespace.get().id} + ')'"
+                        class="btn action"><span class="oi oi-task"></span> Save
+                </button>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- HANDLERS LIST-->
+<div th:fragment="model-handler">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            <a href="/model/handler/add" class="create"><span class="oi oi-plus"></span> Add Handler</a>
+
+            / <a href="/model/context">models</a> / <a href="/model/handler">handlers</a>
+
+            <h3>Handlers<br/>
+                <small>List of Handlers</small>
+            </h3>
+
+            <ul th:if="${#lists.isEmpty(page.getContent())}" class="empty" id="placeholder">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-link-intact"></span></div>
+                    <div class="empty-title">No available handlers</div>
+                    <div class="empty-text">Create a new <a href="/model/handler/add">handler</a></div>
+                </li>
+            </ul>
+
+
+            <div class="wrapper" th:if="${!#lists.isEmpty(page.getContent())}">
+
+                <table id="handlers-table" class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th class="col-md-3">Name</th>
+                        <th class="col-md-6">Details</th>
+                        <th class="col-md-2">Creation Date</th>
+                        <th class="col-md-1"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="handler : ${page.getContent()}">
+                        <td><span th:text="${handler.handlerName}"></span></td>
+                        <td>
+                            <div class="show-field"><strong>Input:</strong> <span th:text="${handler.hasInput.className}"></span></div>
+                            <div class="show-field"><strong>Output:</strong> <span th:text="${handler.hasOutput.className}"></span></div>
+                            <div class="show-field"><strong>Rest Endpoint URI:</strong> <span th:text="${handler.restEndpointURI}"></span></div>
+                        </td>
+                        <td>
+                            <span th:text="${#calendars.format(handler.dateCreated,'dd/MM/yyyy - HH:mm:ss')}"></span>
+                        </td>
+                        <td>
+                            <span th:onclick="'editHandlerRedirect(' + ${handler.id}  + ')'" class='oi oi-pencil'></span>
+                            <span th:onclick="'deleteHandlerHandler(' + ${handler.id} + ')'" class='oi oi-trash'></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div th:include="inc::pagination"></div>
+
+            </div>
+
+
+        </section>
+
+    </div>
+</div>
+
+<!-- ADD HANDLER -->
+<div th:fragment="model-handler-add">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            / <a href="/model/context">models</a> / <a href="/model/handler">handlers</a> / <a href="/model/handler/add"> add</a>
+
+
+
+            <h3><a th:href="${null != predefinedInputID} ? 'javascript:window.history.back();location.reload();' : '/model/handler'">&larr;</a> Add Handler<br/>
+                <small>Handler Management</small>
+            </h3>
+
+            <div class="wrapper">
+
+                <div class="form-group">
+                    <label for="handlerName">Name:</label>
+                    <input type="text" id="handlerName" class="form-control" placeholder="Handler Name" />
+                </div>
+
+                <div class="form-group">
+
+                    <label for="nameSpace">Namespace:</label><br/>
+                    <select id="namespace" name="namespace" class="form-control">
+                        <option value="0">Please choose..</option>
+                        <option th:each="namespace : ${namespaces}" th:value="${namespace.id}"
+                                th:text="${namespace.prefix} + ' - ' + ${namespace.uri}"/>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="handlerEndpointURI">Rest Endpoint URI:</label>
+                    <input type="text" id="restEndpointURI" class="form-control" placeholder="Rest Endpoint URI"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="handlerHasInput">Input:</label>
+                    <input th:if="${null == predefinedInputName}" type="text" id="hasInput" class="form-control" placeholder="Input"/>
+                    <input th:if="${null != predefinedInputName}" type="text" id="hasInput" class="form-control" th:value="${predefinedInputName}"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="handlerHasOutput">Output:</label>
+                    <input th:if="${null == predefinedOutputName}" type="text" id="hasOutput" class="form-control" placeholder="Output"/>
+                    <input th:if="${null != predefinedOutputName}" type="text" id="hasOutput" class="form-control" th:value="${predefinedOutputName}"/>
+                </div>
+
+                <input type="hidden" id="hasInputID" th:value="${null != predefinedInputID} ? ${predefinedInputID}"/>
+
+                <input type="hidden" id="hasOutputID" th:value="${null != predefinedOutputID} ? ${predefinedOutputID}"/>
+
+                <button id="btn-handleradd" onclick="addHandlerHandler()" class="btn action"><span
+                        class="oi oi-task"></span> Save
+                </button>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- EDIT HANDLER -->
+<div th:fragment="model-handler-edit">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            / <a href="/model/context">models</a> / <a href="/model/handler">handlers</a> / <a th:href="${null != handler} ? '/model/handler/' + ${handler.get().id}"><span th:text="${handler.get().handlerName}"></span></a>
+            <h3><a href="/model/handler">&larr;</a> <span th:text="${handler.get().handlerName}"></span><br/>
+                <small>Handler Management</small>
+            </h3>
+
+            <div class="wrapper">
+
+                <input th:if="${null != handler}" th:value="${handler.get().id}" type="hidden" id="hid"/>
+
+                <div class="form-group">
+
+                    <label for="handlerName">Name:</label>
+                    <input type="text" id="handlerName" th:value="${null != handler} ? ${handler.get().handlerName}" class="form-control" />
+                </div>
+
+                <div class="form-group">
+
+                    <label for="nameSpace">Namespace:</label><br/>
+                    <select id="namespace" name="namespace" class="form-control">
+                        <option value="0">Please choose..</option>
+                        <option th:each="namespace : ${namespaces}" th:value="${namespace.id}"
+                                th:text="${namespace.prefix} + ' - ' + ${namespace.uri}"
+                                th:selected="${null != handler and null != handler.get().namespaceID and namespace.id == handler.get().namespaceID.id}"/>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="handlerEndpointURI">Rest Endpoint URI:</label>
+                    <input type="text" id="restEndpointURI" class="form-control" th:value="${null != handler} ? ${handler.get().restEndpointURI}"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="handlerHasInput">Input:</label>
+                    <input type="text" id="hasInput" class="form-control" th:value="${null != handler} ? ${handler.get().hasInput.className}"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="handlerHasOutput">Output:</label>
+                    <input type="text" id="hasOutput" class="form-control" th:value="${null != handler} ? ${handler.get().hasOutput.className}"/>
+                </div>
+
+                <input type="hidden" id="hasInputID" th:value="${null != handler} ? ${handler.get().hasInput.id}"/>
+
+                <input type="hidden" id="hasOutputID" th:value="${null != handler} ? ${handler.get().hasOutput.id}"/>
+
+                <button id="btn-handleradd" th:onclick="'editHandlerHandler(' + ${handler.get().id} + ')'"
+                        class="btn action"><span class="oi oi-task"></span> Save
+                </button>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!--HLO LIST-->
+<div th:fragment="model-hlo">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            <!--<a href="javascript:addClassRedirect(1);" class="create"><span class="oi oi-plus"></span> Add Class</a>-->
+
+            / <a href="/dashboard">dashboard</a> / <a href="/model/context">model management</a> / <a href="/model/hlo">high
+            level ontology editor</a>
+            <h3>High-level Ontology Editor<br/>
+                <small>Model Management</small>
+            </h3>
+
+            <div class="wrapper">
+
+                Under construction!
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!--LIFECYCLE MGMT LIST-->
+<div th:fragment="model-lifecycle">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            <!--<a href="javascript:addClassRedirect(1);" class="create"><span class="oi oi-plus"></span> Add Class</a>-->
+
+            / <a href="/dashboard">dashboard</a> / <a href="/model/context">model management</a> / <a href="/model/hlo">life
+            cycle mgmt editor</a>
+            <h3>Life cycle Mgmt Editor<br/>
+                <small>Model Management</small>
+            </h3>
+
+            <div class="wrapper">
+
+                Under construction!
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!--CONTEXT MODEL LIST-->
+<div th:fragment="model-context">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            <div class="btn-group create-dropdown">
+                <button type="button" class="btn btn-default btn-default-main-text" onclick="addClassRedirect(1)"><span class="oi oi-plus"></span> Add Class</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-expanded="false">
+                    <li><a href="/api/v1/export/contextmodel/json" target="_blank">Export to JSON</a></li>
+                    <li><a href="/api/v1/export/contextmodel/rdf" target="_blank">Export to RDF</a></li>
+                </ul>
+            </div>
+
+            <!--<a href="javascript:addClassRedirect(1);" class="create"><span class="oi oi-plus"></span> Add Class</a>-->
+
+            / <a href="/model/context">models</a> / <a href="/model/context">context model editor</a> / <a
+                href="/model/context">security context element</a>
+
+            <h3>Context Model Editor<br/>
+                <small>Model Management</small>
+            </h3>
+
+            <ul class="secondary">
+                <li><a id="menu-security-context-element" href="/model/context">Security Context Element</a></li>
+                <li><a id="menu-object" href="/model/context/object">Object</a></li>
+                <li><a id="menu-request" href="/model/context/request">Request</a></li>
+                <li><a id="menu-subject" href="/model/context/subject">Subject</a></li>
+                <!--<li><a id="menu-context-pattern" href="/model/context/pattern">Context Pattern</a></li>-->
+            </ul>
+
+            <div class="wrapper">
+
+                <div id="tree1"></div>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!--CONTEXT MODEL PATTERN LIST-->
+<div th:fragment="model-context-pattern">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            <a href="javascript:addClassRedirect(2);" class="create"><span class="oi oi-plus"></span> Add Class</a>
+
+            / <a href="/model/context">models</a> / <a href="/model/context">context model editor</a> / <a
+                href="/model/context/pattern">context pattern</a>
+
+            <h3>Context Model Editor<br/>
+                <small>Model Management</small>
+            </h3>
+
+            <ul class="secondary">
+                <li><a id="menu-security-context-element" href="/model/context">Security Context Element</a></li>
+                <li><a id="menu-object" href="/model/context/object">Object</a></li>
+                <li><a id="menu-request" href="/model/context/request">Request</a></li>
+                <li><a id="menu-subject" href="/model/context/subject">Subject</a></li>
+                <!--<li><a id="menu-context-pattern" href="/model/context/pattern">Context Pattern</a></li>-->
+            </ul>
+
+            <div class="wrapper">
+
+                <div id="tree1"></div>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!--CONTEXT MODEL OBJECT LIST-->
+<div th:fragment="model-context-object">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            <div class="btn-group create-dropdown">
+                <button type="button" class="btn btn-default btn-default-main-text" onclick="addClassRedirect(2)"><span class="oi oi-plus"></span> Add Class</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-expanded="false">
+                    <li><a href="/api/v1/export/contextmodel/json" target="_blank">Export to JSON</a></li>
+                    <li><a href="/api/v1/export/contextmodel/rdf" target="_blank">Export to RDF</a></li>
+                </ul>
+            </div>
+
+            <!--<a href="javascript:addClassRedirect(2);" class="create"><span class="oi oi-plus"></span> Add Class</a>-->
+
+            / <a href="/model/context">models</a> / <a href="/model/context">context model editor</a> / <a
+                href="/model/context/object">object</a>
+
+            <h3>Context Model Editor<br/>
+                <small>Model Management</small>
+            </h3>
+
+            <ul class="secondary">
+                <li><a id="menu-security-context-element" href="/model/context">Security Context Element</a></li>
+                <li><a id="menu-object" href="/model/context/object">Object</a></li>
+                <li><a id="menu-request" href="/model/context/request">Request</a></li>
+                <li><a id="menu-subject" href="/model/context/subject">Subject</a></li>
+                <!--<li><a id="menu-context-pattern" href="/model/context/pattern">Context Pattern</a></li>-->
+            </ul>
+
+            <div class="wrapper">
+
+                <div id="tree1"></div>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!--CONTEXT MODEL REQUEST LIST-->
+<div th:fragment="model-context-request">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            <div class="btn-group create-dropdown">
+                <button type="button" class="btn btn-default btn-default-main-text" onclick="addClassRedirect(3)"><span class="oi oi-plus"></span> Add Class</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-expanded="false">
+                    <li><a href="/api/v1/export/contextmodel/json" target="_blank">Export to JSON</a></li>
+                    <li><a href="/api/v1/export/contextmodel/rdf" target="_blank">Export to RDF</a></li>
+                </ul>
+            </div>
+
+            <!--<a href="javascript:addClassRedirect(3);" class="create"><span class="oi oi-plus"></span> Add Class</a>-->
+
+            / <a href="/model/context">models</a> / <a href="/model/context">context model editor</a> / <a
+                href="/model/context/request">request</a>
+
+            <h3>Context Model Editor<br/>
+                <small>Model Management</small>
+            </h3>
+
+            <ul class="secondary">
+                <li><a id="menu-security-context-element" href="/model/context">Security Context Element</a></li>
+                <li><a id="menu-object" href="/model/context/object">Object</a></li>
+                <li><a id="menu-request" href="/model/context/request">Request</a></li>
+                <li><a id="menu-subject" href="/model/context/subject">Subject</a></li>
+                <!--<li><a id="menu-context-pattern" href="/model/context/pattern">Context Pattern</a></li>-->
+            </ul>
+
+            <div class="wrapper">
+
+                <div id="tree1"></div>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!--CONTEXT MODEL SUBJECT LIST-->
+<div th:fragment="model-context-subject">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            <div class="btn-group create-dropdown">
+                <button type="button" class="btn btn-default btn-default-main-text" onclick="addClassRedirect(4)"><span class="oi oi-plus"></span> Add Class</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-expanded="false">
+                    <li><a href="/api/v1/export/contextmodel/json" target="_blank">Export to JSON</a></li>
+                    <li><a href="/api/v1/export/contextmodel/rdf" target="_blank">Export to RDF</a></li>
+                </ul>
+            </div>
+
+            <!--<a href="javascript:addClassRedirect(4);" class="create"><span class="oi oi-plus"></span> Add Class</a>-->
+
+            / <a href="/model/context">models</a> / <a href="/model/context">context model editor</a> / <a
+                href="/model/context/subject">subject</a>
+
+            <h3>Context Model Editor<br/>
+                <small>Model Management</small>
+            </h3>
+
+            <ul class="secondary">
+                <li><a id="menu-security-context-element" href="/model/context">Security Context Element</a></li>
+                <li><a id="menu-object" href="/model/context/object">Object</a></li>
+                <li><a id="menu-request" href="/model/context/request">Request</a></li>
+                <li><a id="menu-subject" href="/model/context/subject">Subject</a></li>
+                <!--<li><a id="menu-context-pattern" href="/model/context/pattern">Context Pattern</a></li>-->
+            </ul>
+
+            <div class="wrapper">
+
+                <div id="tree1"></div>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+
+<!--CONTEXT MODEL ADD CLASS-->
+<div th:fragment="model-context-class-add">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            / <a href="/model/context">models</a> / <a href="/model/context">context model editor</a> / <a
+                th:href="${rootURL}"><span th:text="${rootClassName}"></span></a> / <a
+                th:href="'javascript:addClassRedirect(' + ${rootClassID} + ');'">add</a>
+
+            <h3><a th:href="${rootURL}">&larr;</a> Add Class<br/>
+                <small>Class Management</small>
+            </h3>
+
+            <div class="wrapper">
+
+                <input type="hidden" id="rootClassID" th:value="${rootClassID}"/>
+
+                <div class="form-group">
+
+                    <label for="className">Name:</label>
+                    <input type="text" id="className"
+                           class="form-control" placeholder="Class Name"
+                           autocomplete="off"
+                           autofocus="true"/>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="nameSpace">Namespace:</label><br/>
+                    <select id="namespace" name="namespace" class="form-control">
+                        <option value="0">Please choose..</option>
+                        <option th:each="namespace : ${namespaces}" th:value="${namespace.id}"
+                                th:text="${namespace.prefix} + ' - ' + ${namespace.uri}"/>
+                    </select>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="parentClass">Parent Class:
+                        <a href="" title='Enter class name or press * to see existing classes!' rel='tooltip'
+                           data-trigger='hover' data-placement='right' data-html='true'>
+                            <span class="oi oi-info"></span>
+                        </a>
+                    </label>
+                    <div class="input-group">
+
+                        <span class="input-group-addon">
+                            <input type="checkbox" aria-label="" id="hasParent" name="hasParent" value="1"/>
+                        </span>
+
+                        <input type="text" id="parentClass" class="form-control" placeholder="Parent Class"
+                               disabled="true"/>
+
+                        <input type="hidden" id="parentID"/>
+
+                    </div>
+                </div>
+
+                <button id="btn-classadd" onclick="addClazzHandler()" class="btn action"><span
+                        class="oi oi-task"></span> Save
+                </button>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!--CONTEXT MODEL EDIT CLASS-->
+<div th:fragment="model-context-class-edit">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            / <a href="/model/context">models</a> / <a href="/model/context">context model editor</a> / <a
+                th:href="${rootURL}"><span th:text="${rootClassName}"></span></a> / <a
+                th:href="'/model/context/class/' + ${clazz.get().id}"><span
+                th:text="${clazz.get().className}"></span></a>
+
+            <a th:if="${clazz.get().isDeletable()}" th:href="'javascript:deleteClazzHandler(' + ${clazz.get().id} + ');'" class="create"><span class="oi oi-trash"></span> Delete Class</a>
+
+            <h3><a th:href="${rootURL}">&larr;</a> Edit Class<br/>
+                <small>Context Model Editor</small>
+            </h3>
+
+            <ul class="secondary">
+                <li><a id="menu-edit-class" th:href="'/model/context/class/' + ${clazz.get().id}">Class Info</a></li>
+                <li><a id="menu-properties" th:href="'/model/context/class/' + ${clazz.get().id} + '/property'">Properties</a>
+                </li>
+                <li><a id="menu-instances"
+                       th:href="'/model/context/class/' + ${clazz.get().id} + '/instance'">Instances</a></li>
+            </ul>
+
+            <div class="wrapper">
+
+                <input type="hidden" id="rootClassID" th:value="${clazz.get().rootID.id}"/>
+
+                <div class="form-group">
+
+                    <input th:if="${null != clazz}" th:value="${clazz.get().id}" type="hidden" id="cid"/>
+
+                    <label for="className">Name:</label>
+                    <input th:value="${null != clazz} ? ${clazz.get().className}" type="text" id="className"
+                           class="form-control" placeholder="Class Name"
+                           autocomplete="off"
+                           autofocus="true"/>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="nameSpace">Namespace:</label><br/>
+                    <select id="namespace" name="namespace" class="form-control">
+                        <option value="0">Please choose..</option>
+                        <option th:each="namespace : ${namespaces}" th:value="${namespace.id}"
+                                th:text="${namespace.prefix} + ' - ' + ${namespace.uri}"
+                                th:selected="${null != clazz and null != clazz.get().namespaceID and namespace.id == clazz.get().namespaceID.id}"/>
+                    </select>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="parentClass">Parent Class:
+                        <a href="" title='Enter class name or press * to see existing classes!' rel='tooltip'
+                           data-trigger='hover' data-placement='right' data-html='true'>
+                            <span class="oi oi-info"></span>
+                        </a>
+                    </label>
+                    <div class="input-group">
+
+                        <span class="input-group-addon">
+                            <input type="checkbox" aria-label="" id="hasParent" name="hasParent"
+                                   th:value="${null != clazz.get().parentID and clazz.get().parentID.id != 1} ? '1' : '0'"
+                                   th:checked="${null != clazz.get().parentID and clazz.get().parentID.id != 1} ? 'true' : 'false'"/>
+                        </span>
+
+                        <input th:value="${null != clazz.get().parentID and clazz.get().parentID.id != 1} ? ${clazz.get().parentID.className}"
+                               type="text" id="parentClass" class="form-control" placeholder="Parent Class"
+                               th:disabled="${null != clazz.get().parentID and clazz.get().parentID.id !=1} ? 'false' : 'true'"/>
+
+                        <input type="hidden" id="parentID"
+                               th:value="${null != clazz.get().parentID} ? ${clazz.get().parentID.id}"/>
+
+                    </div>
+                </div>
+
+                <button id="btn-classedit" onclick="editClazzHandler()"
+                        class="btn action"><span class="oi oi-task"></span> Save
+                </button>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!--CONTEXT MODEL INSTANCES LIST-->
+<div th:fragment="model-context-class-instances">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            <a th:href="@{'/model/context/class/'+${clazz.id}+'/instance/add'}" class="create"><span
+                    class="oi oi-plus"></span> Add Instance</a>
+
+            / <a href="/model/context">models</a> / <a href="/model/context">context model editor</a>
+            / <a th:href="${rootURL}"><span th:text="${rootClassName}"></span></a>
+            / <a th:href="'/model/context/class/' + ${clazz.id}"><span th:text="${clazz.className}"></span></a>
+            / <a th:href="'/model/context/class/' + ${clazz.id} + '/instance'">instances</a>
+
+            <h3>
+                <a th:href="'/model/context/class/'+${clazz.id}">&larr;</a>
+                Instances<br/>
+                <small>Class: <span th:text="${clazz.className}"></span></small>
+            </h3>
+
+            <ul class="secondary">
+                <li><a id="menu-edit-class" th:href="'/model/context/class/' + ${clazz.id}">Class Info</a></li>
+                <li><a id="menu-properties" th:href="'/model/context/class/' + ${clazz.id} + '/property'">Properties</a>
+                </li>
+                <li><a id="menu-instances" th:href="'/model/context/class/' + ${clazz.id} + '/instance'">Instances</a>
+                </li>
+            </ul>
+
+            <ul th:if="${#lists.isEmpty(clazz.instances)}" class="empty" id="placeholder">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-fork"></span></div>
+                    <div class="empty-title">No available instances</div>
+                    <div class="empty-text">Create a new <a
+                            th:href="'/model/context/class/'+${clazz.id}+'/instance/add'">instance</a></div>
+                </li>
+            </ul>
+
+            <div class="wrapper" th:if="${!#lists.isEmpty(clazz.instances)}">
+
+                <table id="instances-table" class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th class="col-md-1 text-center" data-column-id="id" data-type="numeric">ID</th>
+                        <th class="col-md-2" data-column-id="instanceName">Instance Name</th>
+                        <th class="col-md-2" data-column-id="instanceNamespace">Namespace</th>
+                        <th class="col-md-2" data-column-id="commands" data-formatter="commands"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="instance : ${clazz.instances}">
+                        <td class="text-center"><span th:text="${instance.id}"></span></td>
+                        <td><span th:text="${instance.instanceName}"></span></td>
+                        <td><span
+                                th:text="${null != instance.namespaceID} ? ${instance.namespaceID.prefix} : '-'"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- CONTEXT MODEL INSTANCE ADD/EDIT -->
+<div th:fragment="model-context-class-instance-add">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            / <a href="/model/context">models</a> / <a href="/model/context">context model editor</a>
+            / <a th:href="${rootURL}"><span th:text="${rootClassName}"></span></a>
+            / <a th:href="'/model/context/class/' + ${clazz.id}"><span th:text="${clazz.className}"></span></a>
+            / <a th:href="'/model/context/class/' + ${clazz.id} + '/instance'">instances</a>
+            / <a
+                th:href="${null == instance} ? '/model/context/class/' + ${clazz.id} + '/instance/add' : '/model/context/class/' + ${clazz.id} + '/instance/' + ${instance.get().id}">
+            <span th:text="${null == instance} ? 'add' : ${instance.get().instanceName}"></span>
+        </a>
+
+            <h3><a th:href="'/model/context/class/' + ${clazz.id} + '/instance'">&larr;</a> <span
+                    th:text="${null == instance} ? 'Add Instance' : ${instance.get().instanceName}"></span><br/>
+                <small>Class: <span th:text="${clazz.className}"></span></small>
+            </h3>
+
+            <div class="wrapper">
+
+                <div class="form-group">
+
+                    <input th:if="${null != instance}" th:value="${instance.get().id}" type="hidden" id="iid"/>
+
+
+                    <label for="instanceName">Name:</label>
+                    <input th:value="${null != instance} ? ${instance.get().instanceName}" type="text" id="instanceName"
+                           class="form-control" placeholder="Instance Name"
+                           autocomplete="off"
+                           autofocus="true"/>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="nameSpace">Namespace:</label><br/>
+                    <select id="namespace" name="namespace" class="form-control">
+                        <option value="0">Please choose..</option>
+                        <option th:each="namespace : ${namespaces}" th:value="${namespace.id}"
+                                th:text="${namespace.prefix} + ' - ' + ${namespace.uri}"
+                                th:selected="${null != instance and null != instance.get().namespaceID and namespace.id == instance.get().namespaceID.id}"/>
+                    </select>
+                </div>
+
+                <div th:if="${null != properties}" class="form-group" th:each="property: ${properties}">
+
+                    <label th:for="'value-' + ${property.id}"><span th:text="${property.name}"></span>:</label>
+
+                    <input th:if="${!property.isObjectProperty()}" type="text" th:id="${property.id}"
+                           class="form-control property" th:placeholder="${property.name}"
+                           th:value="${null != instance and instance.get().hasPropertyInstanceByPropertyID(property.id)} ? ${instance.get().getPropertyInstanceByPropertyID(property.id).name} : ''"/>
+
+                    <input th:if="${property.isObjectProperty()}" type="text" th:id="${property.id}"
+                           class="form-control property objectProperty" th:placeholder="${property.name}"
+                           th:value="${null != instance and instance.get().hasPropertyInstanceByPropertyID(property.id)} ? ${instance.get().getPropertyInstanceByPropertyID(property.id).name} : ''"/>
+
+                </div>
+
+                <button id="btn-instanceadd"
+                        th:onclick="${null != instance} ? 'editInstanceHandler(' + ${clazz.id} + ')' : 'addInstanceHandler(' + ${clazz.id} + ')'"
+                        class="btn action"><span class="oi oi-task"></span> Save
+                </button>
+            </div>
+        </section>
+    </div>
+</div>
+
+<!--CONTEXT MODEL PROPERTIES LIST-->
+<div th:fragment="model-context-class-properties">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            <a th:href="@{'/model/context/class/'+${clazz.id}+'/property/add'}" class="create"><span
+                    class="oi oi-plus"></span> Add Property</a>
+
+            / <a href="/model/context">models</a> / <a href="/model/context">context model editor</a>
+            / <a th:href="${rootURL}"><span th:text="${rootClassName}"></span></a>
+            / <a th:href="'/model/context/class/' + ${clazz.id}"><span th:text="${clazz.className}"></span></a>
+            / <a th:href="'/model/context/class/' + ${clazz.id} + '/property'">properties</a>
+
+            <h3>
+                <a th:href="'/model/context/class/'+ ${clazz.id}">&larr;</a>
+                Properties<br/>
+                <small>Class: <span th:text="${clazz.className}"></span></small>
+            </h3>
+
+            <ul class="secondary">
+                <li><a id="menu-edit-class" th:href="'/model/context/class/' + ${clazz.id}">Class Info</a></li>
+                <li><a id="menu-properties" th:href="'/model/context/class/' + ${clazz.id} + '/property'">Properties</a>
+                </li>
+                <li><a id="menu-instances" th:href="'/model/context/class/' + ${clazz.id} + '/instance'">Instances</a>
+                </li>
+            </ul>
+
+            <ul th:if="${#lists.isEmpty(properties)}" class="empty" id="placeholder">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-fork"></span></div>
+                    <div class="empty-title">No available properties</div>
+                    <div class="empty-text">Create a new <a
+                            th:href="'/model/context/class/'+${clazz.id}+'/property/add'">property</a></div>
+                </li>
+            </ul>
+
+            <div class="wrapper" th:if="${!#lists.isEmpty(properties)}">
+
+                <table id="properties-table" class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th class="col-md-1 text-center">ID</th>
+                        <th class="col-md-2">Name</th>
+                        <th class="col-md-2">Range</th>
+                        <th class="col-md-2">Sub-property Of</th>
+                        <th class="col-md-1">Namespace</th>
+                        <th class="col-md-2"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="property : ${properties}">
+                        <td class="text-center"><span th:text="${property.id}"></span></td>
+                        <td><span th:text="${property.name}"></span></td>
+                        <td><span
+                                th:text="${property.objectProperty} ? ${property.objectPropertyClassID.className} : ${property.propertyTypeID.name}"></span>
+                        </td>
+                        <td><span
+                                th:text="${null != property.subPropertyOfID} ? ${property.subPropertyOfID.name} : '-'"></span>
+                        </td>
+                        <td><span
+                                th:text="${null != property.namespaceID} ? ${property.namespaceID.prefix} : '-'"></span>
+                        </td>
+                        <td><span class="oi oi-pencil"
+                                  th:onclick="'page.redirect(\'/model/context/class/' + ${clazz.id} + '/property/' + ${property.id} + '\')'"></span>
+                            <span class="oi oi-trash"
+                                  th:onclick="'deletePropertyHandler(' + ${property.id} + ',' + ${clazz.id} + ')'"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!--CONTEXT MODEL PROPERTY ADD/EDIT-->
+<div th:fragment="model-context-class-property-add">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            / <a href="/model/context">models</a> / <a href="/model/context">context model editor</a>
+            / <a th:href="${rootURL}"><span th:text="${rootClassName}"></span></a>
+            / <a th:href="'/model/context/class/' + ${clazz.id}"><span th:text="${clazz.className}"></span></a>
+            / <a th:href="'/model/context/class/' + ${clazz.id} + '/property'">properties</a>
+            / <a
+                th:href="${null == property} ? '/model/context/class/' + ${clazz.id} + '/property/add' : '/model/context/class/' + ${clazz.id} + '/property/' + ${property.id}">
+            <span th:text="${null == property} ? 'add' : ${property.name}"></span>
+        </a>
+
+            <h3><a th:href="'/model/context/class/' + ${clazz.id} + '/property'">&larr;</a> <span
+                    th:text="${null == property} ? 'Add Property' : ${property.name}"></span><br/>
+                <small>Class: <span th:text="${clazz.className}"></span></small>
+            </h3>
+
+            <div class="wrapper">
+
+                <div class="form-group">
+
+                    <input type="hidden" id="rootClassID" th:value="${clazz.rootID.id}"/>
+
+                    <input type="hidden" id="classID" th:value="${clazz.id}"/>
+
+                    <input th:if="${null != property}" th:value="${property.id}" type="hidden" id="pid"/>
+
+                    <input th:if="${null != property}"
+                           th:value="${null != property and property.objectProperty} ? '1' : '0'" type="hidden"
+                           id="objectProperty"/>
+
+                    <input th:if="${null != property}"
+                           th:value="${null != property and null != property.subPropertyOfID} ? '1' : '0'" type="hidden"
+                           id="subProperty"/>
+
+                    <label for="propertyName">Name:</label>
+                    <input th:value="${null != property} ? ${property.name}" type="text" id="propertyName"
+                           class="form-control" placeholder="Property Name"
+                           autocomplete="off"
+                           autofocus="true"/>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="nameSpace">Namespace:</label><br/>
+                    <select id="namespace" name="namespace" class="form-control">
+                        <option value="0">Please choose..</option>
+                        <option th:each="namespace : ${namespaces}" th:value="${namespace.id}"
+                                th:text="${namespace.prefix} + ' - ' + ${namespace.uri}"
+                                th:selected="${null != property and null != property.namespaceID and namespace.id == property.namespaceID.id}"/>
+                    </select>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="transitivity">Transitivity:</label><br/>
+                    <select id="transitivity" name="transitivity" class="form-control">
+                        <option value="0" th:selected="${null != property and property.transitivity == 0}">No</option>
+                        <option value="1" th:selected="${null != property and property.transitivity == 1}">Yes</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="parentClass">Sub-property Of:
+                        <!--<a href="" title='Enter class name or press * to see existing classes!' rel='tooltip' data-trigger='hover' data-placement='right' data-html='true'>-->
+                        <!--<span class="oi oi-info"></span>-->
+                        <!--</a>--><br/>
+                    </label>
+                    <div class="input-group">
+
+                        <span class="input-group-addon">
+                            <input type="checkbox" aria-label="" id="isSubPropertyOf" name="isSubPropertyOf"
+                                   th:value="${null != property and null != property.subPropertyOfID} ? '1' : '0'"
+                                   th:checked="${null != property and null != property.subPropertyOfID} ? 'true' : 'false'"/>
+                        </span>
+
+                        <input th:value="${null != property and null != property.subPropertyOfID} ? ${property.subPropertyOfID.name}"
+                               type="text" id="subPropertyOfPropertyName" class="form-control"
+                               placeholder="Sub-property Of"
+                               th:disabled="${null != property and null != property.subPropertyOfID} ? 'false' : 'true'"/>
+
+                        <input type="hidden" id="subPropertyOfID"
+                               th:value="${null != property and null != property.subPropertyOfID} ? ${property.subPropertyOfID.id}"/>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="propertyType">Type:</label><br/>
+                    <select id="propertyType" name="propertyType" class="form-control">
+                        <option value="0">Please choose..</option>
+                        <option th:each="propertyType : ${propertyTypes}" th:value="${propertyType.id}"
+                                th:text="${propertyType.name}"
+                                th:selected="${null != property and null != property.propertyTypeID and propertyType.id == property.propertyTypeID.id}"/>
+                    </select>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="parentClass">Object Property:
+                        <a href="" title='Enter class name or press * to see existing classes!' rel='tooltip'
+                           data-trigger='hover' data-placement='right' data-html='true'>
+                            <span class="oi oi-info"></span>
+                        </a>
+                    </label>
+                    <div class="input-group">
+
+                        <span class="input-group-addon">
+                            <input type="checkbox" aria-label="" id="isObjectProperty" name="isObjectProperty"
+                                   th:value="${null != property and property.objectProperty} ? '1' : '0'"
+                                   th:checked="${null != property and property.isObjectProperty()} ? 'true' : 'false'"/>
+                        </span>
+
+                        <input th:value="${null != property and property.isObjectProperty()} ? ${property.objectPropertyClassID.className}"
+                               type="text" id="objectPropertyClassName" class="form-control" placeholder="Object Type"
+                               th:disabled="${null != property and property.isObjectProperty()} ? 'false' : 'true'"/>
+
+                        <input type="hidden" id="objectPropertyClassID"
+                               th:value="${null != property and null != property.objectPropertyClassID} ? ${property.objectPropertyClassID.id}"/>
+
+                    </div>
+                </div>
+
+
+                <button id="btn-propertyadd"
+                        th:onclick="${null != property} ? 'editPropertyHandler(' + ${clazz.id} + ')' : 'addPropertyHandler(' + ${clazz.id} + ')'"
+                        class="btn action"><span class="oi oi-task"></span> Save
+                </button>
+            </div>
+        </section>
+    </div>
+</div>
+
+<!-- EXPRESSION MODEL LIST-->
+<div th:fragment="model-expression">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            <a href="/model/expression/add" class="create"><span class="oi oi-plus"></span> Add Expression</a>
+
+            / <a href="/model/expression">expression editor</a>
+
+            <h3>Expression Editor<br/>
+                <small>Expression Management</small>
+            </h3>
+
+            <ul th:if="${#lists.isEmpty(page.getContent())}" class="empty" id="placeholder">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-list"></span></div>
+                    <div class="empty-title">No available expressions</div>
+                    <div class="empty-text">Create a new <a th:href="'/model/expression/add'">expression</a></div>
+                </li>
+            </ul>
+
+            <div class="wrapper" th:if="${!#lists.isEmpty(page.getContent())}">
+
+                <table id="expressions-table" class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th class="col-md-3">Name</th>
+                        <th class="col-md-6">Details</th>
+                        <th class="col-md-2">Creation Date</th>
+                        <th class="col-md-1"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="expression : ${page.getContent()}">
+                        <td><span th:text="${expression.expressionName}"></span></td>
+                        <td>
+                            <div class="show-field"><strong>Namespace:</strong> <span th:text="${null != expression.namespaceID} ? ${expression.namespaceID.uri} : 'N/A'"></span></div>
+                            <!--<div class="show-field">-->
+                                <!--<div class="wrap-field-label">-->
+                                    <!--<strong>Instances:</strong>-->
+                                <!--</div>-->
+                                <!--<span th:if="${#lists.isEmpty(expression.getInstances())}" th:text="'N/A'"></span>-->
+                                <!--<span th:if="${!#lists.isEmpty(expression.getInstances())}"-->
+                                   <!--th:each="instance, key: ${expression.getInstances()}" th:text="!${key.last} ? ${instance} + ', ' : ${instance}">-->
+                                <!--</span>-->
+
+                            <!--</div>-->
+                        </td>
+                        <td>
+                            <span th:text="${#calendars.format(expression.dateCreated,'dd/MM/yyyy - HH:mm:ss')}"></span>
+                        </td>
+                        <td>
+                            <span th:onclick="'editExpressionRedirect(' + ${expression.id}  + ')'" class='oi oi-pencil'></span>
+                            <span th:onclick="'deleteExpressionHandler(' + ${expression.id} + ')'" class='oi oi-trash'></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div th:include="inc::pagination"></div>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- ADD/EDIT EXPRESSION MODEL LIST-->
+<div th:fragment="model-expression-add">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            / <a href="/model/expression">expression editor</a>
+            / <a
+                th:href="${null != expression} ? '/model/expression/' + ${expression.get().id} : '/model/expression/add'"><span
+                th:text="${null != expression} ? ${expression.get().expressionName} :'add'"></span></a>
+
+            <h3><a href="/model/expression">&larr;</a> <span
+                    th:text="${null != expression} ? ${expression.get().expressionName} : 'Add Expression'"></span><br/>
+                <small>Expression Management</small>
+            </h3>
+
+            <div id="errorMessage" class="alert alert-warning"></div>
+
+            <div class="wrapper">
+
+                <div class="form-group">
+
+                    <input th:if="${null != expression}" th:value="${expression.get().id}" type="hidden" id="eid"/>
+
+                    <label for="expressionName">Name:</label>
+                    <input th:value="${null != expression} ? ${expression.get().expressionName}" type="text"
+                           id="expressionName"
+                           class="form-control" placeholder="Expression Name"
+                           autocomplete="off"
+                           autofocus="true"/>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="description">Description:</label>
+                    <textarea th:text="${null != expression} ? ${expression.get().description}" id="description"
+                              class="form-control" placeholder="Description"></textarea>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="nameSpace">Namespace:</label><br/>
+                    <select id="namespace" name="namespace" class="form-control">
+                        <option value="0">Please choose..</option>
+                        <option th:each="namespace : ${namespaces}" th:value="${namespace.id}"
+                                th:text="${namespace.prefix} + ' - ' + ${namespace.uri}"
+                                th:selected="${null != expression and null != expression.get().namespaceID and namespace.id == expression.get().namespaceID.id}"/>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="instances">Instances: </label><br/>
+                    <select id="instances" data-placeholder="Choose instances..." style="width:350px; height:40px;"
+                            multiple="true" class="chosen-select">
+                        <option th:each="instance : ${instances}" th:value="${instance.id}"
+                                th:text="${instance.instanceName}"
+                                th:selected="${null != expression} ? ${#lists.contains(expression.get().getInstances(), #strings.toString(instance.id))} : 'false'"/>
+                        />
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="referredExpressions">Nested Expressions: </label><br/>
+                    <select id="referredExpressions" data-placeholder="Choose other expressions..." style="width:350px; height:40px;"
+                            multiple="true" class="chosen-select">
+                        <option th:each="tempExp : ${allExpressions}" th:value="${tempExp.id}"
+                                th:text="${tempExp.expressionName}"
+                                th:selected="${null != expression and null != expression.get().referredExpressions} ? ${#lists.contains(expression.get().getReferredExpressionsFormatted(), #strings.toString(tempExp.id))} : 'false'"/>
+                        />
+                    </select>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="condition">Condition:</label><br/>
+                    <select id="condition" name="condition" class="form-control">
+                        <option value="AND" th:selected="${null != expression and null != expression.get().condition and expression.get().condition == 'AND'}">AND</option>
+                        <option value="OR" th:selected="${null != expression and null != expression.get().condition and expression.get().condition == 'OR'}">OR</option>
+                    </select>
+                </div>
+
+                <button th:if="${null == expression}" id="btn-loadquerybuilder"
+                        th:onclick="${null != expression} ? 'loadQueryBuilder(\'edit\')' : 'loadQueryBuilder(\'add\')'"
+                        class="btn action"><span class="oi oi-loop-circular"></span> Load Expression Builder
+                </button>
+
+                <br th:if="${null == expression}"/>
+                <br th:if="${null == expression}"/>
+
+                <label th:if="${null != expression}" id="label" for="instances">Expression: </label><br/>
+
+                <div id="builder"></div>
+
+                <br/>
+
+                <div id="buttons"></div>
+
+                <input th:if="${null != expression}" type="hidden" id="expressionRules"
+                       th:value="${expression.get().expression}"/>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- POLICY SET MODEL LIST-->
+<div th:fragment="model-policyset">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            <div class="btn-group create-dropdown">
+                <button type="button" class="btn btn-default btn-default-main-text" onclick="page.redirect('/model/policyset/add');"><span class="oi oi-plus"></span> Add Policy Set</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-expanded="false">
+                    <li><a href="/api/v1/export/policymodel/json" target="_blank">Export to JSON</a></li>
+                    <li><a href="/api/v1/export/policymodel/rdf" target="_blank">Export to RDF</a></li>
+                    <li><a href="/api/v1/export/policymodel/xacml" target="_blank">Export to XACML</a></li>
+                </ul>
+            </div>
+
+            <!--<a href="/model/policyset/add" class="create"><span class="oi oi-plus"></span> Add Policy Set</a>-->
+
+            / <a href="/model/policyset">policy editor</a> / <a href="/model/policyset">policy sets</a>
+
+            <h3>Policy Set Editor<br/>
+                <small>Policy Management</small>
+            </h3>
+
+            <ul class="secondary">
+                <li><a id="menu-policy-set" href="/model/policyset">Policy Set</a></li>
+                <li><a id="menu-policy" href="/model/policy">Policy</a></li>
+                <li><a id="menu-rule" href="/model/rule">Rule</a></li>
+            </ul>
+
+            <ul th:if="${#lists.isEmpty(page.getContent())}" class="empty" id="placeholder">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-list"></span></div>
+                    <div class="empty-title">No available policy sets</div>
+                    <div class="empty-text">Create a new <a th:href="'/model/policyset/add'">policy set</a></div>
+                </li>
+            </ul>
+
+            <div class="wrapper" th:if="${!#lists.isEmpty(page.getContent())}">
+
+                <table id="policy-sets-table" class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th class="col-md-3">Policy Set Name</th>
+                        <th class="col-md-6">Details</th>
+                        <th class="col-md-2">Creation Date</th>
+                        <th class="col-md-1"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="policySet : ${page.getContent()}">
+                        <td><span th:text="${policySet.policySetName}"></span></td>
+                        <td>
+                            <div class="show-field show-field-provider-type"><strong>Namespace:</strong> <span
+                                    th:text="${policySet.namespaceID.name}"></span></div>
+                            <div class="show-field show-field-offering"><strong>Combining Algorithm:</strong> <span
+                                    th:text="${policySet.combiningAlgorithmID.name}"></span></div>
+                            <div class="show-field show-field-services">
+                                <div class="wrap-field-label">
+                                    <strong>Policies:</strong>
+                                    <span><a th:href="'/model/policyset/' + ${policySet.id} + '/policy'">(Assign / Un-assign)</a><br/></span>
+                                </div>
+                                <span th:if="${#lists.isEmpty(policySet.policySetPolicies)}" th:text="'N/A'"></span>
+                                <a th:if="${!#lists.isEmpty(policySet.policySetPolicies)}"
+                                   th:each="policySetValue, key: ${policySet.policySetPolicies}"
+                                   th:href="'/model/policy/' + ${policySetValue.policy.id}" target="_blank"><span
+                                        th:text="!${key.last} ? ${policySetValue.policy.policyName} + ', ' : ${policySetValue.policy.policyName}"></span></a>
+                            </div>
+                        </td>
+                        <td><span th:text="${#calendars.format(policySet.dateCreated,'dd/MM/yyyy - HH:mm:ss')}"></span>
+                        </td>
+                        <td>
+                            <span th:onclick="'editPolicySetRedirect(' + ${policySet.id} + ')'"
+                                  class='oi oi-pencil'></span>
+                            <span th:onclick="'deletePolicySetHandler(' + ${policySet.id} + ')'"
+                                  class='oi oi-trash'></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div th:include="inc::pagination"></div>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- ADD/EDIT POLICY SET MODEL-->
+<div th:fragment="model-policyset-add">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            / <a href="/model/policyset">policy editor</a> / <a href="/model/policyset">policy sets</a>
+            / <a th:href="${null != policySet} ? '/model/policyset/' + ${policySet.id} : '/model/policyset/add'"><span
+                th:text="${null != policySet} ? ${policySet.policySetName} :'add'"></span></a>
+
+            <h3><a href="/model/policyset">&larr;</a> <span
+                    th:text="${null != policySet} ? ${policySet.policySetName} : 'Add Policy Set'"></span><br/>
+                <small>Policy Set Management</small>
+            </h3>
+
+            <div id="errorMessage" class="alert alert-warning"></div>
+
+            <div class="wrapper">
+
+                <div class="form-group">
+
+                    <input th:if="${null != policySet}" th:value="${policySet.id}" type="hidden" id="pid"/>
+
+                    <input th:if="${null != policySet}" th:value="${selectedPolicies}" type="hidden"
+                           id="selectedPolicies"/>
+
+                    <label for="policySetName">Name:</label>
+                    <input th:if="${null == predefinedValue}"
+                           th:value="${null != policySet} ? ${policySet.policySetName}" type="text" id="policySetName"
+                           class="form-control" placeholder="Policy Set Name"
+                           autocomplete="off"
+                           autofocus="true"/>
+
+                    <input th:if="${null != predefinedValue}" th:value="${predefinedValue}" type="text"
+                           id="policySetName"
+                           class="form-control" placeholder="Policy Set Name"
+                           autocomplete="off"
+                           autofocus="true"/>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="description">Description:</label>
+                    <textarea th:text="${null != policySet} ? ${policySet.description}" id="description"
+                              class="form-control" placeholder="Description"></textarea>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="nameSpace">Namespace:</label><br/>
+                    <select id="namespace" name="namespace" class="form-control">
+                        <option value="0">Please choose..</option>
+                        <option th:each="namespace : ${namespaces}" th:value="${namespace.id}"
+                                th:text="${namespace.prefix} + ' - ' + ${namespace.uri}"
+                                th:selected="${null != policySet and null != policySet.namespaceID and namespace.id == policySet.namespaceID.id}"/>
+                    </select>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="policySetCombiningAlgorithm">Combining Algorithm:</label><br/>
+                    <select id="policySetCombiningAlgorithm" name="policySetCombiningAlgorithm" class="form-control">
+                        <option value="0">Please choose..</option>
+                        <option th:each="combiningAlgorithm : ${combiningAlgorithms}"
+                                th:value="${combiningAlgorithm.id}" th:text="${combiningAlgorithm.name}"
+                                th:selected="${null != policySet and null != policySet.combiningAlgorithmID and combiningAlgorithm.id == policySet.combiningAlgorithmID.id}"/>
+                    </select>
+                </div>
+
+                <!--<div class="form-group">-->
+                <!--<label for="policies">Policies:</label><br/>-->
+                <!--<select multiple="multiple" id="policies" name="my-select[]">-->
+                <!--<option th:each="policy : ${policies}" th:value="${policy.id}" th:text="${policy.policyName} + ' (' + ${policy.description} + ')'"/>-->
+                <!--</select>-->
+                <!--</div>-->
+
+                <button id="btn-policySetadd"
+                        th:onclick="${null != policySet} ? 'editPolicySetHandler()' : 'addPolicySetHandler()'"
+                        class="btn action"><span class="oi oi-task"></span> Save
+                </button>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<div th:fragment="model-policyset-policy">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            / <a href="/model/policyset">policy editor</a> / <a href="/model/policyset">policy sets</a>
+            / <a th:href="${null != policySet} ? '/model/policyset/' + ${policySet.id}"><span
+                th:text="${null != policySet} ? ${policySet.policySetName}"></span></a>
+            / <a th:href="${null != policySet} ? '/model/policyset/' + ${policySet.id} + '/policy'"> policies</a>
+
+            <h3><a href="/model/policyset">&larr;</a> <span
+                    th:text="${null != policySet} ? ${policySet.policySetName}"></span><br/>
+                <small>Policy Set Management</small>
+            </h3>
+
+            <div class="wrapper">
+
+                <label class="heading">Selected Policies</label>
+                <br/>
+                <label th:if="${#lists.isEmpty(selectedPolicies)}">No selected policies</label>
+
+                <br/>
+
+                <table class="table table-hover" th:if="!${#lists.isEmpty(selectedPolicies)}">
+                    <thead>
+                    <tr>
+                        <th class="col-md-4">Name</th>
+                        <th class="col-md-6">Description</th>
+                        <th class="col-md-2"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="value : ${selectedPolicies}">
+                        <td><a th:href="'/model/policy/' + ${value.id}" target="_blank"><span
+                                th:text="${value.policyName}"></span></a></td>
+                        <td><span
+                                th:utext="${null != value.description} ? ${#strings.replace(#strings.escapeXml(value.description), T(java.lang.System).getProperty('line.separator'), '&lt;br /&gt;')} : 'N/A'"></span>
+                        </td>
+                        <td>
+                            <span class="oi oi-link-broken"
+                                  th:onclick="'unassignPolicyToPolicySetHandler(' + ${policySet.id} + ', ' + ${value.id} + ')'"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <label class="heading">List of un-assigned policies</label><br/>
+                <label th:if="${#lists.isEmpty(unSelectedPolicies)}">No more policies</label>
+
+                <div th:if="!${#lists.isEmpty(unSelectedPolicies)}">
+                    <div class="form-item">
+                        <select class="form-control child" id="policy">
+                            <option th:each="value : ${unSelectedPolicies}" th:value="${value.id}"
+                                    th:text="${value.policyName}"></option>
+                        </select>
+                    </div>
+
+                    <br/>
+
+                    <button th:onclick="'assignPolicyToPolicySetHandler(' + ${policySet.id}  + ')'"
+                            class="btn action"><span class="oi oi-task"></span> Assign
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- POLICY MODEL LIST-->
+<div th:fragment="model-policy">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            <div class="btn-group create-dropdown">
+                <button type="button" class="btn btn-default btn-default-main-text" onclick="page.redirect('/model/policy/add');"><span class="oi oi-plus"></span> Add Policy</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-expanded="false">
+                    <li><a href="/api/v1/export/policymodel/json" target="_blank">Export to JSON</a></li>
+                    <li><a href="/api/v1/export/policymodel/rdf" target="_blank">Export to RDF</a></li>
+                    <li><a href="/api/v1/export/policymodel/xacml" target="_blank">Export to XACML</a></li>
+                </ul>
+            </div>
+
+            <!--<a href="/model/policy/add" class="create"><span class="oi oi-plus"></span> Add Policy</a>-->
+
+            / <a href="/model/policy/set">policy editor</a> / <a href="/model/policy">policies</a>
+
+            <h3>Policy Editor<br/>
+                <small>Policy Management</small>
+            </h3>
+
+            <ul class="secondary">
+                <li><a id="menu-policy-set" href="/model/policyset">Policy Set</a></li>
+                <li><a id="menu-policy" href="/model/policy">Policy</a></li>
+                <li><a id="menu-rule" href="/model/rule">Rule</a></li>
+            </ul>
+
+            <ul th:if="${#lists.isEmpty(page.getContent())}" class="empty" id="placeholder">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-list"></span></div>
+                    <div class="empty-title">No available policies</div>
+                    <div class="empty-text">Create a new <a th:href="'/model/policy/add'">policy</a></div>
+                </li>
+            </ul>
+
+            <div class="wrapper" th:if="${!#lists.isEmpty(page.getContent())}">
+
+                <table id="policies-table" class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th class="col-md-3">Policy Name</th>
+                        <th class="col-md-6">Details</th>
+                        <th class="col-md-2">Creation Date</th>
+                        <th class="col-md-1"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="policy : ${page.getContent()}">
+                        <td><span th:text="${policy.policyName}"></span></td>
+                        <td>
+                            <div class="show-field show-field-provider-type"><strong>Namespace:</strong> <span
+                                    th:text="${policy.namespaceID.name}"></span></div>
+                            <div class="show-field show-field-offering"><strong>Combining Algorithm:</strong> <span
+                                    th:text="${policy.combiningAlgorithmID.name}"></span></div>
+                            <div class="show-field show-field-services">
+                                <div class="wrap-field-label">
+                                    <strong>Rules:</strong>
+                                    <span><a
+                                            th:href="'/model/policy/' + ${policy.id} + '/rule'">(Assign / Un-assign)</a><br/></span>
+                                </div>
+                                <span th:if="${#lists.isEmpty(policy.policyRules)}" th:text="'N/A'"></span>
+                                <a th:if="${!#lists.isEmpty(policy.policyRules)}"
+                                   th:each="ruleValue, key: ${policy.policyRules}"
+                                   th:href="'/model/rule/' + ${ruleValue.rule.id}" target="_blank"><span
+                                        th:text="!${key.last} ? ${ruleValue.rule.ruleName} + ', ' : ${ruleValue.rule.ruleName}"></span></a>
+                            </div>
+                        </td>
+                        <td><span th:text="${#calendars.format(policy.dateCreated,'dd/MM/yyyy - HH:mm:ss')}"></span>
+                        </td>
+                        <td>
+                            <span th:onclick="'editPolicyRedirect(' + ${policy.id} + ')'" class='oi oi-pencil'></span>
+                            <span th:onclick="'deletePolicyHandler(' + ${policy.id} + ')'" class='oi oi-trash'></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div th:include="inc::pagination"></div>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- ADD/EDIT POLICY MODEL-->
+<div th:fragment="model-policy-add">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            / <a href="/model/policyset">policy editor</a> / <a href="/model/policy">policies</a>
+            / <a th:href="${null != policy} ? '/model/policy/' + ${policy.id} : '/model/policy/add'"><span
+                th:text="${null != policy} ? ${policy.policyName} :'add'"></span></a>
+
+            <h3><a href="/model/policy">&larr;</a> <span
+                    th:text="${null != policy} ? ${policy.policyName} : 'Add Policy'"></span><br/>
+                <small>Policy Management</small>
+            </h3>
+
+            <div id="errorMessage" class="alert alert-warning"></div>
+
+            <div class="wrapper">
+
+                <div class="form-group">
+
+                    <input th:if="${null != policy}" th:value="${policy.id}" type="hidden" id="pid"/>
+
+                    <input th:if="${null != policy}" th:value="${selectedRules}" type="hidden" id="selectedRules"/>
+
+                    <label for="policyName">Name:</label>
+                    <input th:if="${null == predefinedValue}" th:value="${null != policy} ? ${policy.policyName}"
+                           type="text" id="policyName"
+                           class="form-control" placeholder="Policy Name"
+                           autocomplete="off"
+                           autofocus="true"/>
+                    <input th:if="${null != predefinedValue}" th:value="${predefinedValue}" type="text" id="policyName"
+                           class="form-control" placeholder="Policy Name"
+                           autocomplete="off"
+                           autofocus="true"/>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="description">Description:</label>
+                    <textarea th:text="${null != policy} ? ${policy.description}" id="description" class="form-control"
+                              placeholder="Description"></textarea>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="nameSpace">Namespace:</label><br/>
+                    <select id="namespace" name="namespace" class="form-control">
+                        <option value="0">Please choose..</option>
+                        <option th:each="namespace : ${namespaces}" th:value="${namespace.id}"
+                                th:text="${namespace.prefix} + ' - ' + ${namespace.uri}"
+                                th:selected="${null != policy and null != policy.namespaceID and namespace.id == policy.namespaceID.id}"/>
+                    </select>
+                </div>
+
+                <div class="form-group">
+
+                    <label for="policyCombiningAlgorithm">Combining Algorithm:</label><br/>
+                    <select id="policyCombiningAlgorithm" name="policyCombiningAlgorithm" class="form-control">
+                        <option value="0">Please choose..</option>
+                        <option th:each="combiningAlgorithm : ${combiningAlgorithms}"
+                                th:value="${combiningAlgorithm.id}" th:text="${combiningAlgorithm.name}"
+                                th:selected="${null != policy and null != policy.combiningAlgorithmID and combiningAlgorithm.id == policy.combiningAlgorithmID.id}"/>
+                    </select>
+                </div>
+
+                <!--<div class="form-group">-->
+                <!--<label for="rules">Rules:</label><br/>-->
+                <!--<select multiple="multiple" id="rules" name="my-select[]">-->
+                <!--<option th:each="rule : ${rules}" th:value="${rule.id}" th:text="${rule.ruleName} + ' (' + ${rule.description} + ')'"/>-->
+                <!--</select>-->
+                <!--</div>-->
+
+                <button id="btn-policyadd" th:onclick="${null != policy} ? 'editPolicyHandler()' : 'addPolicyHandler()'"
+                        class="btn action"><span class="oi oi-task"></span> Save
+                </button>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<div th:fragment="model-policy-rule">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            / <a href="/model/policyset">policy editor</a> / <a href="/model/policy">policies</a>
+            / <a th:href="${null != policy} ? '/model/policy/' + ${policy.id}"><span
+                th:text="${null != policy} ? ${policy.policyName}"></span></a>
+            / <a th:href="${null != policy} ? '/model/policy/' + ${policy.id} + '/rule'"> rules</a>
+
+            <h3><a href="/model/policy">&larr;</a> <span th:text="${null != policy} ? ${policy.policyName}"></span><br/>
+                <small>Policy Management</small>
+            </h3>
+
+            <div class="wrapper">
+
+                <label class="heading">Selected Rules</label>
+
+                <br/>
+                <label th:if="${#lists.isEmpty(selectedRules)}">No selected rules</label>
+
+                <br/>
+
+                <table class="table table-hover" th:if="!${#lists.isEmpty(selectedRules)}">
+                    <thead>
+                    <tr>
+                        <th class="col-md-4">Name</th>
+                        <th class="col-md-6">Description</th>
+                        <th class="col-md-2"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="value : ${selectedRules}">
+                        <td><a th:href="'/model/rule/' + ${value.id}" target="_blank"><span
+                                th:text="${value.ruleName}"></span></a></td>
+                        <td><span
+                                th:utext="${null != value.description} ? ${#strings.replace(#strings.escapeXml(value.description), T(java.lang.System).getProperty('line.separator'), '&lt;br /&gt;')} : 'N/A'"></span>
+                        </td>
+                        <td>
+                            <span class="oi oi-link-broken"
+                                  th:onclick="'unassignRuleToPolicyHandler(' + ${policy.id} + ', ' + ${value.id} + ')'"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <label class="heading">List of un-assigned rules</label><br/>
+                <label th:if="${#lists.isEmpty(unSelectedRules)}">No more rules</label>
+
+                <div th:if="!${#lists.isEmpty(unSelectedRules)}">
+                    <div class="form-item">
+                        <select class="form-control child" id="rule">
+                            <option th:each="value : ${unSelectedRules}" th:value="${value.id}"
+                                    th:text="${value.ruleName}"></option>
+                        </select>
+                    </div>
+
+                    <br/>
+
+                    <button th:onclick="'assignRuleToPolicyHandler(' + ${policy.id}  + ')'"
+                            class="btn action"><span class="oi oi-task"></span> Assign
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!--RULE MODEL LIST-->
+<div th:fragment="model-rule">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            <div class="btn-group create-dropdown">
+                <button type="button" class="btn btn-default btn-default-main-text" onclick="page.redirect('/model/rule/add');"><span class="oi oi-plus"></span> Add Rule</button>
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-expanded="false">
+                    <li><a href="/api/v1/export/policymodel/json" target="_blank">Export to JSON</a></li>
+                    <li><a href="/api/v1/export/policymodel/rdf" target="_blank">Export to RDF</a></li>
+                    <li><a href="/api/v1/export/policymodel/xacml" target="_blank">Export to XACML</a></li>
+                </ul>
+            </div>
+
+            <!--<a href="/model/rule/add" class="create"><span class="oi oi-plus"></span> Add Rule</a>-->
+
+            / <a href="/model/policy/set">policy editor</a> / <a href="/model/rule">rules</a>
+
+            <h3>Rule Editor<br/>
+                <small>Rule Management</small>
+            </h3>
+
+            <ul class="secondary">
+                <li><a id="menu-policy-set" href="/model/policyset">Policy Set</a></li>
+                <li><a id="menu-policy" href="/model/policy">Policy</a></li>
+                <li><a id="menu-rule" href="/model/rule">Rule</a></li>
+            </ul>
+
+            <ul th:if="${#lists.isEmpty(page.getContent())}" class="empty" id="placeholder">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-list"></span></div>
+                    <div class="empty-title">No available rules</div>
+                    <div class="empty-text">Create a new <a th:href="'/model/rule/add'">rule</a></div>
+                </li>
+            </ul>
+
+            <div class="wrapper" th:if="${!#lists.isEmpty(page.getContent())}">
+
+                <table id="rules-table" class="table table-hover table-striped">
+                    <thead>
+                    <tr>
+                        <th class="col-md-3">Rule Name</th>
+                        <th class="col-md-5">Details</th>
+                        <th class="col-md-2">Creation Date</th>
+                        <th class="col-md-2"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="rule : ${page.getContent()}">
+                        <td><span th:text="${rule.ruleName}"></span></td>
+                        <td>
+                            <div class="show-field show-field-provider-type"><strong>Namespace:</strong> <span
+                                    th:text="${rule.namespaceID.name}"></span></div>
+                            <div class="show-field show-field-offering"><strong>Controlled Object:</strong> <span
+                                    th:text="${rule.controlledObject}"></span></div>
+                            <div class="show-field show-field-auth"><strong>Authorization Type:</strong> <span
+                                    th:text="${rule.authorization}"></span></div>
+                            <div class="show-field show-field-auth"><strong>Actor:</strong> <span
+                                    th:text="${rule.actor}"></span></div>
+                            <div class="show-field show-field-provider"><strong>Permission Type:</strong> <span
+                                    th:text="${rule.permissionType}"></span></div>
+                            <div class="show-field show-field-auth"><strong>Action:</strong> <span
+                                    th:text="${rule.action}"></span></div>
+                            <div class="show-field show-field-auth"><strong>Expression:</strong> <a th:href="'/model/expression/' + ${rule.expressionID.id}" target="_blank"><span
+                                    th:text="${rule.expressionID.expressionName}"></span></a> </div>
+                        </td>
+                        <td><span th:text="${#calendars.format(rule.dateCreated,'dd/MM/yyyy - HH:mm:ss')}"></span></td>
+                        <td>
+                            <span th:onclick="'editRuleRedirect(' + ${rule.id} + ')'" class='oi oi-pencil'></span>
+                            <span th:onclick="'deleteRuleHandler(' + ${rule.id} + ')'" class='oi oi-trash'></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div th:include="inc::pagination"></div>
+
+            </div>
+
+        </section>
+    </div>
+</div>
+
+<!-- ADD/EDIT RULE MODEL-->
+<div th:fragment="model-rule-add">
+    <div class="container">
+
+        <div th:include="inc::sidebar-model"></div>
+
+        <section id="main">
+
+            / <a href="/model/policy/set">policy editor</a> / <a href="/model/rule">rules</a>
+            / <a th:href="${null != rule} ? '/model/rule/' + ${rule.get().id} : '/model/rule/add'"><span
+                th:text="${null != rule} ? ${rule.get().ruleName} :'add'"></span></a>
+
+            <h3><a href="/model/rule">&larr;</a> <span
+                    th:text="${null != rule} ? ${rule.get().ruleName} : 'Add Rule'"></span><br/>
+                <small>Rule Management</small>
+            </h3>
+
+            <div id="errorMessage" class="alert alert-warning"></div>
+
+            <div class="wrapper">
+
+                <!--<ul class="paasword" th:if="${null != rule}">-->
+                    <!--<li class="component policy">-->
+
+                        <!--<div id="expressionTitle" class="title"><a-->
+                                <!--th:href="${null != rule} ? '/model/expression/' + ${rule.get().expressionID.id}"-->
+                                <!--target="_blank"><span-->
+                                <!--th:text="${null != rule} ? ${rule.get().expressionID.expressionName}"></span></a></div>-->
+
+                        <!--&lt;!&ndash;<div id="expressionFriendlyData" class="desc"><span th:text="${null != rule} ? ${rule.get().expressionID.expressionFriendlyData}"></span></div>&ndash;&gt;-->
+
+                        <!--<div id="expressionDescription" class="desc"><span-->
+                                <!--th:text="${null != rule} ? ${rule.get().expressionID.description}"></span></div>-->
+
+                        <!--&lt;!&ndash;<div class="empty-icon"><span class="oi oi-list"></span></div>&ndash;&gt;-->
+
+                        <!--<div class="empty-title"><h4><span class="label label-default">Expression</span></h4></div>-->
+
+                    <!--</li>-->
+                <!--</ul>-->
+
+                <ul class="paasword">
+
+                    <div class="form-group">
+
+                        <input th:if="${null != rule}" th:value="${rule.get().id}" type="hidden" id="rid"/>
+
+                        <label for="ruleName">Name:</label>
+                        <input th:if="${null == predefinedValue}" th:value="${null != rule} ? ${rule.get().ruleName}"
+                               type="text" id="ruleName"
+                               class="form-control" placeholder="Rule Name"
+                               autocomplete="off"
+                               autofocus="true"/>
+                        <input th:if="${null != predefinedValue}" th:value="${predefinedValue}" type="text"
+                               id="ruleName"
+                               class="form-control" placeholder="Rule Name"
+                               autocomplete="off"
+                               autofocus="true"/>
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="description">Description:</label>
+                        <textarea th:text="${null != rule} ? ${rule.get().description}" id="description"
+                                  class="form-control" placeholder="Description"></textarea>
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="nameSpace">Namespace:</label><br/>
+                        <select id="namespace" name="namespace" class="form-control">
+                            <option value="0">Please choose..</option>
+                            <option th:each="namespace : ${namespaces}" th:value="${namespace.id}"
+                                    th:text="${namespace.prefix} + ' - ' + ${namespace.uri}"
+                                    th:selected="${null != rule and null != rule.get().namespaceID and namespace.id == rule.get().namespaceID.id}"/>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="controlledObject">Controlled Object:</label><br/>
+                        <select id="controlledObject" name="controlledObject" class="form-control"
+                                th:if="${null == predefinedObject}">
+                            <option value="0">Please choose..</option>
+                            <option th:each="object : ${objects}" th:value="${object}" th:text="${object}"
+                                    th:selected="${null != rule and #strings.equals('pcm:' + rule.get().controlledObject,object)}"/>
+                        </select>
+
+                        <select id="controlledObject" name="controlledObject" class="form-control"
+                                th:if="${null != predefinedObject}">
+                            <option value="0">Please choose..</option>
+                            <option th:each="object : ${objects}" th:value="${object}" th:text="${object}"
+                                    th:selected="${#strings.equals(predefinedObject,object)}"/>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="authorization">Authorization:</label><br/>
+                        <select id="authorization" name="authorization" class="form-control">
+                            <option value="0">Please choose..</option>
+                            <option value="pac:positive"
+                                    th:selected="${null != rule and 'pac:positive' == rule.get().authorization}">
+                                pac:permit
+                            </option>
+                            <option value="pac:negative"
+                                    th:selected="${null != rule and 'pac:negative' == rule.get().authorization}">
+                                pac:deny
+                            </option>
+                            <!--<option th:each="authorization : ${T(eu.paasword.repository.relational.domain.Rule.Authorization).values()}" th:value="${authorization}" th:text="${authorization}" th:selected="${null != rule and #strings.toString(authorization) == rule.get().authorization}"/>-->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="permissionType">Permission Type:</label><br/>
+                        <select id="permissionType" name="permissionType" class="form-control">
+                            <option value="0">Please choose..</option>
+                            <option th:each="permissionType : ${permissionTypes}" th:value="${permissionType.className}"
+                                    th:text="${permissionType.className}"
+                                    th:selected="${null != rule and #strings.equals(permissionType.className, rule.get().permissionType)}"/>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="action">Action:</label><br/>
+                        <select id="action" name="action" class="form-control"
+                                th:disabled="${null != rule} ? 'false' : 'true'">
+                            <option value="0">Please choose..</option>
+                            <option th:each="action : ${actions}" th:value="${action.instanceName}"
+                                    th:text="${action.instanceName}"
+                                    th:selected="${null != rule and #strings.equals(action.instanceName, rule.get().action)}"/>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="actor">Actor:</label><br/>
+                        <select id="actor" name="actor" class="form-control">
+                            <option value="0">Please choose..</option>
+                            <option th:each="actor : ${actors}" th:value="${actor.instanceName}"
+                                    th:text="${actor.instanceName}"
+                                    th:selected="${null != rule and #strings.equals(actor.instanceName,rule.get().actor)}"/>
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="expression">Expression:</label><br/>
+                        <select id="expression" name="expression" class="form-control">
+                            <option value="0">Please choose..</option>
+                            <option th:each="expression : ${expressions}" th:value="${expression.id}"
+                                    th:text="${expression.expressionName}"
+                                    th:selected="${null != rule and expression.id == rule.get().expressionID.id}"/>
+                        </select>
+                    </div>
+
+                    <button id="btn-ruleadd" th:onclick="${null != rule} ? 'editRuleHandler()' : 'addRuleHandler()'"
+                            class="btn action"><span class="oi oi-task"></span> Save
+                    </button>
+
+                </ul>
+
+            </div>
+
+        </section>
+    </div>
+</div>

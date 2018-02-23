@@ -1,0 +1,195 @@
+<!--HEADER-->
+<div th:fragment="header">
+
+    <div id="loader">
+        <div aria-busy="true" aria-label="Loading, please wait." role="progressbar"></div>
+    </div>
+
+    <div id="loader-full">
+        <div class="loader-inner ball-pulse">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <a href="/">
+            <div class="logo">
+            </div>
+        </a>
+
+        <div class="account">
+            <a sec:authorize="isAnonymous()" href="/login">Log in</a>
+
+            <div sec:authorize="isAuthenticated()">
+                <a href="/dashboard"><span class="oi oi-dashboard"></span> Dashboard</a>
+                <a href="/application"><span class="oi oi-bolt"></span> Applications</a>
+                <a href="/model/context"><span class="oi oi-fork"></span> Models</a>
+                <a href="/logout"><span class="oi oi-account-logout"></span> Logout (<span
+                        sec:authentication="name"></span>)</a>
+            </div>
+        </div>
+
+        <div id="notification-stack">
+        </div>
+    </div>
+
+</div>
+
+<!--CONTENT-->
+<div th:fragment="content">
+
+    <div id="home" class="container">
+
+        <section id="sidebar" class="home">
+            <h5>WELCOME TO PAASWORD PLATFORM</h5>
+
+            <ul>
+                <li>Current cloud applications and storage volumes often leave information at risk to theft, unauthorized exposure or malicious manipulation. The most critical part of a modern Cloud application and services is the data persistency layer and the database itself. To remedy this problem, PaaSword will introduce a holistic data privacy and security by design framework enhanced by sophisticated context-aware policy access models and robust policy access, decision, enforcement and governance mechanisms, which will enable the implementation of secure and transparent cloud-based applications and services that will maintain a fully distributed and totally encrypted data persistence layer, and, thus, will foster customers' data protection, integrity and confidentiality, even in the case wherein there is no control over the underlying third-party cloud resources utilized.
+                    PaaSword offers a security by design framework enabling security annotations,
+                    transparently in your IDE, transformed into context-aware security policies
+                    that enforce <span class="highlight">access control</span>, <span class="highlight">cryptographic protection</span>
+                    and <span class="highlight">physical distribution</span> for securing sensitive data. PAASWORD provides encrypted storage and context-aware access control for Platform-as-a-Service. It thereby delivers key components to protected next generation cloud applications against internal and external adversaries.
+                </li>
+            </ul>
+
+            <div class="widget"><span class="highlight">Objective I</span><br/>Leverage security and trust of Cloud infrastructures and services.</div>
+            <div class="widget"><span class="highlight">Objective II</span><br/>Ensure protection, privacy and integrity of the data stored in the Cloud.</div>
+            <div class="widget"><span class="highlight">Objective III</span><br/>Design and implement a Searchable Encryption Scheme for secure queries.</div>
+            <div class="widget"><span class="highlight">Objective IV</span><br/>Prove applicability, usability, effectiveness and value of the PaaSword concept in industrial, real-life services and applications.</div>
+
+        </section>
+
+        <!--<section id="main" class="home">-->
+            <!--<h5>Providers</h5>-->
+            <!--<img src="/images/providers.png"/>-->
+
+        <!--</section>-->
+
+    </div>
+
+</div>
+
+<!--SIDEBAR-DASHBOARD-->
+<div th:fragment="sidebar-dashboard">
+    <section id="sidebar">
+        <ul>
+            <li class="title">MENU</li>
+            <li><a id="menu-dashboard" href="/dashboard"><span class="oi oi-dashboard"></span> Dashboard</a></li>
+            <!--<li><a id="menu-application" href="/application"><span class="oi oi-bolt"></span> Application</a></li>-->
+            <li><a id="menu-resource" href="/resource"><span class="oi oi-hard-drive"></span> Resources</a></li>
+
+        </ul>
+        <ul>
+            <li class="title">DEVELOPER DOCS</li>
+            <li><a id="menu-documentation" href="/documentation"><span class="oi oi-document"></span> Documentation</a></li>
+            <!--<li class="disabled"><a id="menu-ide" href=""><span class="oi oi-code"></span> Launch IDE <span class="oi oi-external-link pull-right"></span></a></li>-->
+            <li><a id="menu-ide" href="http://ide.paasword.eu/" target="_blank"><span class="oi oi-code"></span> Launch IDE <span class="oi oi-external-link pull-right"></span></a></li>
+
+        </ul>
+        <ul sec:authorize="${hasRole('PRODUCT_MANAGER')}">
+            <li class="title">ADMIN</li>
+            <li><a id="menu-user" href="/user"><span class="oi oi-people"></span> Users</a></li>
+        </ul>
+
+    </section>
+</div>
+
+<!--SIDEBAR-APPLICATION-->
+<div th:fragment="sidebar-application">
+    <section id="sidebar">
+        <ul th:if="${null == currentApp}">
+            <li class="title">Applications</li>
+            <li><a id="menu-application" href="/application"><span class="oi oi-bolt"></span> All Applications</a></li>
+        </ul>
+        <ul th:if="${null == currentApp}">
+            <li class="title">Application</li>
+            <li class="disabled"><a id="menu-application-info" href=""><span class="oi oi-info"></span> Information</a></li>
+            <li class="disabled"><a id="menu-application-keys" href=""><span class="oi oi-key"></span> Keys</a></li>
+            <li class="disabled"><a id="menu-application-pep" href=""><span class="oi oi-code"></span> PEPs</a></li>
+            <li class="disabled"><a id="menu-application-datamodel" href=""><span class="oi oi-code"></span> Entities</a></li>
+        </ul>
+        <ul th:if="${null == currentApp}">
+            <!--<li class="disabled"><a id="menu-application-affinity" href=""><span class="oi oi-document"></span> Affinity Constraints</a></li>-->
+            <li class="disabled"><a id="menu-application-privacy" href=""><span class="oi oi-document"></span> Privacy Constraints</a></li>
+        </ul>
+        <ul th:if="${null == currentApp}">
+            <li class="disabled"><a id="menu-application-instance" href=""><span class="oi oi-sun"></span> Instances</a></li>
+            <!--<li><a id="menu-application-keymgmt" th:href="'/application/' + ${currentApp.get().id} + '/keymgmt'"><span class="oi oi-people"></span> Key Management</a></li>-->
+            <!--<li><a id="menu-activity" th:href="'/application/' + ${currentApp.get().id} + '/activity'"><span class="oi oi-menu"></span> Activity</a></li>-->
+        </ul>
+        <ul th:if="${null != currentApp}">
+            <li class="title">Applications</li>
+            <li><a id="menu-application" href="/application"><span class="oi oi-bolt"></span> All Applications</a></li>
+        </ul>
+        <ul th:if="${null != currentApp}">
+            <li class="title">Application</li>
+            <li><a id="menu-application-info" th:href="'/application/' + ${currentApp.get().id}"><span class="oi oi-info"></span> Information</a></li>
+            <li><a id="menu-application-keys" th:href="'/application/' + ${currentApp.get().id} + '/appkey'"><span class="oi oi-key"></span> Keys</a></li>
+            <li><a id="menu-application-pep" th:href="'/application/' + ${currentApp.get().id} + '/pep'"><span class="oi oi-code"></span> PEPs</a></li>
+            <li><a id="menu-application-datamodel" th:href="'/application/' + ${currentApp.get().id} + '/entity'"><span class="oi oi-code"></span> Entities</a></li>
+
+        </ul>
+
+        <ul th:if="${null != currentApp}">
+            <!--<li class="title">Constraints</li>-->
+            <!--<li><a id="menu-application-affinity" th:href="'/application/' + ${currentApp.get().id} + '/affinity'"><span class="oi oi-document"></span> Affinity Constraints</a></li>-->
+            <li><a id="menu-application-privacy" th:href="'/application/' + ${currentApp.get().id} + '/privacy'"><span class="oi oi-document"></span> Privacy Constraints</a></li>
+        </ul>
+        <ul th:if="${null != currentApp}">
+            <!--<li class="title">Instances</li>-->
+            <li><a id="menu-application-instance" th:href="'/application/' + ${currentApp.get().id} + '/instance'"><span class="oi oi-sun"></span> Instance</a></li>
+            <!--<li><a id="menu-application-keymgmt" th:href="'/application/' + ${currentApp.get().id} + '/keymgmt'"><span class="oi oi-people"></span> Key Management</a></li>-->
+            <!--<li><a id="menu-activity" th:href="'/application/' + ${currentApp.get().id} + '/activity'"><span class="oi oi-menu"></span> Activity</a></li>-->
+        </ul>
+    </section>
+</div>
+
+<!--SIDEBAR-MODEL-MANAGEMENT-->
+<div th:fragment="sidebar-model">
+    <section id="sidebar">
+        <ul>
+            <li class="title">Model</li>
+            <li><a id="menu-model-context" href="/model/context"><span class="oi oi-fork"></span> Context Model Editor</a></li>
+            <li><a id="menu-model-namespaces" href="/model/namespace"><span class="oi oi-link-intact"></span> Namespaces</a></li>
+            <li><a id="menu-model-handlers" href="/model/handler"><span class="oi oi-link-intact"></span> Handlers</a></li>
+            <!--<li><a id="menu-model-hlo" href="/model/hlo"><span class="oi oi-fork"></span> HLO Editor</a></li>-->
+        </ul>
+        <ul>
+            <li class="title">Policy Governance</li>
+            <li><a id="menu-model-expression" href="/model/expression"><span class="oi oi-list"></span> Expression Editor</a></li>
+            <li><a id="menu-model-policyset" href="/model/policyset"><span class="oi oi-list-rich"></span> Policy Editor</a></li>
+        </ul>
+    </section>
+</div>
+
+<!--PAGINATION-->
+<div th:fragment="pagination">
+    <nav th:if="${#arrays.length(page.items) > 1}" style="text-align:center">
+        <div class="pagination pagination-centered">
+            <ul class="pagination">
+                <li th:class="${page.firstPage}? 'disabled' : ''">
+                    <span th:if="${page.firstPage}">&larr; First</span>
+                    <a th:if="${not page.firstPage}" th:href="@{${page.url}(page=0,size=${page.size})}">&larr; First</a>
+                </li>
+                <li th:class="${page.hasPreviousPage}? '' : 'disabled'">
+                    <span th:if="${not page.hasPreviousPage}">&laquo;</span>
+                    <a th:if="${page.hasPreviousPage}" th:href="@{${page.url}(page=${page.number-1},size=${page.size})}" title="Go to previous page">&laquo;</a>
+                </li>
+                <li th:each="item : ${page.items}" th:class="${item.current}? 'active' : ''">
+                    <span th:if="${item.current}" th:text="${item.number + 1}">1</span>
+                    <a th:if="${not item.current}" th:href="@{${page.url}(page=${item.number},size=${page.size})}"><span th:text="${item.number+1}">1</span></a>
+                </li>
+                <li th:class="${page.hasNextPage}? '' : 'disabled'">
+                    <span th:if="${not page.hasNextPage}">&raquo;</span>
+                    <a th:if="${page.hasNextPage}" th:href="@{${page.url}(page=${page.number+1},size=${page.size})}" title="Go to next page">&raquo;</a>
+                </li>
+                <li th:class="${page.lastPage}? 'disabled' : ''">
+                    <span th:if="${page.lastPage}">Last &rarr;</span>
+                    <a th:if="${not page.lastPage}" th:href="@{${page.url}(page=${page.totalPages -1},size=${page.size})}">Last &rarr;</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>

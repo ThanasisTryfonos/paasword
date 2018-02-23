@@ -1,0 +1,142 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <name>paasword</name>
+    <url>https://paasword.eu</url>
+    <description>A holistic security-by-design framework</description>
+    <packaging>pom</packaging>
+    <groupId>eu.paasword</groupId>
+    <artifactId>parent</artifactId>
+    <version>1.0.0</version>
+
+    <!-- Project Modules -->
+    <modules>
+
+        <!-- Adapters (dynamic loadable) -->
+        <module>resource-adapters</module>
+        <!-- Handlers (dynamic loadable) -->
+        <module>handlers</module>
+        <!-- Annotations that will be offered to the developers -->
+        <module>annotation-libs</module>
+        <!-- PaaSword Library -->
+        <module>paasword-library</module>
+        <!-- Annotations that will be interpreted -->
+        <module>annotation-interpreter</module>
+        <!-- Database Proxy -->
+        <module>database-proxy</module>
+        <!-- JPA -->
+        <module>jpa</module>
+        <!-- Triplestore API -->
+        <module>triplestore-api</module>
+        <!-- Key Management -->
+        <module>key-management</module>
+        <!-- API Module -->
+        <module>api</module>
+        <!-- REST-Transfer Module -->
+        <module>rest-transfer</module>        
+        <!-- REST-API Module -->
+        <module>rest-api</module>
+        <!-- UTIL Module -->
+        <module>util</module>
+        <!-- Policy Validator -->
+        <module>validator</module>
+        <!-- REPOSITORY Module -->
+        <module>repository</module>
+        <!-- WEB-APP Module -->
+        <module>app</module>
+        <!-- SPI Module -->
+        <module>spi</module>
+        <!-- Semantic Authorization Engine -->
+        <module>semantic-authorization-engine</module>
+        <!-- External Module for testing purposes -->
+        <module>jpatests</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- Basic Project Settings -->
+        <project.source.charset>UTF-8</project.source.charset>
+        <project.source.encoding>UTF-8</project.source.encoding>
+        <java.version.source>1.8</java.version.source>
+        <java.version.target>1.8</java.version.target>
+        <maven.compiler.plugin>3.3</maven.compiler.plugin>
+        <maven.test.plugin>2.19</maven.test.plugin>
+        <org.springframework.boot>1.3.2.RELEASE</org.springframework.boot>
+        <org.springframework.test>4.2.4.RELEASE</org.springframework.test>
+        <org.springframework.spring-context>4.2.4.RELEASE</org.springframework.spring-context>
+        <org.springframework.security>4.0.3.RELEASE</org.springframework.security>
+        <com.mysql>5.1.36</com.mysql>
+        <junit>4.12</junit>
+
+        <!-- PaaSword Framework Global Version -->
+        <paasword.version>1.0.0</paasword.version>
+
+    </properties>
+
+
+    <build>
+        <plugins>
+            <!-- Java Compatibility-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin}</version>
+                <configuration>
+                    <encoding>${project.source.encoding}</encoding>
+                    <source>${java.version.source}</source>
+                    <target>${java.version.target}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- Global Repository Settings -->
+    <repositories>
+        <!-- Maven Central -->
+        <repository>
+            <id>MavenCentral</id>
+            <name>Maven repository</name>
+            <url>http://repo1.maven.org/maven2</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <!-- Spring -->
+        <repository>
+            <id>spring-snapshots</id>
+            <url>http://repo.spring.io/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-milestones</id>
+            <url>http://repo.spring.io/milestone</url>
+        </repository>
+        <!-- Redhat Repository -->
+        <repository>
+            <id>Redhat-techpreview-all-repository</id>
+            <name>Red Hat Tech Preview repository (all)</name>
+            <url>http://maven.repository.redhat.com/techpreview/all/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+        <!-- CloudFoundry PaaS Provider -->
+        <repository>
+            <id>alfresco</id>
+            <url>https://artifacts.alfresco.com/nexus/content/repositories/public/</url>
+        </repository>
+
+    </repositories>
+
+</project>

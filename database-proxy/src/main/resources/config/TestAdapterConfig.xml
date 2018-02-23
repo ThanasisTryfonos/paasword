@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="xml2yaml.xsl"?>
+<databases>
+    <mapping>
+        <relation>
+            <local>filme</local>
+            <remote>remote.data</remote>
+        </relation>
+    </mapping>
+    <database>
+        <type>remote</type>
+        <class>eu.paasword.dbproxy.database.SQLDatabase</class>
+        <driver>org.postgresql.Driver</driver>
+        <driverConn>jdbc:postgresql</driverConn>
+        <host>localhost</host>
+        <name>kit_mimosecco_remote</name>
+        <user>kitpostgres</user>
+        <password>kit-mimo-pgs1!</password>
+        <scheme>
+            <place>remote</place>
+            <type>database</type>
+            <name></name>
+        </scheme>
+    </database>
+    <database>
+        <type>local</type>
+        <class>eu.paasword.dbproxy.database.SQLDatabase</class>
+        <driver>org.postgresql.Driver</driver>
+        <driverConn>jdbc:postgresql</driverConn>
+        <host>localhost</host>
+        <name>kit_mimosecco_local</name>
+        <user>kitpostgres</user>
+        <password>kit-mimo-pgs1!</password>
+        <scheme>
+            <place>local</place>
+            <type>database</type>
+            <name></name>
+        </scheme>
+    </database>
+    <wibustick>
+        <number>1</number>
+        <hcmse>0</hcmse>
+        <firmcode>10</firmcode>
+        <productcode>1608</productcode>
+        <featurecode>1</featurecode>
+    </wibustick>
+    <deamon>
+        <port>1338</port>
+        <poolsize>5</poolsize>
+    </deamon>
+    <index>
+        <indextype>standard</indextype>
+        <indexhashkey>ABCDEFGHIJKLMNOP</indexhashkey>
+        <bucketsize>10</bucketsize>
+    </index>
+    <global>
+        <logging>true</logging>
+    </global>
+</databases>
+
+

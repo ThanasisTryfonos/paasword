@@ -1,0 +1,56 @@
+#Type,Label,Arg1,Arg2
+#Acceptable Types: Class (C), InstanceOfClass (IOC), ObjectProperty(OP), KnowledgeTriple (KT)
+#
+# examples:
+#
+# C,Area,null        denotes a Class with label Area and no superclass
+# C,Continent,Area   denotes a Class with label Continent that has Area as superclass 
+# 
+# IoC,Europe,Continent      denotes an Instance of class continent with the label Europe
+#
+# OP,areaContainsArea, Area, Area,false,null    denotes an Object Property that has label: areaContainsArea, Domain: Area, Range: Area , it is Not transitive (false) and has no parental Object Property (null)
+#
+
+#Basic Elements required by XACML
+
+C,Request,null
+C,Subject,null
+C,Object,null
+C,Action,null
+
+
+IoC,GET,Action
+IoC,POST,Action
+IoC,DELETE,Action
+IoC,PUT,Action
+
+OP,requestHasSubject, Request, Subject,false,null
+OP,requestHasObject, Request, Object,false,null
+OP,requestHasAction, Request, Action,false,null
+
+#Pilot Specific (static) Elements 
+C,Area,null
+C,Continent,Area
+C,Country, Area
+C,City, Area
+C,Region, Area
+C,IPAddress,null
+C,PrivateIPAddress,IPAddress
+C,PublicIPAddress,PrivateIPAddress
+C,Building, null
+C,PartOfBuilding, null
+C,Floor, PartOfBuilding
+C,Datacenter, PartOfBuilding
+C,Employee, null
+C,Secretery, Employee
+C,Developer, Employee
+
+#static Instances
+IoC,Europe,Continent
+IoC,Greece,Country
+
+#Object Properties
+
+OP,subjectHasLocation, Subject, City,false,null
+OP,requestHasIPAddress, Request, IPAddress,false,null           //instantiated by Default AuthorizationRequest Handler
+

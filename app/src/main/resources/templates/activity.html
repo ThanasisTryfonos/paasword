@@ -1,0 +1,51 @@
+a<!-- ACTIVITY LIST-->
+<div th:fragment="list">
+    <div class="container">
+
+        <div th:include="inc::sidebar-application"></div>
+
+        <section id="main">
+
+            / <a href="/application">application</a> / <a th:href="'/application/' + ${currentApp.get().id}"><span th:text="${currentApp.get().name}"></span></a> / <a th:href="'/application/' + ${currentApp.get().id} + '/activity'">activity</a>
+            <h3><a th:href="'/application/' + ${currentApp.get().id}">&larr;</a> Activity<br/>
+                <small>Recent activity</small>
+            </h3>
+
+            <ul th:if="${#lists.isEmpty(logs)}" class="empty">
+                <li class="item">
+                    <div class="empty-icon"><span class="oi oi-menu"></span></div>
+                    <div class="empty-title">No recent activity</div>
+                    <div class="empty-text"><a href="/application/add">Create</a> an application</div>
+                </li>
+            </ul>
+
+            <div class="wrapper" th:if="${!#lists.isEmpty(logs)}" >
+                <table class="table table-hover table-striped" id="activities-table">
+                    <thead>
+                    <tr>
+                        <th class="col-md-2">Permission</th>
+                        <th class="col-md-6">Description</th>
+                        <th class="col-md-4">Timestamp</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="log : ${logs}">
+                       <td><span class="label label-default" th:text="${log.permission}"></span></td>
+                        <td>
+                            <strong>Object</strong> <span th:text="${log.object}"></span><br/>
+                            <strong>Actor</strong> <span th:text="${log.actor}"></span><br/>
+                            <strong>Agent</strong> <span th:text="${log.agent}"></span><br/>
+                            <strong>Remote IP Address</strong> <span th:text="${log.remoteAddress}"></span><br/>
+                            <strong>Local IP Address</strong> <span th:text="${log.localAddress}"></span><br/>
+                            <strong>Referrer</strong> <span th:text="${log.getReferrer()}"></span><br/>
+                            <strong>Policies</strong> <span th:text="${log.getPolicies()}"></span>
+                        </td>
+                        <td><span th:text="${log.getTimestamp()}"></span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </section>
+    </div>
+</div>

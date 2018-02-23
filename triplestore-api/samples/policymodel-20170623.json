@@ -1,0 +1,192 @@
+{
+	"prefixes": {
+		"schema": "http://www.schema.org/",
+		"pcpm": "http://www.paasword-project.eu/ontologies/cpsm/2015/11/30#",
+		"xsd": "http://www.w3.org/2001/XMLSchema#",
+		"pbdfd": "http://www.paasword.eu/security-policy/seerc/pbdfd#",
+		"rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+		"gr": "http://purl.org/goodrelations/v1#",
+		"ppm": "http://www.paasword-project.eu/ontologies/psm/2015/11/30#",
+		"pbe": "http://www.paasword.eu/security-policy/seerc/pbe#",
+		"pac": "http://www.paasword.eu/security-policy/seerc/pac#",
+		"ex": "http://www.example.com/test/1#",
+		"rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+		"usdl-core": "http://www.linked-usdl.org/ns/usdl-core#",
+		"xca": "http://www.paasword.eu/security-policy/seerc/combiningAlgorithms#",
+		"pdm": "http://www.paasword-project.eu/ontologies/dsm/2015/11/30#",
+		"dcterms": "http://purl.org/dc/terms/",
+		"pcm": "http://www.paasword-project.eu/ontologies/casm/2015/11/30#",
+		"pwd": "http://www.paasword.eu/security-policy/seerc/pwd#",
+		"aggr": "http://ontology.ihmc.us/temporalAggregates.owl#",
+		"foaf": "http://xmlns.com/foaf/0.1/"
+	},
+	"policySets": [{
+		"combiningAlgorithm": "xca:denyOverrides",
+		"name": "webAccessPolicySet",
+		"policies": ["ex:webAccessPolicy"],
+		"id": 4,
+		"uri": "ex:webAccessPolicySet"
+	}],
+	"policies": [{
+		"combiningAlgorithm": "xca:denyUnlessPermit",
+		"name": "webAccessPolicy",
+		"rules": [],
+		"id": 16,
+		"uri": "ex:webAccessPolicy"
+	}, {
+		"combiningAlgorithm": "xca:permitOverrides",
+		"name": "viewContactsPolicy",
+		"rules": ["pcm:orbiRule1", "pcm:orbiRule2"],
+		"id": 17,
+		"uri": "pcm:viewContactsPolicy"
+	}, {
+		"combiningAlgorithm": "xca:permitOverrides",
+		"name": "myProcessesPolicy",
+		"rules": ["pcm:xchangeRule"],
+		"id": 18,
+		"uri": "pcm:myProcessesPolicy"
+	}, {
+		"combiningAlgorithm": "xca:denyOverrides",
+		"name": "myCorpsPolicy",
+		"rules": ["pcm:xchangeRule1", "pcm:xchangeRule2"],
+		"id": 19,
+		"uri": "pcm:myCorpsPolicy"
+	}],
+	"rules": [{
+		"authorizationUri": "pac:positive",
+		"actionUri": "ex:POST",
+		"name": "orbiRule1",
+		"controlledObjectUri": "eu.singularlogic.orbi.controller.WebController.contactsList",
+		"actorUri": "ex:Any Subject",
+		"id": 18,
+		"uri": "pcm:orbiRule1",
+		"exprUri": "pcm:orbiExpression1"
+	}, {
+		"authorizationUri": "pac:positive",
+		"actionUri": "ex:POST",
+		"name": "orbiRule2",
+		"controlledObjectUri": "eu.singularlogic.orbi.controller.WebController.contactsList",
+		"actorUri": "ex:Any Subject",
+		"id": 19,
+		"uri": "pcm:orbiRule2",
+		"exprUri": "pcm:orbiExpression2"
+	}, {
+		"authorizationUri": "pac:positive",
+		"actionUri": "ex:POST",
+		"name": "xchangeRule",
+		"controlledObjectUri": "eu.ubitech.xchange.app.controller.ProcessInstanceController.processList",
+		"actorUri": "ex:Any Subject",
+		"id": 20,
+		"uri": "pcm:xchangeRule",
+		"exprUri": "pcm:xchangeExpression"
+	}, {
+		"authorizationUri": "pac:positive",
+		"actionUri": "ex:POST",
+		"name": "xchangeRule1",
+		"controlledObjectUri": "eu.ubitech.xchange.app.controller.CorpController.corpList",
+		"actorUri": "ex:Any Subject",
+		"id": 21,
+		"uri": "pcm:xchangeRule1",
+		"exprUri": "pcm:xchangeExpression"
+	}, {
+		"authorizationUri": "pac:positive",
+		"actionUri": "ex:POST",
+		"name": "xchangeRule2",
+		"controlledObjectUri": "eu.ubitech.xchange.app.controller.CorpController.corpList",
+		"actorUri": "ex:Any Subject",
+		"id": 22,
+		"uri": "pcm:xchangeRule2",
+		"exprUri": "pcm:xchangeExpression1"
+	}],
+	"contextExpressions": [{
+		"nestedExpressions": [],
+		"name": "orbiExpression1",
+		"id": 27,
+		"type": "pac:ANDContextExpression",
+		"params": [{
+			"refersTo": "ex:Any Request",
+			"datatype": "pcm:OperatingSystem",
+			"property": "pcm:requestHasOperatingSystem",
+			"hasParameter": "pcm:OS X"
+		}, {
+			"refersTo": "ex:Any Request",
+			"datatype": "pcm:DayOfWeek",
+			"property": "pcm:requestInSpecificDay",
+			"hasParameter": "pcm:Working day"
+		}, {
+			"refersTo": "ex:Any Request",
+			"datatype": "pcm:HourOfDay",
+			"property": "pcm:requestInSpecificHour",
+			"hasParameter": "pcm:Working hours"
+		}, {
+			"refersTo": "ex:Any Subject",
+			"datatype": "pcm:City",
+			"property": "pcm:subjectHasLocation",
+			"hasParameter": "pcm:Thessaloniki"
+		}],
+		"uri": "pcm:orbiExpression1"
+	}, {
+		"nestedExpressions": [],
+		"name": "orbiExpression2",
+		"id": 28,
+		"type": "pac:ANDContextExpression",
+		"params": [{
+			"refersTo": "ex:Any Request",
+			"datatype": "pcm:DeviceType",
+			"property": "pcm:requestHasDeviceType",
+			"hasParameter": "pcm:Personal computer"
+		}],
+		"uri": "pcm:orbiExpression2"
+	}, {
+		"nestedExpressions": [],
+		"name": "xchangeExpression",
+		"id": 29,
+		"type": "pac:ANDContextExpression",
+		"params": [{
+			"refersTo": "ex:Any Request",
+			"datatype": "pcm:DeviceType",
+			"property": "pcm:requestHasDeviceType",
+			"hasParameter": "pcm:Personal computer"
+		}, {
+			"refersTo": "ex:Any Request",
+			"datatype": "pcm:OperatingSystem",
+			"property": "pcm:requestHasOperatingSystem",
+			"hasParameter": "pcm:OS X"
+		}, {
+			"refersTo": "ex:Any Subject",
+			"datatype": "pcm:City",
+			"property": "pcm:subjectHasLocation",
+			"hasParameter": "pcm:Thessaloniki"
+		}, {
+			"refersTo": "ex:Any Request",
+			"datatype": "pcm:DayOfWeek",
+			"property": "pcm:requestInSpecificDay",
+			"hasParameter": "pcm:Working day"
+		}],
+		"uri": "pcm:xchangeExpression"
+	}, {
+		"nestedExpressions": [],
+		"name": "xchangeExpression1",
+		"id": 30,
+		"type": "pac:ANDContextExpression",
+		"params": [{
+			"refersTo": "ex:Any Request",
+			"datatype": "pcm:HourOfDay",
+			"property": "pcm:requestInSpecificHour",
+			"hasParameter": "pcm:Working hours"
+		}],
+		"uri": "pcm:xchangeExpression1"
+	}, {
+		"nestedExpressions": [],
+		"name": "testExp",
+		"id": 31,
+		"type": "pac:ANDContextExpression",
+		"params": [{
+			"associatedWith": "ex:Athens",
+			"datatype": "pcm:Coordinates",
+			"property": "pcm:hasCoordinates",
+			"hasParameter": "ex:GR_Athens_Coords"
+		}],
+		"uri": "pcm:testExp"
+	}]
+}

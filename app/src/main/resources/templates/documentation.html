@@ -1,0 +1,297 @@
+<!-- DOCUMENTATION SPRING BOOT -->
+<div th:fragment="list">
+    <div class="container">
+
+        <div th:include="inc::sidebar-dashboard"></div>
+
+        <section id="main">
+
+            / <a href="/documentation">documentation</a>
+            <h3><a href="/dashboard">&larr;</a> Documentation<br/>
+                <small>Needed Information</small>
+            </h3>
+
+            <ul class="secondary">
+                <li><a id="menu-documentation-generic" href="/documentation">PaaSword in Spring Boot Applications</a></li>
+                <li><a id="menu-documentation-webapp" href="/documentation/webapp">PaaSword in Web Applications</a></li>
+                <li><a id="menu-documentation-pep" href="/documentation/pep">PaaSword PEPs</a></li>
+                <li><a id="menu-documentation-jpa" href="/documentation/jpa">PaaSword JPA</a></li>
+            </ul>
+
+
+
+                <ul th:if="${#lists.isEmpty(documents)}" class="paasword">
+                    <li class="application">
+                        <ul class="tag">
+                            <li class="label">Add PaaSword Repository to your pom file:</li>
+                            <xmp style="white-space: pre-wrap;">
+<!-- PaaSword Repository -->
+<repository>
+    <id>paasword-repo</id>
+    <name>PaaSword Repository</name>
+    <url>http://ci.paasword.eu/nexus/content/repositories/thirdparty/</url>
+    <releases>
+        <enabled>true</enabled>
+    </releases>
+    <snapshots>
+        <enabled>true</enabled>
+    </snapshots>
+</repository>
+                            </xmp>
+                        </ul>
+                        <ul class="tag">
+                            <li class="label">Add PaaSword Library as dependency to your pom file:</li>
+                            <xmp>
+<dependency>
+    <groupId>eu.paasword</groupId>
+    <artifactId>paasword-libary</artifactId>
+    <version>1.0.0</version>
+</dependency>
+                            </xmp>
+                        </ul>
+                        <ul class="tag">
+                            <li class="label">Initialize PaaSword API as Spring Bean:</li>
+                            <xmp  style="white-space: pre-wrap;">
+@Bean
+public PaaSwordService initializePaaSwordService() {
+    return PaaSwordService.getInstance("PaaSwordFrameworkURL", "appKey");
+}
+                            </xmp>
+                        </ul>
+                        <ul class="tag">
+                            <li class="label">Add the EnableAspectJAutoProxy annotation to your main class:</li>
+                            <xmp  style="white-space: pre-wrap;">
+@EnableAspectJAutoProxy
+public class Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }
+    ...
+}
+                            </xmp>
+                        </ul>
+                    </li>
+                </ul>
+
+        </section>
+    </div>
+</div>
+
+<!-- DOCUMENTATION WEB APP -->
+<div th:fragment="webapp">
+    <div class="container">
+
+        <div th:include="inc::sidebar-dashboard"></div>
+
+        <section id="main">
+
+            / <a href="/documentation">documentation</a>
+            <h3><a href="/dashboard">&larr;</a> Documentation<br/>
+                <small>Needed Information</small>
+            </h3>
+
+            <ul class="secondary">
+                <li><a id="menu-documentation-generic" href="/documentation">PaaSword in Spring Boot Applications</a></li>
+                <li><a id="menu-documentation-webapp" href="/documentation/webapp">PaaSword in Web Applications</a></li>
+                <li><a id="menu-documentation-pep" href="/documentation/pep">PaaSword PEPs</a></li>
+                <li><a id="menu-documentation-jpa" href="/documentation/jpa">PaaSword JPA</a></li>
+            </ul>
+
+
+            <ul th:if="${#lists.isEmpty(documents)}" class="paasword">
+                <li class="application">
+                    <ul class="tag">
+                        <li class="label">Add PaaSword Repository to your pom file:</li>
+                        <xmp style="white-space: pre-wrap;">
+<!-- PaaSword Repository -->
+<repository>
+    <id>paasword-repo</id>
+    <name>PaaSword Repository</name>
+    <url>http://ci.paasword.eu/nexus/content/repositories/thirdparty/</url>
+    <releases>
+        <enabled>true</enabled>
+    </releases>
+    <snapshots>
+        <enabled>true</enabled>
+    </snapshots>
+</repository>
+                        </xmp>
+                    </ul>
+                    <ul class="tag">
+                        <li class="label">Add PaaSword Library as dependency to your pom file:</li>
+                        <xmp>
+<dependency>
+    <groupId>eu.paasword</groupId>
+    <artifactId>paasword-libary</artifactId>
+    <version>1.0.0</version>
+</dependency>
+                        </xmp>
+                    </ul>
+                    <ul class="tag">
+                        <li class="label">Initialize PaaSword Service as a Servlet:</li>
+                        <xmp  style="white-space: pre-wrap;">
+public class PaaSwordServlet extends HttpServlet {
+
+    public static PaaSwordService paaSwordService;
+
+    public void init() throws ServletException {
+        paaSwordService = PaaSwordService.getInstance("PaaSwordFrameworkURL", "appKey");
+    }
+
+}
+                        </xmp>
+                    </ul>
+                </li>
+            </ul>
+
+        </section>
+    </div>
+</div>
+
+<!-- DOCUMENTATION PEPs-->
+<div th:fragment="pep">
+    <div class="container">
+
+        <div th:include="inc::sidebar-dashboard"></div>
+
+        <section id="main">
+
+            / <a href="/documentation">documentation</a>
+            <h3><a href="/dashboard">&larr;</a> Documentation<br/>
+                <small>Needed Information</small>
+            </h3>
+
+            <ul class="secondary">
+                <li><a id="menu-documentation-generic" href="/documentation">PaaSword in Spring Boot Applications</a></li>
+                <li><a id="menu-documentation-webapp" href="/documentation/webapp">PaaSword in Web Applications</a></li>
+                <li><a id="menu-documentation-pep" href="/documentation/pep">PaaSword PEPs</a></li>
+                <li><a id="menu-documentation-jpa" href="/documentation/jpa">PaaSword JPA</a></li>
+            </ul>
+
+
+            <ul class="paasword">
+                <li class="application">
+                    <ul class="tag">
+                        <li class="label">Annotate your class/method with PaaSwordPEP annotation using the name of a Policy Set:</li>
+                        <xmp style="white-space: pre-wrap;">
+@PaaSwordPEP("webAccessPolicySet", type = PaaSwordPEP.Type.POLICY_SET)
+@RequestMapping(value = "/country", method = RequestMethod.GET)
+public String countries(Model model) {
+
+}
+                        </xmp>
+                    </ul>
+                    <ul class="tag">
+                        <li class="label">Annotate your class/method with PaaSwordPEP annotation using the name of a Policy:</li>
+                        <xmp style="white-space: pre-wrap;">
+@PaaSwordPEP("webAccessPolicy")
+@RequestMapping(value = "/country", method = RequestMethod.GET)
+public String countries(Model model) {
+
+}
+                        </xmp>
+                    </ul>
+                    <ul class="tag">
+                        <li class="label">Annotate your class/method with PaaSwordPEP annotation using the name of a Rule:</li>
+                        <xmp style="white-space: pre-wrap;">
+@PaaSwordPEP("webAccessRule", type = PaaSwordPEP.Type.RULE)
+@RequestMapping(value = "/country", method = RequestMethod.GET)
+public String countries(Model model) {
+
+}
+                        </xmp>
+                    </ul>
+
+                </li>
+            </ul>
+
+        </section>
+    </div>
+</div>
+
+<!-- DOCUMENTATION JPA-->
+<div th:fragment="jpa">
+    <div class="container">
+
+        <div th:include="inc::sidebar-dashboard"></div>
+
+        <section id="main">
+
+            / <a href="/documentation">documentation</a>
+            <h3><a href="/dashboard">&larr;</a> Documentation<br/>
+                <small>Needed Information</small>
+            </h3>
+
+            <ul class="secondary">
+                <li><a id="menu-documentation-generic" href="/documentation">PaaSword in Spring Boot Applications</a></li>
+                <li><a id="menu-documentation-webapp" href="/documentation/webapp">PaaSword in Web Applications</a></li>
+                <li><a id="menu-documentation-pep" href="/documentation/pep">PaaSword PEPs</a></li>
+                <li><a id="menu-documentation-jpa" href="/documentation/jpa">PaaSword JPA</a></li>
+            </ul>
+
+
+            <ul class="paasword">
+                <li class="application">
+                    <ul class="tag">
+                        <li class="label">Annotate your entities with PaaSwordEntity annotation:</li>
+                        <xmp style="white-space: pre-wrap;">
+@PaaSwordEntity
+public class Country {
+
+    @Id
+    @Column
+    private long id;
+
+    @Column (nullable = false, length = 50)
+    private String name;
+
+    @Column (nullable = false)
+    private int inhabitants;
+
+} //EoC
+                        </xmp>
+                    </ul>
+                    <ul class="tag">
+                        <li class="label">Use save method to store/update an Entity:</li>
+                        <xmp>
+PaaSwordEntityHandler entityHandler = PaaSwordEntityHandler.getInstance();
+
+// Adding Country
+Country country = new Country();
+country.setName("Greece");
+country.setInhabitants(10000000);
+
+entityHandler.save(country);
+                        </xmp>
+                    </ul>
+                    <ul class="tag">
+                        <li class="label">Use delete method to remove an Entity:</li>
+                        <xmp>
+PaaSwordEntityHandler entityHandler = PaaSwordEntityHandler.getInstance();
+
+entityHandler.delete(1, Country.class);
+                        </xmp>
+                    </ul>
+                    <ul class="tag">
+                        <li class="label">Use findOne method to find an Entity:</li>
+                        <xmp  style="white-space: pre-wrap;">
+PaaSwordEntityHandler entityHandler = PaaSwordEntityHandler.getInstance();
+
+Country country = (Country) entityHandler.findOne(Country.class);
+                        </xmp>
+                    </ul>
+                    <ul class="tag">
+                        <li class="label">Use findAll method to find all Entities:</li>
+                        <xmp  style="white-space: pre-wrap;">
+PaaSwordEntityHandler entityHandler = PaaSwordEntityHandler.getInstance();
+
+List countries = entityHandler.findAll(Country.class);
+                        </xmp>
+                    </ul>
+                </li>
+            </ul>
+
+        </section>
+    </div>
+</div>

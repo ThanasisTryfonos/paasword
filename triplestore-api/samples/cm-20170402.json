@@ -1,0 +1,2200 @@
+{
+	"prefixes": {
+		"schema": "http://www.schema.org/",
+		"pcpm": "http://www.paasword-project.eu/ontologies/cpsm/2015/11/30#",
+		"xsd": "http://www.w3.org/2001/XMLSchema#",
+		"pbdfd": "http://www.paasword.eu/security-policy/seerc/pbdfd#",
+		"rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+		"gr": "http://purl.org/goodrelations/v1#",
+		"ppm": "http://www.paasword-project.eu/ontologies/psm/2015/11/30#",
+		"pbe": "http://www.paasword.eu/security-policy/seerc/pbe#",
+		"pac": "http://www.paasword.eu/security-policy/seerc/pac#",
+		"ex": "http://www.example.com/test/1#",
+		"rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+		"usdl-core": "http://www.linked-usdl.org/ns/usdl-core#",
+		"xca": "http://www.paasword.eu/security-policy/seerc/combiningAlgorithms#",
+		"pdm": "http://www.paasword-project.eu/ontologies/dsm/2015/11/30#",
+		"dcterms": "http://purl.org/dc/terms/",
+		"pcm": "http://www.paasword-project.eu/ontologies/casm/2015/11/30#",
+		"pwd": "http://www.paasword.eu/security-policy/seerc/pwd#",
+		"aggr": "http://ontology.ihmc.us/temporalAggregates.owl#",
+		"foaf": "http://xmlns.com/foaf/0.1/"
+	},
+	"handlers": [{
+		"restEndpointURI": "http://handlers.paasword.eu/subjectHasLocation",
+		"name": "pcm:subjectHasLocation",
+		"hasOutput": "pcm:Area",
+		"id": 4,
+		"hasInput": "pcm:Subject"
+	},
+	{
+		"restEndpointURI": "http://handlers.paasword.eu/subjectHasLocationExtended",
+		"name": "pcm:subjectHasLocationExtended",
+		"hasOutput": "pcm:Area",
+		"id": 5,
+		"hasInput": "pcm:Subject"
+	},
+	{
+		"restEndpointURI": "http://handlers.paasword.eu/request2Device",
+		"name": "pcm:Request2Device",
+		"hasOutput": "pcm:DeviceType",
+		"id": 6,
+		"hasInput": "pcm:Request"
+	},
+	{
+		"restEndpointURI": "http://handlers.paasword.eu/handlerPersonArea",
+		"name": "pcm:handlerPersonArea",
+		"hasOutput": "pcm:Area",
+		"id": 8,
+		"hasInput": "pcm:Person"
+	},
+	{
+		"restEndpointURI": "http://handlers.paasword.eu/handlerAreaArea",
+		"name": "pcm:handlerAreaArea",
+		"hasOutput": "pcm:Area",
+		"id": 9,
+		"hasInput": "pcm:Area"
+	},
+	{
+		"restEndpointURI": "http://localhost:8082/api/semanticpolicyengine/handler",
+		"name": "pcm:requestIPAddress",
+		"hasOutput": "pcm:IPAddress",
+		"id": 10,
+		"hasInput": "pcm:Request"
+	}],
+	"definitions": [{
+		"instances": [],
+		"fatherID": 19,
+		"className": "Abstract Location",
+		"hasFather": true,
+		"id": 39,
+		"uri": "pcm:Abstract Location",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasName",
+			"id": 12,
+			"uri": "pcm:hasName"
+		},
+		{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:Area",
+			"name": "hasArea",
+			"id": 13,
+			"uri": "pcm:hasArea"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 56,
+		"className": "Access Sequence Pattern",
+		"hasFather": true,
+		"id": 59,
+		"uri": "pcpm:Access Sequence Pattern",
+		"properties": [{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcpm:TemporalSeq",
+			"name": "hasTemporalSeq",
+			"id": 106,
+			"uri": "aggr:hasTemporalSeq"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 19,
+		"className": "Address",
+		"hasFather": true,
+		"id": 36,
+		"uri": "pcm:Address",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:integer",
+			"name": "hasBuildingNumber",
+			"id": 76,
+			"uri": "pcm:hasBuildingNumber"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:float",
+			"name": "hasRoomNumber",
+			"id": 77,
+			"uri": "pcm:hasRoomNumber"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:integer",
+			"name": "hasFloorNumber",
+			"id": 78,
+			"uri": "pcm:hasFloorNumber"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "refersToContinentalUnion",
+			"id": 79,
+			"uri": "pcm:refersToContinentalUnion"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "refersToEconomicUnion",
+			"id": 80,
+			"uri": "pcm:refersToEconomicUnion"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasaddressCountry",
+			"id": 81,
+			"uri": "schema:hasaddressCountry"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasaddressLocality",
+			"id": 82,
+			"uri": "schema:hasaddressLocality"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasaddressRegion",
+			"id": 83,
+			"uri": "schema:hasaddressRegion"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:integer",
+			"name": "haspostalCode",
+			"id": 84,
+			"uri": "schema:haspostalCode"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "streetAddress",
+			"id": 85,
+			"uri": "schema:streetAddress"
+		}]
+	},
+	{
+		"instances": [{
+			"name": "SouthEurope",
+			"id": 74,
+			"uri": "ex:SouthEurope",
+			"propertyInstances": []
+		},
+		{
+			"name": "NorthEurope",
+			"id": 75,
+			"uri": "ex:NorthEurope",
+			"propertyInstances": []
+		},
+		{
+			"name": "CentralEurope",
+			"id": 76,
+			"uri": "ex:CentralEurope",
+			"propertyInstances": []
+		},
+		{
+			"name": "BE",
+			"id": 85,
+			"uri": "ex:BE",
+			"propertyInstances": [{
+				"id": 17,
+				"propertyID": 113,
+				"value": "ex:CentralEurope"
+			}]
+		},
+		{
+			"name": "GR",
+			"id": 86,
+			"uri": "ex:GR",
+			"propertyInstances": [{
+				"id": 18,
+				"propertyID": 113,
+				"value": "ex:SouthEurope"
+			}]
+		},
+		{
+			"name": "WestEurope",
+			"id": 90,
+			"uri": "ex:WestEurope",
+			"propertyInstances": []
+		},
+		{
+			"name": "ES",
+			"id": 91,
+			"uri": "ex:ES",
+			"propertyInstances": [{
+				"id": 22,
+				"propertyID": 113,
+				"value": "ex:WestEurope"
+			}]
+		}],
+		"fatherID": 19,
+		"className": "Area",
+		"hasFather": true,
+		"id": 38,
+		"uri": "pcm:Area",
+		"properties": [{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:Area",
+			"name": "areaIsLocatedIn",
+			"id": 113,
+			"uri": "pcm:areaIsLocatedIn"
+		},
+		{
+			"subPropertyOf": {
+				"name": "hasCoordinates",
+				"id": 132,
+				"uri": "pcm:hasCoordinates"
+			},
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:Coordinates",
+			"name": "hasAreaCoordinates",
+			"id": 128,
+			"uri": "pcm:hasAreaCoordinates"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:float",
+			"name": "hasCircularRadius",
+			"id": 129,
+			"uri": "pcm:hasCircularRadius"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:float",
+			"name": "hasRectangularRangeWidth",
+			"id": 130,
+			"uri": "pcm:hasRectangularRangeWidth"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:float",
+			"name": "hasRectangularRangeHeight",
+			"id": 131,
+			"uri": "pcm:hasRectangularRangeHeight"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 7,
+		"className": "Authentication Method",
+		"hasFather": true,
+		"id": 16,
+		"uri": "pcm:Authentication Method",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 7,
+		"className": "Authorization Method",
+		"hasFather": true,
+		"id": 17,
+		"uri": "pcm:Authorization Method",
+		"properties": []
+	},
+	{
+		"instances": [{
+			"name": "Brussels",
+			"id": 84,
+			"uri": "ex:Brussels",
+			"propertyInstances": [{
+				"id": 16,
+				"propertyID": 113,
+				"value": "ex:BE"
+			}]
+		},
+		{
+			"name": "Athens",
+			"id": 87,
+			"uri": "ex:Athens",
+			"propertyInstances": [{
+				"id": 19,
+				"propertyID": 113,
+				"value": "ex:GR"
+			}]
+		},
+		{
+			"name": "Alcobendas",
+			"id": 92,
+			"uri": "ex:Alcobendas",
+			"propertyInstances": [{
+				"id": 23,
+				"propertyID": 113,
+				"value": "ex:ES"
+			}]
+		},
+		{
+			"name": "Volos",
+			"id": 93,
+			"uri": "ex:Volos",
+			"propertyInstances": [{
+				"id": 24,
+				"propertyID": 113,
+				"value": "ex:GR"
+			}]
+		}],
+		"fatherID": 38,
+		"className": "City",
+		"hasFather": true,
+		"id": 125,
+		"uri": "pcm:City",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 32,
+		"className": "Connection Cyphersuite",
+		"hasFather": true,
+		"id": 42,
+		"uri": "pcm:Connection Cyphersuite",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 14,
+		"className": "Connection Metrics",
+		"hasFather": true,
+		"id": 33,
+		"uri": "pcm:Connection Metrics",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:integer",
+			"name": "hasUploadRate",
+			"id": 41,
+			"uri": "pcm:hasUploadRate"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:integer",
+			"name": "hasDownloadRate",
+			"id": 42,
+			"uri": "pcm:hasDownloadRate"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasMetricUnit",
+			"id": 43,
+			"uri": "pcm:hasMetricUnit"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 14,
+		"className": "Connection Security",
+		"hasFather": true,
+		"id": 32,
+		"uri": "pcm:Connection Security",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 14,
+		"className": "Connection Type",
+		"hasFather": true,
+		"id": 31,
+		"uri": "pcm:Connection Type",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasTelecommunicationsProvider",
+			"id": 39,
+			"uri": "pcm:hasTelecommunicationsProvider"
+		},
+		{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:Connection Metrics",
+			"name": "hasConnectionMetric",
+			"id": 40,
+			"uri": "pcm:hasConnectionMetric"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 7,
+		"className": "Connectivity",
+		"hasFather": true,
+		"id": 14,
+		"uri": "pcm:Connectivity",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 56,
+		"className": "Connectivity Pattern",
+		"hasFather": true,
+		"id": 60,
+		"uri": "pcpm:Connectivity Pattern",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": -1,
+		"className": "Context Pattern Element",
+		"hasFather": false,
+		"id": 56,
+		"uri": "pcpm:Context Pattern Element",
+		"properties": [{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcpm:Context Pattern Element",
+			"name": "hasPattern",
+			"id": 110,
+			"uri": "pcpm:hasPattern"
+		}]
+	},
+	{
+		"instances": [{
+			"name": "GR_Athens_Coords",
+			"id": 3,
+			"uri": "ex:GR_Athens_Coords",
+			"propertyInstances": []
+		},
+		{
+			"name": "GR_Thessaloniki_Coords",
+			"id": 4,
+			"uri": "ex:GR_Thessaloniki_Coords",
+			"propertyInstances": []
+		},
+		{
+			"name": "Parking1_Coords",
+			"id": 5,
+			"uri": "ex:Parking1_Coords",
+			"propertyInstances": []
+		}],
+		"fatherID": 7,
+		"className": "Coordinates",
+		"hasFather": true,
+		"id": 9,
+		"uri": "pcm:Coordinates",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:float",
+			"name": "Latitude",
+			"id": 7,
+			"uri": "schema:Latitude"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:float",
+			"name": "Longitude",
+			"id": 8,
+			"uri": "schema:Longitude"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:float",
+			"name": "Elevation",
+			"id": 9,
+			"uri": "schema:Elevation"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 38,
+		"className": "Country",
+		"hasFather": true,
+		"id": 127,
+		"uri": "pcm:Country",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 51,
+		"className": "DAO",
+		"hasFather": true,
+		"id": 55,
+		"uri": "pcm:DAO",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 13,
+		"className": "Data Artefact",
+		"hasFather": true,
+		"id": 27,
+		"uri": "pcm:Data Artefact",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 89,
+		"className": "Data Permission",
+		"hasFather": true,
+		"id": 90,
+		"uri": "ppm:Data Permission",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasActionStatus",
+			"id": 44,
+			"uri": "ppm:hasActionStatus"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:dateTime",
+			"name": "hasStartTime",
+			"id": 45,
+			"uri": "ppm:hasStartTime"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:dateTime",
+			"name": "hasEndTime",
+			"id": 46,
+			"uri": "ppm:hasEndTime"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasResult",
+			"id": 47,
+			"uri": "ppm:hasResult"
+		}]
+	},
+	{
+		"instances": [{
+			"name": "DDL_CREATE",
+			"id": 21,
+			"uri": "ex:DDL_CREATE",
+			"propertyInstances": []
+		},
+		{
+			"name": "DDL_ALTER",
+			"id": 22,
+			"uri": "ex:DDL_ALTER",
+			"propertyInstances": []
+		},
+		{
+			"name": "DDL_DROP",
+			"id": 23,
+			"uri": "ex:DDL_DROP",
+			"propertyInstances": []
+		},
+		{
+			"name": "DDL_SELECT",
+			"id": 24,
+			"uri": "ex:DDL_SELECT",
+			"propertyInstances": []
+		}],
+		"fatherID": 91,
+		"className": "Datastore DDL Permission",
+		"hasFather": true,
+		"id": 96,
+		"uri": "ppm:Datastore DDL Permission",
+		"properties": []
+	},
+	{
+		"instances": [{
+			"name": "READ",
+			"id": 10,
+			"uri": "ex:READ",
+			"propertyInstances": []
+		},
+		{
+			"name": "WRITE",
+			"id": 11,
+			"uri": "ex:WRITE",
+			"propertyInstances": []
+		}],
+		"fatherID": 90,
+		"className": "Datastore Permission",
+		"hasFather": true,
+		"id": 93,
+		"uri": "ppm:Datastore Permission",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 7,
+		"className": "DateTime",
+		"hasFather": true,
+		"id": 10,
+		"uri": "pcm:DateTime",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:dateTime",
+			"name": "hasTimezone",
+			"id": 22,
+			"uri": "pcm:hasTimezone"
+		},
+		{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:DateTime",
+			"name": "before",
+			"id": 23,
+			"uri": "pcm:before"
+		},
+		{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:DateTime",
+			"name": "after",
+			"id": 24,
+			"uri": "pcm:after"
+		}]
+	},
+	{
+		"instances": [{
+			"name": "In_Working_Hours",
+			"id": 100,
+			"uri": "ex:In_Working_Hours",
+			"propertyInstances": [{
+				"id": 8,
+				"propertyID": 31,
+				"value": "1900-01-01T09:00:00Z"
+			},
+			{
+				"id": 9,
+				"propertyID": 32,
+				"value": "1900-01-01T23:00:00Z"
+			}]
+		},
+		{
+			"name": "In_Working_Days",
+			"id": 101,
+			"uri": "ex:In_Working_Days",
+			"propertyInstances": []
+		}],
+		"fatherID": 10,
+		"className": "DateTime Interval",
+		"hasFather": true,
+		"id": 21,
+		"uri": "pcm:DateTime Interval",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:dateTime",
+			"name": "hasBegining",
+			"id": 31,
+			"uri": "pcm:hasBegining"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:dateTime",
+			"name": "hasEnd",
+			"id": 32,
+			"uri": "pcm:hasEnd"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 56,
+		"className": "DateTime Pattern",
+		"hasFather": true,
+		"id": 58,
+		"uri": "pcpm:DateTime Pattern",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 89,
+		"className": "DDL Permission",
+		"hasFather": true,
+		"id": 91,
+		"uri": "ppm:DDL Permission",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasDDLActionStatus",
+			"id": 48,
+			"uri": "ppm:hasDDLActionStatus"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:dateTime",
+			"name": "hasDDLStartTime",
+			"id": 49,
+			"uri": "ppm:hasDDLStartTime"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:dateTime",
+			"name": "hasDDLEndTime",
+			"id": 50,
+			"uri": "ppm:hasDDLEndTime"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasDDLResult",
+			"id": 51,
+			"uri": "ppm:hasDDLResult"
+		}]
+	},
+	{
+		"instances": [{
+			"name": "SamsungN7000",
+			"id": 70,
+			"uri": "pcm:SamsungN7000",
+			"propertyInstances": [{
+				"id": 12,
+				"propertyID": 35,
+				"value": "Android"
+			}]
+		},
+		{
+			"name": "Sony Xperia",
+			"id": 88,
+			"uri": "pcm:Sony Xperia",
+			"propertyInstances": [{
+				"id": 20,
+				"propertyID": 35,
+				"value": "Windows"
+			}]
+		},
+		{
+			"name": "ASUSG752",
+			"id": 94,
+			"uri": "pcm:ASUSG752",
+			"propertyInstances": [{
+				"id": 25,
+				"propertyID": 122,
+				"value": "firefox"
+			}]
+		},
+		{
+			"name": "DellVostro14 ",
+			"id": 95,
+			"uri": "pcm:DellVostro14 ",
+			"propertyInstances": [{
+				"id": 26,
+				"propertyID": 122,
+				"value": "chrome"
+			}]
+		}],
+		"fatherID": 14,
+		"className": "DeviceType",
+		"hasFather": true,
+		"id": 30,
+		"uri": "pcm:DeviceType",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasMobileOS",
+			"id": 35,
+			"uri": "pcm:hasMobileOS"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasBrowser",
+			"id": 122,
+			"uri": "pcm:hasBrowser"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasDeviceHandler",
+			"id": 124,
+			"uri": "pcm:hasDeviceHandler"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 15,
+		"className": "Ephemeral",
+		"hasFather": true,
+		"id": 35,
+		"uri": "pcm:Ephemeral",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 27,
+		"className": "File",
+		"hasFather": true,
+		"id": 50,
+		"uri": "pcm:File",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasFileType",
+			"id": 89,
+			"uri": "pcm:hasFileType"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasFileName",
+			"id": 90,
+			"uri": "pcm:hasFileName"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasFilePath",
+			"id": 91,
+			"uri": "pcm:hasFilePath"
+		}]
+	},
+	{
+		"instances": [{
+			"name": "READ_FILE",
+			"id": 12,
+			"uri": "ex:READ_FILE",
+			"propertyInstances": []
+		},
+		{
+			"name": "WRITE_FILE",
+			"id": 13,
+			"uri": "ex:WRITE_FILE",
+			"propertyInstances": []
+		},
+		{
+			"name": "DELETE_FILE",
+			"id": 14,
+			"uri": "ex:DELETE_FILE",
+			"propertyInstances": []
+		},
+		{
+			"name": "MOVE_FILE",
+			"id": 15,
+			"uri": "ex:MOVE_FILE",
+			"propertyInstances": []
+		},
+		{
+			"name": "CREATE_FILE",
+			"id": 16,
+			"uri": "ex:CREATE_FILE",
+			"propertyInstances": []
+		}],
+		"fatherID": 90,
+		"className": "File Permission",
+		"hasFather": true,
+		"id": 92,
+		"uri": "ppm:File Permission",
+		"properties": []
+	},
+	{
+		"instances": [{
+			"name": "FS_DIR_CREATE",
+			"id": 25,
+			"uri": "ex:FS_DIR_CREATE",
+			"propertyInstances": []
+		},
+		{
+			"name": "FS_DIR_DELETE",
+			"id": 26,
+			"uri": "ex:FS_DIR_DELETE",
+			"propertyInstances": []
+		},
+		{
+			"name": "FS_DIR_MOVE",
+			"id": 27,
+			"uri": "ex:FS_DIR_MOVE",
+			"propertyInstances": []
+		},
+		{
+			"name": "FS_DIR_ACCESS",
+			"id": 28,
+			"uri": "ex:FS_DIR_ACCESS",
+			"propertyInstances": []
+		},
+		{
+			"name": "FS_DIR_LIST",
+			"id": 29,
+			"uri": "ex:FS_DIR_LIST",
+			"propertyInstances": []
+		},
+		{
+			"name": "FS_DIR_CHANGE_PERMS",
+			"id": 30,
+			"uri": "ex:FS_DIR_CHANGE_PERMS",
+			"propertyInstances": []
+		},
+		{
+			"name": "FS_DIR_CHANGE_OWNERSHIP",
+			"id": 31,
+			"uri": "ex:FS_DIR_CHANGE_OWNERSHIP",
+			"propertyInstances": []
+		},
+		{
+			"name": "FS_MOUNT",
+			"id": 32,
+			"uri": "ex:FS_MOUNT",
+			"propertyInstances": []
+		},
+		{
+			"name": "FS_UNMOUNT",
+			"id": 33,
+			"uri": "ex:FS_UNMOUNT",
+			"propertyInstances": []
+		},
+		{
+			"name": "FS_FORMAT",
+			"id": 34,
+			"uri": "ex:FS_FORMAT",
+			"propertyInstances": []
+		}],
+		"fatherID": 91,
+		"className": "File System Structure Permission",
+		"hasFather": true,
+		"id": 97,
+		"uri": "ppm:File System Structure Permission",
+		"properties": []
+	},
+	{
+		"instances": [{
+			"name": "Admin_Group",
+			"id": 35,
+			"uri": "ex:Admin_Group",
+			"propertyInstances": []
+		},
+		{
+			"name": "Guards_Group",
+			"id": 36,
+			"uri": "ex:Guards_Group",
+			"propertyInstances": []
+		},
+		{
+			"name": "Clerks_Group",
+			"id": 37,
+			"uri": "ex:Clerks_Group",
+			"propertyInstances": []
+		},
+		{
+			"name": "Managers_Group",
+			"id": 38,
+			"uri": "ex:Managers_Group",
+			"propertyInstances": []
+		}],
+		"fatherID": 12,
+		"className": "Group",
+		"hasFather": true,
+		"id": 24,
+		"uri": "pcm:Group",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 49,
+		"className": "Hierarchical Data Structure",
+		"hasFather": true,
+		"id": 54,
+		"uri": "pcm:Hierarchical Data Structure",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 7,
+		"className": "Identity Type",
+		"hasFather": true,
+		"id": 15,
+		"uri": "pcm:Identity Type",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 13,
+		"className": "Infrastructure Artefact",
+		"hasFather": true,
+		"id": 29,
+		"uri": "pcm:Infrastructure Artefact",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 10,
+		"className": "Instant",
+		"hasFather": true,
+		"id": 22,
+		"uri": "pcm:Instant",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:dateTime",
+			"name": "hasYear",
+			"id": 25,
+			"uri": "pcm:hasYear"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:dateTime",
+			"name": "hasMonth",
+			"id": 26,
+			"uri": "pcm:hasMonth"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:dateTime",
+			"name": "hasDay",
+			"id": 27,
+			"uri": "pcm:hasDay"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:dateTime",
+			"name": "hasHour",
+			"id": 28,
+			"uri": "pcm:hasHour"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:dateTime",
+			"name": "hasMinute",
+			"id": 29,
+			"uri": "pcm:hasMinute"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:dateTime",
+			"name": "hasSecond",
+			"id": 30,
+			"uri": "pcm:hasSecond"
+		}]
+	},
+	{
+		"instances": [{
+			"name": "213.249.38.66",
+			"id": 102,
+			"uri": "pcm:213.249.38.66",
+			"propertyInstances": []
+		},
+		{
+			"name": "Undefined",
+			"id": 103,
+			"uri": "pcm:Undefined",
+			"propertyInstances": []
+		},
+		{
+			"name": "172.16.108.13",
+			"id": 106,
+			"uri": "pcm:172.16.108.13",
+			"propertyInstances": []
+		},
+		{
+			"name": "62.254.187.244",
+			"id": 107,
+			"uri": "pcm:62.254.187.244",
+			"propertyInstances": []
+		}],
+		"fatherID": 7,
+		"className": "IPAddress",
+		"hasFather": true,
+		"id": 128,
+		"uri": "pcm:IPAddress",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 61,
+		"className": "Least Accessed Object",
+		"hasFather": true,
+		"id": 82,
+		"uri": "pcpm:Least Accessed Object",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 57,
+		"className": "Least Frequent Access Location",
+		"hasFather": true,
+		"id": 67,
+		"uri": "pcpm:Least Frequent Access Location",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 58,
+		"className": "Least Frequent DateTime Instance",
+		"hasFather": true,
+		"id": 71,
+		"uri": "pcpm:Least Frequent DateTime Instance",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 58,
+		"className": "Least Frequent DateTime Interval",
+		"hasFather": true,
+		"id": 74,
+		"uri": "pcpm:Least Frequent DateTime Interval",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 7,
+		"className": "Location",
+		"hasFather": true,
+		"id": 8,
+		"uri": "pcm:Location",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 56,
+		"className": "Location Pattern",
+		"hasFather": true,
+		"id": 57,
+		"uri": "pcpm:Location Pattern",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 28,
+		"className": "Method",
+		"hasFather": true,
+		"id": 51,
+		"uri": "pcm:Method",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasMName",
+			"id": 95,
+			"uri": "pcm:hasMName"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 30,
+		"className": "Mobile",
+		"hasFather": true,
+		"id": 44,
+		"uri": "pcm:Mobile",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasIMEI",
+			"id": 36,
+			"uri": "pcm:hasIMEI"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasIMSI",
+			"id": 37,
+			"uri": "pcm:hasIMSI"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "supportsEncryptedStorageMobile",
+			"id": 38,
+			"uri": "pcm:supportsEncryptedStorageMobile"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 57,
+		"className": "Most Frequent Access Location",
+		"hasFather": true,
+		"id": 66,
+		"uri": "pcpm:Most Frequent Access Location",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 60,
+		"className": "Most Frequent Connection Type",
+		"hasFather": true,
+		"id": 78,
+		"uri": "pcpm:Most Frequent Connection Type",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 58,
+		"className": "Most Frequent DateTime Instance",
+		"hasFather": true,
+		"id": 70,
+		"uri": "pcpm:Most Frequent DateTime Instance",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 58,
+		"className": "Most Frequent DateTime Interval",
+		"hasFather": true,
+		"id": 73,
+		"uri": "pcpm:Most Frequent DateTime Interval",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 60,
+		"className": "Most Frequent Device Type",
+		"hasFather": true,
+		"id": 76,
+		"uri": "pcpm:Most Frequent Device Type",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 61,
+		"className": "Most Frequently Accessed Object",
+		"hasFather": true,
+		"id": 81,
+		"uri": "pcpm:Most Frequently Accessed Object",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 62,
+		"className": "Most Frequently Denied Permission",
+		"hasFather": true,
+		"id": 85,
+		"uri": "pcpm:Most Frequently Denied Permission",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 62,
+		"className": "Most Frequently Granted Permission",
+		"hasFather": true,
+		"id": 86,
+		"uri": "pcpm:Most Frequently Granted Permission",
+		"properties": []
+	},
+	{
+		"instances": [{
+			"name": "UbitechIntranet",
+			"id": 47,
+			"uri": "pdm:UbitechIntranet",
+			"propertyInstances": [{
+				"id": 1,
+				"propertyID": 16,
+				"value": "192.168.3.*"
+			},
+			{
+				"id": 2,
+				"propertyID": 17,
+				"value": "ubitech.eu"
+			},
+			{
+				"id": 3,
+				"propertyID": 18,
+				"value": "255.255.255.0"
+			}]
+		}],
+		"fatherID": 8,
+		"className": "Network Location",
+		"hasFather": true,
+		"id": 20,
+		"uri": "pcm:Network Location",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasIPAddress",
+			"id": 16,
+			"uri": "pcm:hasIPAddress"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasDomain",
+			"id": 17,
+			"uri": "pcm:hasDomain"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasSubnet",
+			"id": 18,
+			"uri": "pcm:hasSubnet"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasZone",
+			"id": 19,
+			"uri": "pcm:hasZone"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasIPAddressRange",
+			"id": 20,
+			"uri": "pcm:hasIPAddressRange"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:integer",
+			"name": "hasPort",
+			"id": 21,
+			"uri": "pcm:hasPort"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 27,
+		"className": "Non-relational",
+		"hasFather": true,
+		"id": 49,
+		"uri": "pcm:Non-relational",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasNonRelationalType",
+			"id": 92,
+			"uri": "pcm:hasNonRelationalType"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 44,
+		"className": "Notebook",
+		"hasFather": true,
+		"id": 45,
+		"uri": "pcm:Notebook",
+		"properties": []
+	},
+	{
+		"instances": [{
+			"name": "com.mycompany.xerp.web.WebController.countries",
+			"id": 99,
+			"uri": "pcm:com.mycompany.xerp.web.WebController.countries",
+			"propertyInstances": []
+		}],
+		"fatherID": -1,
+		"className": "Object",
+		"hasFather": false,
+		"id": 13,
+		"uri": "pcm:Object",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasTarget",
+			"id": 87,
+			"uri": "pcm:hasTarget"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 56,
+		"className": "Object Pattern",
+		"hasFather": true,
+		"id": 61,
+		"uri": "pcpm:Object Pattern",
+		"properties": []
+	},
+	{
+		"instances": [{
+			"name": "Park_Comp_Org",
+			"id": 39,
+			"uri": "ex:Park_Comp_Org",
+			"propertyInstances": []
+		},
+		{
+			"name": "Cleaning_Service_Org",
+			"id": 40,
+			"uri": "ex:Cleaning_Service_Org",
+			"propertyInstances": []
+		}],
+		"fatherID": 12,
+		"className": "Organization",
+		"hasFather": true,
+		"id": 23,
+		"uri": "pcm:Organization",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 15,
+		"className": "Permanent",
+		"hasFather": true,
+		"id": 34,
+		"uri": "pcm:Permanent",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": -1,
+		"className": "Permission Element",
+		"hasFather": false,
+		"id": 89,
+		"uri": "ppm:Permission Element",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 56,
+		"className": "Permission Pattern",
+		"hasFather": true,
+		"id": 62,
+		"uri": "pcpm:Permission Pattern",
+		"properties": []
+	},
+	{
+		"instances": [{
+			"name": "Agent_Smith",
+			"id": 41,
+			"uri": "ex:Agent_Smith",
+			"propertyInstances": []
+		},
+		{
+			"name": "Neo",
+			"id": 42,
+			"uri": "ex:Neo",
+			"propertyInstances": []
+		},
+		{
+			"name": "Morpheus",
+			"id": 43,
+			"uri": "ex:Morpheus",
+			"propertyInstances": []
+		},
+		{
+			"name": "Trinity",
+			"id": 44,
+			"uri": "ex:Trinity",
+			"propertyInstances": []
+		},
+		{
+			"name": "admin",
+			"id": 105,
+			"uri": "pcm:admin",
+			"propertyInstances": []
+		}],
+		"fatherID": 12,
+		"className": "Person",
+		"hasFather": true,
+		"id": 25,
+		"uri": "pcm:Person",
+		"properties": [{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:PhysicalLocation",
+			"name": "hasRequestorLocation",
+			"id": 114,
+			"uri": "ex:hasRequestorLocation"
+		},
+		{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:PhysicalLocation",
+			"name": "subjectIsLocatedIn",
+			"id": 126,
+			"uri": "pcm:subjectIsLocatedIn"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 8,
+		"className": "PhysicalLocation",
+		"hasFather": true,
+		"id": 19,
+		"uri": "pcm:PhysicalLocation",
+		"properties": [{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:Coordinates",
+			"name": "hasCoordinates",
+			"id": 132,
+			"uri": "pcm:hasCoordinates"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 19,
+		"className": "POI",
+		"hasFather": true,
+		"id": 40,
+		"uri": "pcm:POI",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasPOIName",
+			"id": 14,
+			"uri": "pcm:hasPOIName"
+		},
+		{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:Address",
+			"name": "hasAddress",
+			"id": 15,
+			"uri": "pcm:hasAddress"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 19,
+		"className": "Point",
+		"hasFather": true,
+		"id": 37,
+		"uri": "pcm:Point",
+		"properties": [{
+			"subPropertyOf": {
+				"name": "hasCoordinates",
+				"id": 132,
+				"uri": "pcm:hasCoordinates"
+			},
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:Coordinates",
+			"name": "hasPointCoordinates",
+			"id": 3,
+			"uri": "pcm:hasPointCoordinates"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 57,
+		"className": "Recent Access Location",
+		"hasFather": true,
+		"id": 65,
+		"uri": "pcpm:Recent Access Location",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 61,
+		"className": "Recently Accessed Object",
+		"hasFather": true,
+		"id": 83,
+		"uri": "pcpm:Recently Accessed Object",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 62,
+		"className": "Recently Denied Permission",
+		"hasFather": true,
+		"id": 87,
+		"uri": "pcpm:Recently Denied Permission",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 62,
+		"className": "Recently Granted Permission",
+		"hasFather": true,
+		"id": 88,
+		"uri": "pcpm:Recently Granted Permission",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 27,
+		"className": "Relational",
+		"hasFather": true,
+		"id": 48,
+		"uri": "pcm:Relational",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasRelationalType",
+			"id": 88,
+			"uri": "pcm:hasRelationalType"
+		}]
+	},
+	{
+		"instances": [{
+			"name": "Any Request",
+			"id": 1,
+			"uri": "ex:Any Request",
+			"propertyInstances": []
+		}],
+		"fatherID": -1,
+		"className": "Request",
+		"hasFather": false,
+		"id": 126,
+		"uri": "pcm:Request",
+		"properties": [{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:DeviceType",
+			"name": "comesFrom",
+			"id": 123,
+			"uri": "pcm:comesFrom"
+		},
+		{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:DateTime Interval",
+			"name": "hasDateTimeInterval",
+			"id": 133,
+			"uri": "pcm:hasDateTimeInterval"
+		},
+		{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:Area",
+			"name": "hasRequestLocation",
+			"id": 134,
+			"uri": "pcm:hasRequestLocation"
+		},
+		{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:IPAddress",
+			"name": "hasIP",
+			"id": 135,
+			"uri": "pcm:hasIP"
+		},
+		{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:Subject",
+			"name": "requestHasSubject",
+			"id": 136,
+			"uri": "pcm:requestHasSubject"
+		},
+		{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:Object",
+			"name": "requestHasObject",
+			"id": 137,
+			"uri": "pcm:requestHasObject"
+		},
+		{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "ppm:Permission Element",
+			"name": "requestHasAction",
+			"id": 138,
+			"uri": "pcm:requestHasAction"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 7,
+		"className": "Role",
+		"hasFather": true,
+		"id": 18,
+		"uri": "usdl-core:Role",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": -1,
+		"className": "Security Context Element",
+		"hasFather": false,
+		"id": 7,
+		"uri": "pcm:Security Context Element",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 32,
+		"className": "Security Protocol",
+		"hasFather": true,
+		"id": 41,
+		"uri": "pcm:Security Protocol",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasSecurityProtocolImplementation",
+			"id": 86,
+			"uri": "pcm:hasSecurityProtocolImplementation"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 28,
+		"className": "Service",
+		"hasFather": true,
+		"id": 52,
+		"uri": "pcm:Service",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "category",
+			"id": 93,
+			"uri": "schema:category"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasEndpoint",
+			"id": 94,
+			"uri": "pcm:hasEndpoint"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 44,
+		"className": "Smartphone",
+		"hasFather": true,
+		"id": 47,
+		"uri": "pcm:Smartphone",
+		"properties": []
+	},
+	{
+		"instances": [{
+			"name": "ERP_System",
+			"id": 45,
+			"uri": "ex:ERP_System",
+			"propertyInstances": []
+		},
+		{
+			"name": "CRM_System",
+			"id": 46,
+			"uri": "ex:CRM_System",
+			"propertyInstances": []
+		}],
+		"fatherID": 12,
+		"className": "Software",
+		"hasFather": true,
+		"id": 26,
+		"uri": "pcm:Software",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 13,
+		"className": "Software Artefact",
+		"hasFather": true,
+		"id": 28,
+		"uri": "pcm:Software Artefact",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 30,
+		"className": "Stationary",
+		"hasFather": true,
+		"id": 43,
+		"uri": "pcm:Stationary",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasStationaryOS",
+			"id": 33,
+			"uri": "pcm:hasStationaryOS"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "supportsEncryptedStorageStationary",
+			"id": 34,
+			"uri": "pcm:supportsEncryptedStorageStationary"
+		}]
+	},
+	{
+		"instances": [{
+			"name": "Any Subject",
+			"id": 2,
+			"uri": "ex:Any Subject",
+			"propertyInstances": []
+		},
+		{
+			"name": "Unauthorized",
+			"id": 104,
+			"uri": "pcm:Unauthorized",
+			"propertyInstances": []
+		}],
+		"fatherID": -1,
+		"className": "Subject",
+		"hasFather": false,
+		"id": 12,
+		"uri": "pcm:Subject",
+		"properties": [{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:Identity Type",
+			"name": "hasIdentityType",
+			"id": 4,
+			"uri": "pcm:hasIdentityType"
+		},
+		{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:Authentication Method",
+			"name": "hasAuthenticationMethod",
+			"id": 5,
+			"uri": "pcm:hasAuthenticationMethod"
+		},
+		{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:Authorization Method",
+			"name": "hasAuthorizationMethod",
+			"id": 6,
+			"uri": "pcm:hasAuthorizationMethod"
+		},
+		{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "usdl-core:Role",
+			"name": "hasRole",
+			"id": 73,
+			"uri": "pcm:hasRole"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "name",
+			"id": 100,
+			"uri": "gr:name"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "description",
+			"id": 101,
+			"uri": "gr:description"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "categoryS",
+			"id": 102,
+			"uri": "usdl-core:categoryS"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasBrand",
+			"id": 103,
+			"uri": "gr:hasBrand"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasDUNS",
+			"id": 104,
+			"uri": "usdl-core:hasDUNS"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "legalName",
+			"id": 105,
+			"uri": "gr:legalName"
+		},
+		{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcm:Area",
+			"name": "hasLocation",
+			"id": 127,
+			"uri": "pcm:hasLocation"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 44,
+		"className": "Tablet",
+		"hasFather": true,
+		"id": 46,
+		"uri": "pcm:Tablet",
+		"properties": []
+	},
+	{
+		"instances": [],
+		"fatherID": 56,
+		"className": "TemporalSeq",
+		"hasFather": true,
+		"id": 63,
+		"uri": "pcpm:TemporalSeq",
+		"properties": [{
+			"isObjectProperty": true,
+			"transitivity": 0,
+			"propertyType": "pcpm:TemporalSeqMember",
+			"name": "hasMember",
+			"id": 74,
+			"uri": "aggr:hasMember"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 56,
+		"className": "TemporalSeqMember",
+		"hasFather": true,
+		"id": 64,
+		"uri": "pcpm:TemporalSeqMember",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:integer",
+			"name": "hasPosition",
+			"id": 75,
+			"uri": "aggr:hasPosition"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 57,
+		"className": "Usual Access Location",
+		"hasFather": true,
+		"id": 68,
+		"uri": "pcpm:Usual Access Location",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:integer",
+			"name": "hasUAThreshold",
+			"id": 52,
+			"uri": "pcpm:hasUAThreshold"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 60,
+		"className": "Usual Connection Security",
+		"hasFather": true,
+		"id": 79,
+		"uri": "pcpm:Usual Connection Security",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:integer",
+			"name": "hasUCSThreshold",
+			"id": 57,
+			"uri": "pcpm:hasUCSThreshold"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 60,
+		"className": "Usual Connection Type",
+		"hasFather": true,
+		"id": 77,
+		"uri": "pcpm:Usual Connection Type",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:integer",
+			"name": "hasUCTThreshold",
+			"id": 56,
+			"uri": "pcpm:hasUCTThreshold"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 58,
+		"className": "Usual DateTime Instance",
+		"hasFather": true,
+		"id": 69,
+		"uri": "pcpm:Usual DateTime Instance",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:integer",
+			"name": "hasUTThreshold",
+			"id": 53,
+			"uri": "pcpm:hasUTThreshold"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 58,
+		"className": "Usual DateTime Interval",
+		"hasFather": true,
+		"id": 72,
+		"uri": "pcpm:Usual DateTime Interval",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:integer",
+			"name": "hasUTIThreshold",
+			"id": 54,
+			"uri": "pcpm:hasUTIThreshold"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 60,
+		"className": "Usual Device Type",
+		"hasFather": true,
+		"id": 75,
+		"uri": "pcpm:Usual Device Type",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:integer",
+			"name": "hasUDTThreshold",
+			"id": 55,
+			"uri": "pcpm:hasUDTThreshold"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 61,
+		"className": "Usually Accessed Object",
+		"hasFather": true,
+		"id": 80,
+		"uri": "pcpm:Usually Accessed Object",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:integer",
+			"name": "hasUAOThreshold",
+			"id": 58,
+			"uri": "pcpm:hasUAOThreshold"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 62,
+		"className": "Usually Granted Permission",
+		"hasFather": true,
+		"id": 84,
+		"uri": "pcpm:Usually Granted Permission",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:integer",
+			"name": "hasUGTThreshold",
+			"id": 59,
+			"uri": "pcpm:hasUGTThreshold"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 29,
+		"className": "Volume",
+		"hasFather": true,
+		"id": 53,
+		"uri": "pcm:Volume",
+		"properties": [{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "hasVolumeType",
+			"id": 96,
+			"uri": "pcm:hasVolumeType"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "isVolumeEncrypted",
+			"id": 97,
+			"uri": "pcm:isVolumeEncrypted"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "volumeInputSpeed",
+			"id": 98,
+			"uri": "pcm:volumeInputSpeed"
+		},
+		{
+			"isObjectProperty": false,
+			"transitivity": 0,
+			"propertyType": "xsd:string",
+			"name": "volumeOutputSpeed",
+			"id": 99,
+			"uri": "rdf:volumeOutputSpeed"
+		}]
+	},
+	{
+		"instances": [],
+		"fatherID": 90,
+		"className": "Volume Permission",
+		"hasFather": true,
+		"id": 95,
+		"uri": "ppm:Volume Permission",
+		"properties": []
+	},
+	{
+		"instances": [{
+			"name": "CALL_WEP",
+			"id": 9,
+			"uri": "ex:CALL_WEP",
+			"propertyInstances": []
+		},
+		{
+			"name": "GET",
+			"id": 17,
+			"uri": "ex:GET",
+			"propertyInstances": []
+		},
+		{
+			"name": "POST",
+			"id": 18,
+			"uri": "ex:POST",
+			"propertyInstances": []
+		},
+		{
+			"name": "PUT",
+			"id": 19,
+			"uri": "ex:PUT",
+			"propertyInstances": []
+		},
+		{
+			"name": "DELETE",
+			"id": 20,
+			"uri": "ex:DELETE",
+			"propertyInstances": []
+		}],
+		"fatherID": 90,
+		"className": "Web Endpoint Permission",
+		"hasFather": true,
+		"id": 94,
+		"uri": "ppm:Web Endpoint Permission",
+		"properties": []
+	}]
+}
