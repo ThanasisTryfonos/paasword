@@ -42,9 +42,11 @@ import java.util.concurrent.Executor;
 public class SDPConnection implements Connection {
 	
 	private Adapter adapter;
-	
+	private String sessionid;
+        
 	public SDPConnection() throws SQLException, DatabaseException {
 		try {
+                        this.sessionid = sessionid;
 			adapter = new Adapter();
 		} catch (PluginLoadFailure e) {
 			String stacktrace = "";
@@ -77,7 +79,7 @@ public class SDPConnection implements Connection {
 	}
 
 	public Statement createStatement() throws SQLException {
-		return new SDPStatement(this);
+		return new SDPStatement(this,sessionid);
 	}
 
 	public PreparedStatement prepareStatement(String sql) throws SQLException {

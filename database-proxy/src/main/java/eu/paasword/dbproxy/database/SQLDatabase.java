@@ -68,7 +68,7 @@ public class SQLDatabase implements Database {
      * @throws DatabaseException if a connection to the database is not possible
      * @throws IOException If database scheme could not be loaded from file
      */
-    public SQLDatabase(Map<String, String> dbConfig) throws DatabaseException, IOException {
+    public SQLDatabase(Map<String, String> dbConfig,String sessionid) throws DatabaseException, IOException {
         adapterid = dbConfig.get("adapterid");
         databaseName = dbConfig.get("name");
         String url = dbConfig.get("driverConn") + "://" + dbConfig.get("host") + "/" + databaseName;
@@ -76,13 +76,12 @@ public class SQLDatabase implements Database {
         String pwd = dbConfig.get("password");
         logger.info("SQLDatabase--> Creating new DB for adapter: " + adapterid + "(" + databaseName + ")");
         
-        dtm = AdapterHelper.getDTMByAdapterId(adapterid);
-
         //load the schema once
         try {
-            String tid = dtm.initiateTransaction();
-            scheme = new DBScheme(SchemeLoader.loadScheme("database", databaseName, adapterid, databaseName, tid));
-            dtm.commitTransaction(tid);
+            dtm = AdapterHelper.getDTMByAdapterId(adapterid);
+            //String tid = dtm.initiateTransaction();
+            scheme = new DBScheme(SchemeLoader.loadScheme("database", databaseName, adapterid, databaseName, sessionid));
+            //dtm.commitTransaction(tid);
         } catch (Exception ex) {
             logger.severe("Error Schema could not be loaded");
         }

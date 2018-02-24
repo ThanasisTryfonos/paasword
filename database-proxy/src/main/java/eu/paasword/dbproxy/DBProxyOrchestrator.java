@@ -20,7 +20,9 @@ import eu.paasword.adapter.openstack.IaaS;
 import eu.paasword.adapter.openstack.OpenStackAdapter;
 import eu.paasword.dbproxy.jdbc.JDBCInterface;
 import eu.paasword.dbproxy.fragmentation.FragmentationUtil;
+import eu.paasword.dbproxy.helper.AdapterHelper;
 import eu.paasword.dbproxy.initialization.DistributedDBInitializer;
+import eu.paasword.dbproxy.transaction.DistributedTransactionalManager;
 import eu.paasword.jpa.PaaSwordQueryHandler;
 import eu.paasword.jpa.exceptions.CyclicDependencyException;
 import eu.paasword.jpa.exceptions.NoClassToProcessException;
@@ -59,7 +61,6 @@ public class DBProxyOrchestrator {
 
 //    private static APIKeyRepository apiKeyService;
 //    private static ApplicationInstanceRepository applicationInstanceService;
-
     public static DBProxyOrchestratorResponse orchestrateDeployment(String deploymentinstanceid, String tenantKey, List<IaaS> iaasresources, List<Class> daoclasses, ArrayList<ArrayList<String>> constraints) {
 
         DBProxyOrchestratorResponse orchestrationresponse = new DBProxyOrchestratorResponse();
@@ -310,18 +311,29 @@ public class DBProxyOrchestrator {
             logger.info("Sleep is over");                                                           //sleep 5 seconds in order for the database tp be ready                
 
             //Step 11 - DB initialization
-            DistributedDBInitializer initializer = new DistributedDBInitializer(fragservers, deploymentinstanceid);
-            initializer.clearAll();
-            initializer.setUpRemoteDatabase();
-            initializer.setUpLocalDatabase();
-            initializer.createIndexServers();
-            logger.info("Performing Fragmentation....and schema initialization");
-            ((DistributedDBInitializer) initializer).performFragmentation(indexservers, createcommands, tenantKey);
+            try {
+                DistributedTransactionalManager dtm = AdapterHelper.getDTMByAdapterId(deploymentinstanceid);
+                String sessionid = dtm.initiateTransaction();
 
-            //Create Reponse
-            orchestrationresponse.setSuccessresult(true);
-            orchestrationresponse.setFragservers(fragservers);
-            orchestrationresponse.setConfigurationxml(sb.toString());
+                DistributedDBInitializer initializer = new DistributedDBInitializer(fragservers, deploymentinstanceid);
+                initializer.clearAll(sessionid);
+                initializer.setUpRemoteDatabase(sessionid);
+                initializer.setUpLocalDatabase(sessionid);
+                initializer.createIndexServers();
+                logger.info("Performing Fragmentation....and schema initialization");
+                ((DistributedDBInitializer) initializer).performFragmentation(indexservers, createcommands, tenantKey, sessionid);
+                //commit
+                dtm.commitTransaction(sessionid);
+
+                //Create Reponse
+                orchestrationresponse.setSuccessresult(true);
+                orchestrationresponse.setFragservers(fragservers);
+                orchestrationresponse.setConfigurationxml(sb.toString());
+
+            } catch (Exception ex) {
+                logger.severe("Error during Orchrstration of Fragmentation");
+                ex.printStackTrace();
+            }
 
         } catch (CyclicDependencyException | NotAValidPaaSwordEntityException | NoClassToProcessException | UnSatisfiedDependencyException ex) {
             logger.severe("Exception during DBProxy bootstrapping");
@@ -345,7 +357,6 @@ public class DBProxyOrchestrator {
             } else {
                 file.createNewFile();
                 logger.info("File is created!");
-
 
             }
 
@@ -381,7 +392,6 @@ public class DBProxyOrchestrator {
         }
         return isSuccess;
     }//EoM
-
 
     public static DBProxyOrchestratorResponse orchestrateSlipStreamDeployment(String deploymentinstanceid, String tenantKey, org.json.JSONArray iaasresources, List<String> createtablecommands, List<String> allfields, ArrayList<ArrayList<String>> constraints) {
 
@@ -542,19 +552,30 @@ public class DBProxyOrchestrator {
             }
 
             //Step 11 - Initialize Database
+            try {
+                DistributedTransactionalManager dtm = AdapterHelper.getDTMByAdapterId(deploymentinstanceid);
+                String sessionid = dtm.initiateTransaction();
 
-            DistributedDBInitializer initializer = new DistributedDBInitializer(fragservers, deploymentinstanceid);
-            initializer.clearAll();
-            initializer.setUpRemoteDatabase();
-            initializer.setUpLocalDatabase();
-            initializer.createIndexServers();
-            logger.info("Performing Fragmentation....and schema initialization");
-            ((DistributedDBInitializer) initializer).performFragmentation(indexservers, createtablecommands, tenantKey);
+                DistributedDBInitializer initializer = new DistributedDBInitializer(fragservers, deploymentinstanceid);
+                initializer.clearAll(sessionid);
+                initializer.setUpRemoteDatabase(sessionid);
+                initializer.setUpLocalDatabase(sessionid);
+                initializer.createIndexServers();
+                logger.info("Performing Fragmentation....and schema initialization");
+                ((DistributedDBInitializer) initializer).performFragmentation(indexservers, createtablecommands, tenantKey, sessionid);
 
-            //Create Response
-            orchestrationresponse.setSuccessresult(true);
-            orchestrationresponse.setFragservers(fragservers);
-            orchestrationresponse.setConfigurationxml(sb.toString());
+                //commit
+                dtm.commitTransaction(sessionid);
+
+                //Create Response
+                orchestrationresponse.setSuccessresult(true);
+                orchestrationresponse.setFragservers(fragservers);
+                orchestrationresponse.setConfigurationxml(sb.toString());
+
+            } catch (Exception ex) {
+                logger.severe("Error during parseDBConfig");
+                ex.printStackTrace();
+            }
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -768,7 +789,6 @@ public class DBProxyOrchestrator {
 //            for (String command : createcommands) {
 //                logger.info("Command: " + command);
 //            }
-
             //Step 10 - Gracefull sleep
             logger.info("Sleeping in order for db to be ready");                                    //sleep 5 seconds in order for the database tp be ready    
             //Thread.currentThread().sleep(amountofservers * TIMEOUTOUTMILLISPERSERVER);            //TODO substitute that with check business logic   
@@ -813,19 +833,30 @@ public class DBProxyOrchestrator {
             }
 
             //Step 11 - Initialize Database
+            try {
+                DistributedTransactionalManager dtm = AdapterHelper.getDTMByAdapterId(deploymentinstanceid);
+                String sessionid = dtm.initiateTransaction();
 
-            DistributedDBInitializer initializer = new DistributedDBInitializer(fragservers, deploymentinstanceid);
-            initializer.clearAll();
-            initializer.setUpRemoteDatabase();
-            initializer.setUpLocalDatabase();
-            initializer.createIndexServers();
-            logger.info("Performing Fragmentation....and schema initialization");
-            ((DistributedDBInitializer) initializer).performFragmentation(indexservers, createtablecommands, tenantKey);
+                DistributedDBInitializer initializer = new DistributedDBInitializer(fragservers, deploymentinstanceid);
+                initializer.clearAll(sessionid);
+                initializer.setUpRemoteDatabase(sessionid);
+                initializer.setUpLocalDatabase(sessionid);
+                initializer.createIndexServers();
+                logger.info("Performing Fragmentation....and schema initialization");
+                ((DistributedDBInitializer) initializer).performFragmentation(indexservers, createtablecommands, tenantKey, sessionid);
 
-            //Create Reponse
-            orchestrationresponse.setSuccessresult(true);
-            orchestrationresponse.setFragservers(fragservers);
-            orchestrationresponse.setConfigurationxml(sb.toString());
+                //commit
+                dtm.commitTransaction(sessionid);
+
+                //Create Reponse
+                orchestrationresponse.setSuccessresult(true);
+                orchestrationresponse.setFragservers(fragservers);
+                orchestrationresponse.setConfigurationxml(sb.toString());
+
+            } catch (Exception ex) {
+                logger.severe("Error during parseDBConfig");
+                ex.printStackTrace();
+            }
 
         } catch (Exception ex) {
             ex.printStackTrace();

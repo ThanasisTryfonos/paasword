@@ -86,7 +86,7 @@ public class RemoteDBAdminstration implements RemoteDatabase {
         Map<String, String> localDbConf = ConfigParser.getInstance(adapterid).getLocalDatabase();
 
 
-        localDB = DatabaseLoader.loadDatabase(localDbConf);
+        localDB = DatabaseLoader.loadDatabase(localDbConf,sessionid);
         List<Map<String, String>> remoteDbs = ConfigParser.getInstance(adapterid).getRemoteDatabases();
         List<Map<String, String>> remoteIndexDatabases = ConfigParser.getInstance(adapterid).getRemoteIndexDatabases();
 
@@ -99,7 +99,7 @@ public class RemoteDBAdminstration implements RemoteDatabase {
         helper = new RemoteDBHelper(this, remoteDBName, encrypt, relationToDB);
         for (Map<String, String> rdb : remoteDbs) {
             // gets all tablenames from remoteDB
-            Database db = DatabaseLoader.loadDatabase(rdb);
+            Database db = DatabaseLoader.loadDatabase(rdb,sessionid);
             String dbName = rdb.get("name");
             Set<String> relations = db.getRelationNames();
             for (String rel : relations) {
@@ -107,7 +107,7 @@ public class RemoteDBAdminstration implements RemoteDatabase {
             }
         }
         for (Map<String, String> rdb : remoteIndexDatabases) {
-            Database db = DatabaseLoader.loadDatabase(rdb);
+            Database db = DatabaseLoader.loadDatabase(rdb,sessionid);
             String dbName = rdb.get("name");
             Set<String> relations = db.getRelationNames();
             for (String rel : relations) {

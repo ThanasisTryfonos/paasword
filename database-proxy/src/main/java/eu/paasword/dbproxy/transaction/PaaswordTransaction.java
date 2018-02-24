@@ -87,6 +87,7 @@ public class PaaswordTransaction implements Runnable {
             utm = new UserTransactionManager();
             utm.setTransactionTimeout(DistributedTransactionalManager.TXTIMEOUT);
             utm.setForceShutdown(true);
+            utm.setStartupTransactionService(true);
 //            utm.init();
             logger.info("PaaswordTransaction Initiation FINISHED SUCCESSFULLY for adapter " + dtm.getAdapterid() + " and tid " + tid);
         } catch (Exception ex) {
@@ -98,12 +99,12 @@ public class PaaswordTransaction implements Runnable {
     @Override
     public void run() {
         try {
-                                           
+
             //Start Transaction Manager
             logger.info("PaaswordTransaction--> run() utm.getStatus(): " + utm.getStatus());
-            utm.setTransactionTimeout(DistributedTransactionalManager.TXTIMEOUT);
-            utm.setForceShutdown(true);
-            utm.setStartupTransactionService(true);
+//            utm.setTransactionTimeout(DistributedTransactionalManager.TXTIMEOUT);
+//            utm.setForceShutdown(true);
+//            utm.setStartupTransactionService(true);
 //            utm.init();
 
             utm.begin();
@@ -255,32 +256,35 @@ public class PaaswordTransaction implements Runnable {
         try {
 
             try {
-                //step-1 close the connections and clear connection map 
+
+                //step close the connections and clear connection map 
                 for (String resid : (List<String>) resources) {
                     Connection connection = (Connection) conmap.get(tid + "_" + resid);
-                    connection.close();
-                    connection = null;
+                    connection.commit();
+                    connection.close();                    
                     conmap.remove(tid + "_" + resid);
-                }
-            } catch (Exception ex) {
-                logger.info("PaaswordTransaction.commitTransaction--> Connection could not be closed. Have to ROLLback");
-                rollback = true;
-            } finally {
-                if (rollback) {
-                    logger.severe("PaaswordTransaction.executeAtomicCUDQuery1--> Rollback");
-//                    tm.rollback();
-                } else {
-//                    tm.commit();
-                    logger.info("PaaswordTransaction.commitTransaction--> commited status: " + utm.getStatus());
-                }
-                utm.close();
+                }                
+
+//                utm.commit();
+
                 //close xaconnection
                 for (String rid : resources) {
                     XAConnection xacon = (XAConnection) xaconmap.get(tid + "_" + rid);
                     xacon.close();
                 }
 
+                logger.info("PaaswordTransaction.commitTransaction--> commited status: " + utm.getStatus());
+//                utm.close();
                 success = true;
+            } catch (Exception ex) {
+                logger.info("Commit error. Have to rollback");
+                ex.printStackTrace();
+                rollback = true;
+            } finally {
+                if (rollback) {
+                    logger.severe("PaaswordTransaction.executeAtomicCUDQuery1--> Rollback");
+                    //utm.rollback();
+                }
             }
         } catch (Exception ex) {
             rollback = true;

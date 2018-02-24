@@ -61,8 +61,8 @@ public class DistributedDBInitializer extends DefaultDBInitializer {
     }
 
     @Override
-    public void setUpRemoteDatabase() {
-        super.setUpRemoteDatabase();
+    public void setUpRemoteDatabase(String sessionid) {
+        super.setUpRemoteDatabase(sessionid);
         setUpRemoteWithManualIndexDistribution();
     }
 
@@ -74,17 +74,17 @@ public class DistributedDBInitializer extends DefaultDBInitializer {
      * instance of the local machine is used.
      */
     @Override
-    public void setUpLocalDatabase() {
-        super.setUpLocalDatabase();
+    public void setUpLocalDatabase(String sessionid) {
+        super.setUpLocalDatabase(sessionid);
     }
 
     @Override
-    public void createDatabaseEntries() {
-        initializeDistribution();
-        Adapter adapter = AdapterHelper.getAdapter(deploymentinstanceid);
+    public void createDatabaseEntries(String sessionid) {
+        initializeDistribution(sessionid);
+        Adapter adapter = AdapterHelper.getAdapter(deploymentinstanceid,null,sessionid);
         try {
             for (String table : DBData.getCreateTableStatements().keySet()) {
-                adapter.query(DBData.getCreateTableStatements().get(table));
+                adapter.query(DBData.getCreateTableStatements().get(table),sessionid);
             }
             //
             insertDataIntoDatabase(adapter);
@@ -93,8 +93,8 @@ public class DistributedDBInitializer extends DefaultDBInitializer {
         }
     }//EoM
 
-    private void initializeDistribution() {
-        Adapter adapter = AdapterHelper.getAdapter(deploymentinstanceid);
+    private void initializeDistribution(String sessionid) {
+        Adapter adapter = AdapterHelper.getAdapter(deploymentinstanceid,null,sessionid);
         Map<IDistributedServer, Map<String, List<String>>> serverMapping = new HashMap<>();
         int serverNumber = 0;
 
@@ -118,8 +118,8 @@ public class DistributedDBInitializer extends DefaultDBInitializer {
         DistributedTablesConfiguration.getInstance().setServerTableMapping(serverMapping);
     }//EoM
 
-    public void performFragmentation() {
-        Adapter adapter = AdapterHelper.getAdapter(deploymentinstanceid);
+    public void performFragmentation(String sessionid) {
+        Adapter adapter = AdapterHelper.getAdapter(deploymentinstanceid,null,sessionid);
 
         Map<IDistributedServer, Map<String, List<String>>> serverMapping = new HashMap<>();
         int serverNumber = 0;
@@ -147,7 +147,7 @@ public class DistributedDBInitializer extends DefaultDBInitializer {
 
             //Create tables
             for (String table : DBData.getCreateTableStatements().keySet()) {
-                adapter.query(DBData.getCreateTableStatements().get(table));
+                adapter.query(DBData.getCreateTableStatements().get(table),sessionid);
             }
 
         } catch (Exception e) {
@@ -155,9 +155,9 @@ public class DistributedDBInitializer extends DefaultDBInitializer {
         }
     }//EoM
 
-    public void performFragmentation(List<  Map<String, List<String>>> indexservers, List<String> createcommands, String tenantKey) {
+    public void performFragmentation(List<  Map<String, List<String>>> indexservers, List<String> createcommands, String tenantKey, String sessionid) {
         //Step 1 validate adapters
-        Adapter adapter = AdapterHelper.getAdapter(deploymentinstanceid, tenantKey);
+        Adapter adapter = AdapterHelper.getAdapter(deploymentinstanceid, tenantKey,sessionid);
 
         Map<IDistributedServer, Map<String, List<String>>> serverMapping = new HashMap<>();
         //int serverNumber = 0;
@@ -178,7 +178,7 @@ public class DistributedDBInitializer extends DefaultDBInitializer {
             //Create tables
             for (String command : createcommands) {
                 logger.info("Executing query: " + command);
-                adapter.query(command);
+                adapter.query(command,sessionid);
             }
 
         } catch (Exception e) {
@@ -186,9 +186,9 @@ public class DistributedDBInitializer extends DefaultDBInitializer {
         }
     }//EoM
 
-    public void performFragmentation2() {
+    public void performFragmentation2(String sessionid) {
         //Step 1 validate adapters
-        Adapter adapter = AdapterHelper.getAdapter(deploymentinstanceid);
+        Adapter adapter = AdapterHelper.getAdapter(deploymentinstanceid,null,sessionid);
 
         Map<IDistributedServer, Map<String, List<String>>> serverMapping = new HashMap<>();
         //int serverNumber = 0;
@@ -222,7 +222,7 @@ public class DistributedDBInitializer extends DefaultDBInitializer {
 
             //Create tables
             for (String table : DBData.getCreateTableStatements().keySet()) {
-                adapter.query(DBData.getCreateTableStatements().get(table));
+                adapter.query(DBData.getCreateTableStatements().get(table),sessionid);
             }
 
         } catch (Exception e) {
@@ -278,8 +278,8 @@ public class DistributedDBInitializer extends DefaultDBInitializer {
     }//EoM
 
     @Override
-    public void clearAll() {
-        super.clearAll();
+    public void clearAll(String sessionid) {
+        super.clearAll(sessionid);
         clearIndexServers();
     }
 

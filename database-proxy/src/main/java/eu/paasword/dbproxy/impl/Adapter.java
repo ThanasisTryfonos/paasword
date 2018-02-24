@@ -80,7 +80,7 @@ public class Adapter {
      * @throws DatabaseException
      */
     public Adapter() throws PluginLoadFailure, IOException, DatabaseException {
-        parseDBConfig("config-default.xml");
+        parseDBConfig("config-default.xml","panos");
     }
 
     /**
@@ -92,20 +92,20 @@ public class Adapter {
      * @throws PluginLoadFailure If a class could not be loaded.
      * @throws DatabaseException
      */
-    public Adapter(String dbConfig) throws PluginLoadFailure, IOException, DatabaseException {
-        logger.info("Adapter parsing Config: " + dbConfig);
-        parseDBConfig(dbConfig);
-        this.dbConfig = dbConfig;
-    }
+//    public Adapter(String dbConfig) throws PluginLoadFailure, IOException, DatabaseException {
+//        logger.info("Adapter parsing Config: " + dbConfig);
+//        parseDBConfig(dbConfig);
+//        this.dbConfig = dbConfig;
+//    }
 
-    public Adapter(String dbConfig, String tenantKey) throws PluginLoadFailure, IOException, DatabaseException {
+    public Adapter(String dbConfig, String tenantKey, String sessionid) throws PluginLoadFailure, IOException, DatabaseException {
         logger.info("Adapter parsing Config: " + dbConfig);
         this.dbConfig = dbConfig;
         try {
-            DistributedTransactionalManager dtm = AdapterHelper.getDTMByAdapterId(this.getDbConfig());
-            String sessionid = dtm.initiateTransaction();
+            //DistributedTransactionalManager dtm = AdapterHelper.getDTMByAdapterId(this.getDbConfig());
+            //String sessionid = dtm.initiateTransaction();
             parseDBConfig(dbConfig, tenantKey,sessionid);
-            dtm.commitTransaction(sessionid);
+            //dtm.commitTransaction(sessionid);
         } catch (Exception ex) {
             logger.severe("Error during parseDBConfig");
             ex.printStackTrace();
@@ -130,14 +130,14 @@ public class Adapter {
         Encryption encrypt = new EncryptionHelperBase(tenantKey);
         remoteDB = new RemoteDBAdminstration(encrypt, adapterid, sessionid);        
 
-        localDB = DatabaseLoader.loadDatabase(localDbConf);
+        localDB = DatabaseLoader.loadDatabase(localDbConf,sessionid);
         reinitializeLocalDB(sessionid);                                
 
     }
 
     // loads the xml config file and creates the local and remote database
     // objects.
-    private void parseDBConfig(String adapterid) throws PluginLoadFailure, IOException, DatabaseException {
+    private void parseDBConfig(String adapterid,String sessionid) throws PluginLoadFailure, IOException, DatabaseException {
         Map<String, String> localDbConf = ConfigParser.getInstance(adapterid).getLocalDatabase();
         Map<String, String> globalOptions = ConfigParser.getInstance(adapterid).getGlobalConfig();
         if (globalOptions.get("logging").equals("false")) {
@@ -158,10 +158,10 @@ public class Adapter {
         }
 
 //        encrypt = new EncryptionHelperBase();
-        remoteDB = new RemoteDBAdminstration(encrypt, adapterid, "atomic");        //TODO   empty sessionid
+        remoteDB = new RemoteDBAdminstration(encrypt, adapterid, sessionid);        //TODO   empty sessionid
 
-        localDB = DatabaseLoader.loadDatabase(localDbConf);
-        reinitializeLocalDB("atomic");                                //TODO check empty sessionid          
+        localDB = DatabaseLoader.loadDatabase(localDbConf,sessionid);
+        reinitializeLocalDB(sessionid);                                //TODO check empty sessionid          
 
     }
 
@@ -183,7 +183,7 @@ public class Adapter {
      * @throws DatabaseException If an error occurs during query execution
      * @throws StandardException
      */
-    public synchronized OutputHandler query(String query) throws ParseException, DatabaseException, StandardException {
+    public synchronized OutputHandler query(String query,String sessionid) throws ParseException, DatabaseException, StandardException {
         //Necessary to remove ; to avoid parser errors with fdb
         if (query.endsWith(";")) {
             query = query.substring(0, query.length() - 1);
@@ -191,10 +191,10 @@ public class Adapter {
 
         ArrayList<ResultSet> results = new ArrayList<ResultSet>();
 
-        logger.info("Adapter . Attempting to det DTM for " + this.getDbConfig());
-        DistributedTransactionalManager dtm = AdapterHelper.getDTMByAdapterId(this.getDbConfig());
+        //logger.info("Adapter . Attempting to det DTM for " + this.getDbConfig());
+        //DistributedTransactionalManager dtm = AdapterHelper.getDTMByAdapterId(this.getDbConfig());
         try {
-            String sessionid = dtm.initiateTransaction();
+            //String sessionid = dtm.initiateTransaction();
 
             List<StatementNode> nodes = null;
             try {
@@ -259,9 +259,9 @@ public class Adapter {
                 }//for statement nodes
             }// nodes != null
 
-            dtm.commitTransaction(sessionid);
+            //dtm.commitTransaction(sessionid);
 
-        } catch (SQLException | SystemException | IllegalStateException | RollbackException | NotSupportedException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(Adapter.class.getName()).log(Level.SEVERE, null, ex);
         }
         return new OutputHandler(results);

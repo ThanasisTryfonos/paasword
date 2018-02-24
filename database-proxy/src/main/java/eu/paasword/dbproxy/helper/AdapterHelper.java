@@ -43,24 +43,24 @@ public class AdapterHelper {
     public static ConcurrentHashMap<String, Adapter> adaptermap = new ConcurrentHashMap<>();
     private static ConcurrentHashMap<String, DistributedTransactionalManager> transactmap = new ConcurrentHashMap<>();
 
-    public static Adapter getAdapter(String adapterid) {
-        Adapter adapter = null;
-        if (!adaptermap.containsKey(adapterid)) { //if adapter is not created
-            synchronized (transactmap) {
-                adapter = initializeAdapter(adapterid, null);
-            }
-        } else { // adapter exists
-            logger.info("AdapterHelper-->Adapter EXISTS. It will be fetched ");
-            adapter = (Adapter) adaptermap.get(adapterid);
-        }
-        return adapter;
-    }//EoM
+//    public static Adapter getAdapter(String adapterid) {
+//        Adapter adapter = null;
+//        if (!adaptermap.containsKey(adapterid)) { //if adapter is not created
+//            synchronized (transactmap) {
+//                adapter = initializeAdapter(adapterid, null);
+//            }
+//        } else { // adapter exists
+//            logger.info("AdapterHelper-->Adapter EXISTS. It will be fetched ");
+//            adapter = (Adapter) adaptermap.get(adapterid);
+//        }
+//        return adapter;
+//    }//EoM
 
-    public static Adapter getAdapter(String adapterid, String tenantKey) {
+    public static Adapter getAdapter(String adapterid, String tenantKey,String sessionid) {
         Adapter adapter = null;
         if (!adaptermap.containsKey(adapterid)) { //if adapter is not created
             synchronized (transactmap) {
-                adapter = initializeAdapter(adapterid, tenantKey);
+                adapter = initializeAdapter(adapterid, tenantKey, sessionid);
             }
         } else { // adapter exists
             logger.info("AdapterHelper-->Adapter EXISTS. It will be fetched ");
@@ -131,14 +131,14 @@ public class AdapterHelper {
         return reslist;
     }//EoM      
 
-    private static Adapter initializeAdapter(String adapterid, String tenantKey) {
+    private static Adapter initializeAdapter(String adapterid, String tenantKey,String sessionid) {
         Adapter adapter = null;
         try {
             logger.info("AdapterHelper-->Adapter DOES NOT exist for: " + adapterid);
-            adapter = new Adapter(adapterid, tenantKey);
+            adapter = new Adapter(adapterid, tenantKey,sessionid);
             //add it to the global map
             adaptermap.put(adapterid, adapter);
-        } catch (PluginLoadFailure | IOException | DatabaseException ex) {
+        } catch (Exception ex) {
             logger.severe(ex.getMessage());
         }
         return adapter;

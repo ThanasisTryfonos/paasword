@@ -36,13 +36,15 @@ public class SDPStatement implements Statement {
 
 	private SDPConnection connection;
 	private SDPResultSet lastResultSet;
+        private String sessionid;
 	/**
 	 * The query timeout. Default in most sql databases is 30 sec.
 	 */
 	private int queryTimeout = 30;
 
-	public SDPStatement(SDPConnection connection) {
+	public SDPStatement(SDPConnection connection,String sessionid) {
 		this.connection = connection;
+                this.sessionid = sessionid;
 	}
 
 	@Override
@@ -55,7 +57,7 @@ public class SDPStatement implements Statement {
 		return false;
 	}
 
-	@Override
+	//@Override
 	public ResultSet executeQuery(String sql) throws SQLException {
 		if (sql == null || sql.isEmpty())
 			throw new SQLException("Malformed SQL!");
@@ -66,7 +68,7 @@ public class SDPStatement implements Statement {
 
 		try {
 			Adapter a = this.connection.getAdapter();
-			ArrayList<ResultSet> result = a.query(sql).getResultSet();
+			ArrayList<ResultSet> result = a.query(sql,sessionid).getResultSet();          
 			if(result == null || result.isEmpty())
 				return null;
 

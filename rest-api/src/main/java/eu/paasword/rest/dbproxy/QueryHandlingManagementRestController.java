@@ -124,11 +124,11 @@ public class QueryHandlingManagementRestController {
         }
 
         logger.info("Getting adapter for " + query.getAppInstanceAPIKey());
-        Adapter adapter = AdapterHelper.getAdapter(query.getAppInstanceAPIKey());
+        Adapter adapter = AdapterHelper.getAdapter(query.getAppInstanceAPIKey(),null,"panos");
         logger.info("Adapters " + query.getAppInstanceAPIKey());
 
         try {
-            OutputHandler queryoutput = adapter.query(query.getQuery());
+            OutputHandler queryoutput = adapter.query(query.getQuery(),"panos");
             List<Map<String, String>> results = QueryHelper.getSerializedOutput(queryoutput);
             logger.info(query.getAppInstanceAPIKey() + "-Query1 '" + query.getQuery() + "' returned #results: " + results.size());
             return new PaaSwordObjectResponse(BasicResponseCode.SUCCESS.name(), Message.QUERY_EXECUTED_SUCCESSFULLY, results);
@@ -143,9 +143,9 @@ public class QueryHandlingManagementRestController {
 
         // TODO Validate user key if exists
 
-        Adapter adapter = AdapterHelper.getAdapter(query.getAppInstanceAPIKey());
+        Adapter adapter = AdapterHelper.getAdapter(query.getAppInstanceAPIKey(),null,"panos");
         try {
-            OutputHandler queryoutput = adapter.query(query.getQuery());
+            OutputHandler queryoutput = adapter.query(query.getQuery(),"panos");
 
             return new PaaSwordObjectResponse(BasicResponseCode.SUCCESS.name(), Message.QUERY_EXECUTED_SUCCESSFULLY, QueryHelper.formatForWeb(queryoutput));
         } catch (ParseException | DatabaseException | StandardException | NullPointerException ex) {

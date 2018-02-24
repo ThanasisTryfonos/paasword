@@ -56,7 +56,7 @@ public class DefaultDBInitializer implements IDBInitializer {
     }
 
     @Override
-    public void clearAll() {
+    public void clearAll(String sessionid) {
         logger.info("clearAll() ");
         clearRemote();
         clearLocal();
@@ -67,7 +67,7 @@ public class DefaultDBInitializer implements IDBInitializer {
      * base.
      */
     @Override
-    public void setUpRemoteDatabase() {
+    public void setUpRemoteDatabase(String sessionid) {
         logger.info("DefaultDBInitializer--> setUpRemoteDatabase()");
         clearRemote();
         //createRemoteDatabase();       //TODO check if ok. In a multicloud environment the DB should be always there and we never drop it
@@ -78,7 +78,7 @@ public class DefaultDBInitializer implements IDBInitializer {
      * Creates the database scheme for the local (application) data base.
      */
     @Override
-    public void setUpLocalDatabase() {
+    public void setUpLocalDatabase(String sessionid) {
         logger.info("DefaultDBInitializer--> setUpLocalDatabase()");
         clearLocal();
         //createLocalDatabase();        //TODO check if ok. In a multicloud environment the DB should be always there and we never drop it
@@ -89,7 +89,7 @@ public class DefaultDBInitializer implements IDBInitializer {
      * This method adds data base entries using the Adapter-API.
      */
     @Override
-    public void createDatabaseEntries() {
+    public void createDatabaseEntries(String sessionid) {
 //        Adapter adapter = AdapterHelper.STD_INSTANCE.get();                             //TODO add support to local also
 //        try {
 //            for (String drop_table : DBData.getDropTableStatements().values()) {

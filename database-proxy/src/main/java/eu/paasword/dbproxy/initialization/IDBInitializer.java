@@ -24,22 +24,22 @@ public interface IDBInitializer {
     /**
      * Create the database and tables on the remote side
      */
-    void setUpRemoteDatabase();
+    void setUpRemoteDatabase(String sessionid);
 
     /**
      * Create the database and tables on the local machine
      */
-    void setUpLocalDatabase();
+    void setUpLocalDatabase(String sessionid);
 
     /**
      * Add data to the remote data base
      */
-    void createDatabaseEntries();
+    void createDatabaseEntries(String sessionid);
 
     /**
      * This method will delete all tables from remote and local data base.
      */
-    void clearAll();
+    void clearAll(String sessionid);
     
     
 }

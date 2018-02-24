@@ -82,100 +82,100 @@ public class TransactionTests {
 //        }
 //    }//EoM    
 
-    public static void executeNonTransactionalScenario(String adapterid, int numofthreads) throws ParseException, StandardException, DatabaseException {
-
-        Adapter adapter = AdapterHelper.getAdapter(adapterid);
-        //insert the first indicative entry which will be subjected to competition
-        TestHelper.INSTANCE.print(adapter.query("delete from country;"));
-        TestHelper.INSTANCE.print(adapter.query("INSERT INTO country (id, name, inhabitants) VALUES ( 1, 'country1', 100 );"));
-        TestHelper.INSTANCE.print(adapter.query("select * from country;"));
-
-        ExecutorService executor = Executors.newWorkStealingPool();
-        List<Callable<Boolean>> callables = new ArrayList<>();
-
-        for (int i = 0; i < numofthreads; i++) {
-            callables.add(() -> {
-                Random random = new Random();
-                String delay = ("" + random.nextInt()).substring(2, 5);
-                logger.info("Thread started with delay: " + delay);
-                int id = 0;
-                int inhabitants = 0;
-                OutputHandler query = adapter.query("select id,inhabitants from country where id = 1");
-                for (ResultSet rs : query.getResultSet()) {
-                    try {
-                        ResultSetMetaData rsmd = rs.getMetaData();
-                        int columnsNumber = rsmd.getColumnCount();
-                        while (rs.next()) {
-                            for (int j = 1; j <= columnsNumber; j++) {
-                                String columnValue = rs.getString(j);
-//                                System.out.printf("%-24s", rsmd.getColumnName(j) + "=" + columnValue);
-                                if (rsmd.getColumnName(j).equalsIgnoreCase("id")) {
-                                    id = Integer.parseInt(columnValue);
-                                }
-                                if (rsmd.getColumnName(j).equalsIgnoreCase("inhabitants")) {
-                                    inhabitants = Integer.parseInt(columnValue);
-                                }
-                            }//for
-//                            System.out.println("\n\n");
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }//for
-
-                //first add
-                int newvalue = inhabitants + new Integer(delay);
-                adapter.query("update country set inhabitants=" + newvalue + " where id = " + id + ";");
-
-                Thread.sleep(new Integer(delay));
-
-                query = adapter.query("select id,inhabitants from country where id = 1");
-                for (ResultSet rs : query.getResultSet()) {
-                    try {
-                        ResultSetMetaData rsmd = rs.getMetaData();
-                        int columnsNumber = rsmd.getColumnCount();
-                        while (rs.next()) {
-                            for (int j = 1; j <= columnsNumber; j++) {
-                                String columnValue = rs.getString(j);
-//                                System.out.printf("%-24s", rsmd.getColumnName(j) + "=" + columnValue);
-                                if (rsmd.getColumnName(j).equalsIgnoreCase("id")) {
-                                    id = Integer.parseInt(columnValue);
-                                }
-                                if (rsmd.getColumnName(j).equalsIgnoreCase("inhabitants")) {
-                                    inhabitants = Integer.parseInt(columnValue);
-                                }
-                            }//for
-//                            System.out.println("\n\n");
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }//for              
-
-                //then delete
-                newvalue = inhabitants - new Integer(delay);
-                adapter.query("update country set inhabitants=" + newvalue + " where id = " + id + ";");
-
-                logger.info("Thread terminated");
-                //return
-                return true;
-            });
-        }//for
-        try {
-            executor.invokeAll(callables)
-                    .stream()
-                    .map(future -> {
-                        try {
-                            return future.get();
-                        } catch (InterruptedException | ExecutionException e) {
-                            throw new IllegalStateException(e);
-                        }
-                    })
-                    .forEach(System.out::println);
-        } catch (InterruptedException ex) {
-            logger.log(Level.SEVERE, null, ex);
-            //TODO add throw
-        }
-    }//EoM
+//    public static void executeNonTransactionalScenario(String adapterid, int numofthreads) throws ParseException, StandardException, DatabaseException {
+//
+//        Adapter adapter = AdapterHelper.getAdapter(adapterid);
+//        //insert the first indicative entry which will be subjected to competition
+//        TestHelper.INSTANCE.print(adapter.query("delete from country;"));
+//        TestHelper.INSTANCE.print(adapter.query("INSERT INTO country (id, name, inhabitants) VALUES ( 1, 'country1', 100 );"));
+//        TestHelper.INSTANCE.print(adapter.query("select * from country;"));
+//
+//        ExecutorService executor = Executors.newWorkStealingPool();
+//        List<Callable<Boolean>> callables = new ArrayList<>();
+//
+//        for (int i = 0; i < numofthreads; i++) {
+//            callables.add(() -> {
+//                Random random = new Random();
+//                String delay = ("" + random.nextInt()).substring(2, 5);
+//                logger.info("Thread started with delay: " + delay);
+//                int id = 0;
+//                int inhabitants = 0;
+//                OutputHandler query = adapter.query("select id,inhabitants from country where id = 1");
+//                for (ResultSet rs : query.getResultSet()) {
+//                    try {
+//                        ResultSetMetaData rsmd = rs.getMetaData();
+//                        int columnsNumber = rsmd.getColumnCount();
+//                        while (rs.next()) {
+//                            for (int j = 1; j <= columnsNumber; j++) {
+//                                String columnValue = rs.getString(j);
+////                                System.out.printf("%-24s", rsmd.getColumnName(j) + "=" + columnValue);
+//                                if (rsmd.getColumnName(j).equalsIgnoreCase("id")) {
+//                                    id = Integer.parseInt(columnValue);
+//                                }
+//                                if (rsmd.getColumnName(j).equalsIgnoreCase("inhabitants")) {
+//                                    inhabitants = Integer.parseInt(columnValue);
+//                                }
+//                            }//for
+////                            System.out.println("\n\n");
+//                        }
+//                    } catch (SQLException e) {
+//                        e.printStackTrace();
+//                    }
+//                }//for
+//
+//                //first add
+//                int newvalue = inhabitants + new Integer(delay);
+//                adapter.query("update country set inhabitants=" + newvalue + " where id = " + id + ";");
+//
+//                Thread.sleep(new Integer(delay));
+//
+//                query = adapter.query("select id,inhabitants from country where id = 1");
+//                for (ResultSet rs : query.getResultSet()) {
+//                    try {
+//                        ResultSetMetaData rsmd = rs.getMetaData();
+//                        int columnsNumber = rsmd.getColumnCount();
+//                        while (rs.next()) {
+//                            for (int j = 1; j <= columnsNumber; j++) {
+//                                String columnValue = rs.getString(j);
+////                                System.out.printf("%-24s", rsmd.getColumnName(j) + "=" + columnValue);
+//                                if (rsmd.getColumnName(j).equalsIgnoreCase("id")) {
+//                                    id = Integer.parseInt(columnValue);
+//                                }
+//                                if (rsmd.getColumnName(j).equalsIgnoreCase("inhabitants")) {
+//                                    inhabitants = Integer.parseInt(columnValue);
+//                                }
+//                            }//for
+////                            System.out.println("\n\n");
+//                        }
+//                    } catch (SQLException e) {
+//                        e.printStackTrace();
+//                    }
+//                }//for              
+//
+//                //then delete
+//                newvalue = inhabitants - new Integer(delay);
+//                adapter.query("update country set inhabitants=" + newvalue + " where id = " + id + ";");
+//
+//                logger.info("Thread terminated");
+//                //return
+//                return true;
+//            });
+//        }//for
+//        try {
+//            executor.invokeAll(callables)
+//                    .stream()
+//                    .map(future -> {
+//                        try {
+//                            return future.get();
+//                        } catch (InterruptedException | ExecutionException e) {
+//                            throw new IllegalStateException(e);
+//                        }
+//                    })
+//                    .forEach(System.out::println);
+//        } catch (InterruptedException ex) {
+//            logger.log(Level.SEVERE, null, ex);
+//            //TODO add throw
+//        }
+//    }//EoM
 
 }//EoC

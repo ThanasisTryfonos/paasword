@@ -57,8 +57,8 @@ public class DistributedTransactionalManager {
     private ConcurrentHashMap<String, Object> xaconmap;          // key=tid_resid  value=XAConnection
     private ConcurrentHashMap<String, Object> transactionsmap;         // key=tid        value=Transaction
     //private ConcurrentHashMap<String, Object> utmmap;         // key=tid        value=utm
-    public static final int TXTIMEOUT = 90;  //seconds
-    public static final int MAXIDLECONTIMEOUT_INSECONDS = 90;  //seconds
+    public static final int TXTIMEOUT = 240;  //seconds
+    public static final int MAXIDLECONTIMEOUT_INSECONDS = 240;  //seconds
     public static final int POOLSIZE = 0;
     private String adapterid;
     private List<ConnectionContext> concontextlist;
