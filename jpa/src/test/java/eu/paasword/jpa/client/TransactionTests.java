@@ -43,9 +43,9 @@ import org.springframework.web.client.RestTemplate;
  *
  * @author ubuntu
  */
-public class Main {
+public class TransactionTests {
 
-    private static final Logger logger = Logger.getLogger(Main.class.getName());
+    private static final Logger logger = Logger.getLogger(TransactionTests.class.getName());
     private static final String PROXYID = "00c34888-50c6-4368-a5da-da2e8e321836";
 
     public static void main(String[] args) throws ProxyInitializationException, InterruptedException {
@@ -53,11 +53,11 @@ public class Main {
         //--------BEFORE all tests restore the country schema to the databases
         
         //-------Do not parallelize it since it is using distributed transaction
-//        for (int i = 0; i < 100; i++)
-            Main.NonTransactionalJPATests(PROXYID);
+//        for (int i = 0; i < 5; i++)
+//            Main.NonTransactionalJPATests(PROXYID);
        
         //-------Transaction Manager               
-//        Main.singleThreadTransactionTest(PROXYID);   
+        TransactionTests.singleThreadTransactionTest(PROXYID);   
 //        Main.multiThreadedTransactionTest(PROXYID, 10 );
         
         //-------Distributed Transaction Manager
@@ -73,14 +73,15 @@ public class Main {
         PaaSwordEntityHandler entityhandler = PaaSwordEntityHandler.getInstance(adapterid);
 
 //        //Query-1 delete everything
-        entityhandler.customQuery("delete from role ;");
+//        entityhandler.customQuery("delete from role ;");
 //
 //        //Query-2 insert
 //        entityhandler.customQuery("INSERT INTO role (id, actor, description) VALUES (1, 'act1', 'desc111');");
 //        entityhandler.customQuery("INSERT INTO role (id, actor, description) VALUES (2, 'act2', 'desc222');");
 //
 //        //Query-3
-//        entityhandler.customQuery("update role set actor='act11' where id=1 ;");
+        entityhandler.customQuery("update role set actor='act11' where id=1 ;");
+//        entityhandler.customQuery("update role set actor='act22' where id=2 ;");
 //
 //        //Query-4
 //        List<Map<String, String>> customQuery = entityhandler.customQuery("select * from role ;");
@@ -110,112 +111,111 @@ ALTER TABLE public.country
         PaaSwordEntityHandler entityhandler = PaaSwordEntityHandler.getInstance(adapterid);
 
         //Test for Transactions        
-        String selq = "select * from country";
-        String insq = "insert into country (id, name, inhabitants) VALUES ( 11, 'country10', 100 );";
-        String updq = "update country set name='country10update',inhabitants=200 where id=10 ; ";
-        String delq = "delete from country; ";
+        String selq = "select * from role";
+        String insq = "insert into role (id, actor, description) VALUES ( 11, 'act11', 'descr11' );";
+        String updq = "update role set actor='act112',description='descr112' where id=11 ; ";
+        String delq = "delete from role; ";
 
         String tid = entityhandler.initiateTransaction();
         logger.info("Transactionid: " + tid);
 
         entityhandler.performCUDQueryDuringTransaction(delq, tid);
-
         entityhandler.performCUDQueryDuringTransaction(insq, tid);
-
-        List<Object[]> results = entityhandler.performRQueryDuringTransaction(selq, tid);
-        logger.info("#results: " + results.size());
-
+        List<Map<String, String>> results = entityhandler.performRQueryDuringTransaction(selq, tid);
+        logger.info("#results: " + results.size() + " "+results.toString());
         entityhandler.performCUDQueryDuringTransaction(updq, tid);
-
+        List<Map<String, String>> results2 = entityhandler.performRQueryDuringTransaction(selq, tid);
+        logger.info("#results: " + results2.size() + " "+results2.toString());
+        
         entityhandler.commitTransaction(tid);
     }//EoM    
 
-    public static void multiThreadedTransactionTest(String adapterid, int numofthreads) throws ProxyInitializationException, InterruptedException {
-
-        PaaSwordEntityHandler entityhandler = PaaSwordEntityHandler.getInstance(adapterid);
-
-        //prepare the environment for clean experiment
-        String inittid = entityhandler.initiateTransaction();
-        entityhandler.performCUDQueryDuringTransaction("delete from country", inittid);
-        entityhandler.performCUDQueryDuringTransaction("INSERT INTO country (id, name, inhabitants) VALUES ( 1, 'country1', 100 );", inittid);
-        entityhandler.commitTransaction(inittid);
-
-        logger.info("Sleeping before all threads start");
-        Thread.sleep(new Integer(2000));
-
-        ExecutorService executor = Executors.newWorkStealingPool();
-        List<Callable<Boolean>> callables = new ArrayList<>();
-
-        for (int i = 0; i < numofthreads; i++) {
-            callables.add(() -> {
-                String tid = entityhandler.initiateTransaction();
-                Random random = new Random();
-                String delay = ("" + random.nextInt()).substring(2, 5);
-                logger.info("+++++>Thread started for tid: " + tid);
-                int id = 1;
-                int inhabitants = 0;
-
-                List<Object[]> selresults = (List<Object[]>) entityhandler.performRQueryDuringTransaction("select id,inhabitants from country where id = 1", tid);
-                logger.info("# results: " + selresults.size());
-                for (Object list : selresults) {
-                    Iterator iterator = ((ArrayList) list).iterator();
-                    id = new Integer((Integer) iterator.next());
-                    inhabitants = new Integer((Integer) iterator.next());
-                }//for
-
-                //first add
-                int newvalue = inhabitants + new Integer(delay);
-                logger.info("sending update tid: " + tid);
-                entityhandler.performCUDQueryDuringTransaction("update country set inhabitants=" + newvalue + " where id = " + id + ";", tid);
-                logger.info("update returned tid: " + tid);
-
-                try {
-                    Thread.sleep(new Integer(delay));
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                    logger.log(Level.SEVERE, null, ex);
-                }
-
-                selresults = (List<Object[]>) entityhandler.performRQueryDuringTransaction("select id,inhabitants from country where id = 1", tid);
-                logger.info("# new results: " + selresults.size());
-                for (Object list : selresults) {
-                    Iterator iterator = ((ArrayList) list).iterator();
-                    id = new Integer((Integer) iterator.next());
-                    inhabitants = new Integer((Integer) iterator.next());
-                }//for
-
-                //then delete
-                newvalue = inhabitants - new Integer(delay);
-                logger.info("sending update tid: " + tid);
-                entityhandler.performCUDQueryDuringTransaction("update country set inhabitants=" + newvalue + " where id = " + id + ";", tid);
-                logger.info("update returned tid: " + tid);
-
-                //commit the transaction
-                logger.info("commiting transaction tid: " + tid);
-                entityhandler.commitTransaction(tid);
-                logger.info("transaction commited  tid: " + tid);
-
-                logger.info("************* Thread terminated " + tid);
-                //return
-                return true;
-            });
-        }//for
-        try {
-            executor.invokeAll(callables)
-                    .stream()
-                    .map(future -> {
-                        try {
-                            return future.get();
-                        } catch (InterruptedException | ExecutionException e) {
-                            throw new IllegalStateException(e);
-                        }
-                    })
-                    .forEach(System.out::println);
-        } catch (InterruptedException ex) {
-            logger.log(Level.SEVERE, null, ex);
-            //TODO add throw
-        }
-    }//EoM
+//    public static void multiThreadedTransactionTest(String adapterid, int numofthreads) throws ProxyInitializationException, InterruptedException {
+//
+//        PaaSwordEntityHandler entityhandler = PaaSwordEntityHandler.getInstance(adapterid);
+//
+//        //prepare the environment for clean experiment
+//        String inittid = entityhandler.initiateTransaction();
+//        entityhandler.performCUDQueryDuringTransaction("delete from country", inittid);
+//        entityhandler.performCUDQueryDuringTransaction("INSERT INTO country (id, name, inhabitants) VALUES ( 1, 'country1', 100 );", inittid);
+//        entityhandler.commitTransaction(inittid);
+//
+//        logger.info("Sleeping before all threads start");
+//        Thread.sleep(new Integer(2000));
+//
+//        ExecutorService executor = Executors.newWorkStealingPool();
+//        List<Callable<Boolean>> callables = new ArrayList<>();
+//
+//        for (int i = 0; i < numofthreads; i++) {
+//            callables.add(() -> {
+//                String tid = entityhandler.initiateTransaction();
+//                Random random = new Random();
+//                String delay = ("" + random.nextInt()).substring(2, 5);
+//                logger.info("+++++>Thread started for tid: " + tid);
+//                int id = 1;
+//                int inhabitants = 0;
+//
+//                List<Object[]> selresults = (List<Object[]>) entityhandler.performRQueryDuringTransaction("select id,inhabitants from country where id = 1", tid);
+//                logger.info("# results: " + selresults.size());
+//                for (Object list : selresults) {
+//                    Iterator iterator = ((ArrayList) list).iterator();
+//                    id = new Integer((Integer) iterator.next());
+//                    inhabitants = new Integer((Integer) iterator.next());
+//                }//for
+//
+//                //first add
+//                int newvalue = inhabitants + new Integer(delay);
+//                logger.info("sending update tid: " + tid);
+//                entityhandler.performCUDQueryDuringTransaction("update country set inhabitants=" + newvalue + " where id = " + id + ";", tid);
+//                logger.info("update returned tid: " + tid);
+//
+//                try {
+//                    Thread.sleep(new Integer(delay));
+//                } catch (InterruptedException ex) {
+//                    ex.printStackTrace();
+//                    logger.log(Level.SEVERE, null, ex);
+//                }
+//
+//                selresults = (List<Object[]>) entityhandler.performRQueryDuringTransaction("select id,inhabitants from country where id = 1", tid);
+//                logger.info("# new results: " + selresults.size());
+//                for (Object list : selresults) {
+//                    Iterator iterator = ((ArrayList) list).iterator();
+//                    id = new Integer((Integer) iterator.next());
+//                    inhabitants = new Integer((Integer) iterator.next());
+//                }//for
+//
+//                //then delete
+//                newvalue = inhabitants - new Integer(delay);
+//                logger.info("sending update tid: " + tid);
+//                entityhandler.performCUDQueryDuringTransaction("update country set inhabitants=" + newvalue + " where id = " + id + ";", tid);
+//                logger.info("update returned tid: " + tid);
+//
+//                //commit the transaction
+//                logger.info("commiting transaction tid: " + tid);
+//                entityhandler.commitTransaction(tid);
+//                logger.info("transaction commited  tid: " + tid);
+//
+//                logger.info("************* Thread terminated " + tid);
+//                //return
+//                return true;
+//            });
+//        }//for
+//        try {
+//            executor.invokeAll(callables)
+//                    .stream()
+//                    .map(future -> {
+//                        try {
+//                            return future.get();
+//                        } catch (InterruptedException | ExecutionException e) {
+//                            throw new IllegalStateException(e);
+//                        }
+//                    })
+//                    .forEach(System.out::println);
+//        } catch (InterruptedException ex) {
+//            logger.log(Level.SEVERE, null, ex);
+//            //TODO add throw
+//        }
+//    }//EoM
 
 //------------------------------------------------------------------------------    
         

@@ -68,7 +68,7 @@ public class RestUtil {
         RestTemplate restTemplate = new RestTemplate();
         PaaSwordObjectResponse< String> result = null;
         try {
-            result = restTemplate.postForObject(uri, "", PaaSwordObjectResponse.class);
+            result = restTemplate.postForObject(uri, appinstanceid, PaaSwordObjectResponse.class);
             logger.info("initiateTransaction returned: " + result.getReturnobject());
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -82,7 +82,7 @@ public class RestUtil {
         RestTemplate restTemplate = new RestTemplate();
         PaaSwordObjectResponse< String> result = null;
         try {
-            result = restTemplate.postForObject(uri, tid, PaaSwordObjectResponse.class);
+            result = restTemplate.postForObject(uri, appinstanceid+"_"+tid, PaaSwordObjectResponse.class);
             logger.info("CommitTransaction returned: " + result.getReturnobject());
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -105,11 +105,11 @@ public class RestUtil {
         return result.getReturnobject();
     }//EoM        
 
-    public static List<Object[]> performRawRQueryDuringTransaction(String uri, String appinstanceid, String query, String tid) throws QueryException {
+    public static List<Map<String, String>> performRawRQueryDuringTransaction(String uri, String appinstanceid, String query, String tid) throws QueryException {
         uri += "rawrtransaction";
         TQuery queryarg = new TQuery(appinstanceid, appinstanceid, query, tid);
         RestTemplate restTemplate = new RestTemplate();
-        PaaSwordObjectResponse<List<Object[]>> result = null;
+        PaaSwordObjectResponse<List<Map<String, String>>> result = null;
         try {
             result = restTemplate.postForObject(uri, queryarg, PaaSwordObjectResponse.class);
         } catch (Exception ex) {

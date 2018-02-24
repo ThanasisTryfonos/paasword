@@ -114,7 +114,7 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- UI dependencies -->
+        <!-- UI dependencies         -->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
@@ -140,11 +140,11 @@
             <artifactId>jQuery-QueryBuilder</artifactId>
             <version>2.3.2</version>
             <exclusions>
-                <exclusion>  <!-- declare the exclusion here -->
+                <exclusion> 
                     <groupId>org.webjars.bower</groupId>
                     <artifactId>jquery-extendext</artifactId>
                 </exclusion>
-                <exclusion>  <!-- declare the exclusion here -->
+                <exclusion>  
                     <groupId>org.webjars.bower</groupId>
                     <artifactId>doT</artifactId>
                 </exclusion>
@@ -180,6 +180,8 @@
             <artifactId>chosen</artifactId>
             <version>1.3.0</version>
         </dependency>
+
+        
         <!-- Framework dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

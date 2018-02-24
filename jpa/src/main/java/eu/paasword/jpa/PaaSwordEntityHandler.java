@@ -379,8 +379,8 @@ public class PaaSwordEntityHandler {
         return returnobject;
     }//EoM    
 
-    public List<Object[]> performRQueryDuringTransaction(String namedQuery, String tid) {
-        List<Object[]> returnobject = null;
+    public List<Map<String, String>> performRQueryDuringTransaction(String namedQuery, String tid) {
+        List<Map<String, String>> returnobject = null;
         try {
             returnobject = RestUtil.performRawRQueryDuringTransaction(uri, appinstnceid, namedQuery, tid);
             logger.info("Executed Part of Transaction: " + namedQuery);
