@@ -135,6 +135,14 @@ public class TransactionSegment {
         this.rid = rid;           
     }
 
+    TransactionSegment(Map<String, List<Column>> schema) {
+        this.schema = schema;
+    }
+
+    TransactionSegment(CachedRowSet cachedrowset) {
+        this.cachedrowset = cachedrowset;
+    }
+
     public int getType() {
         return type;
     }

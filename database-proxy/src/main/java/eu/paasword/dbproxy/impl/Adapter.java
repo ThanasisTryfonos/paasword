@@ -100,13 +100,21 @@ public class Adapter {
 
     public Adapter(String dbConfig, String tenantKey) throws PluginLoadFailure, IOException, DatabaseException {
         logger.info("Adapter parsing Config: " + dbConfig);
-        parseDBConfig(dbConfig, tenantKey);
         this.dbConfig = dbConfig;
+        try {
+            DistributedTransactionalManager dtm = AdapterHelper.getDTMByAdapterId(this.getDbConfig());
+            String sessionid = dtm.initiateTransaction();
+            parseDBConfig(dbConfig, tenantKey,sessionid);
+            dtm.commitTransaction(sessionid);
+        } catch (Exception ex) {
+            logger.severe("Error during parseDBConfig");
+            ex.printStackTrace();
+        }
     }
-
     // loads the xml config file and creates the local and remote database
     // objects.
-    private void parseDBConfig(String adapterid, String tenantKey) throws PluginLoadFailure, IOException, DatabaseException {
+
+    private void parseDBConfig(String adapterid, String tenantKey,String sessionid) throws PluginLoadFailure, IOException, DatabaseException {
         Map<String, String> localDbConf = ConfigParser.getInstance(adapterid).getLocalDatabase();
         Map<String, String> globalOptions = ConfigParser.getInstance(adapterid).getGlobalConfig();
         if (globalOptions.get("logging").equals("false")) {
@@ -120,10 +128,10 @@ public class Adapter {
         }
 
         Encryption encrypt = new EncryptionHelperBase(tenantKey);
-        remoteDB = new RemoteDBAdminstration(encrypt, adapterid, "atomic");        //TODO   empty sessionid
+        remoteDB = new RemoteDBAdminstration(encrypt, adapterid, sessionid);        
 
         localDB = DatabaseLoader.loadDatabase(localDbConf);
-        reinitializeLocalDB("atomic");                                //TODO check empty sessionid
+        reinitializeLocalDB(sessionid);                                
 
     }
 

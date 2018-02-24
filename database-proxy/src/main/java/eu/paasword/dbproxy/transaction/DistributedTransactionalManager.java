@@ -56,9 +56,9 @@ public class DistributedTransactionalManager {
     private ConcurrentHashMap<String, Object> conmap;          // key=tid_resid  value=Connection
     private ConcurrentHashMap<String, Object> xaconmap;          // key=tid_resid  value=XAConnection
     private ConcurrentHashMap<String, Object> transactionsmap;         // key=tid        value=Transaction
-    private ConcurrentHashMap<String, Object> utmmap;         // key=tid        value=utm
-    public static final int TXTIMEOUT = 30;  //seconds
-    public static final int MAXIDLECONTIMEOUT_INSECONDS = 30;  //seconds
+    //private ConcurrentHashMap<String, Object> utmmap;         // key=tid        value=utm
+    public static final int TXTIMEOUT = 90;  //seconds
+    public static final int MAXIDLECONTIMEOUT_INSECONDS = 90;  //seconds
     public static final int POOLSIZE = 0;
     private String adapterid;
     private List<ConnectionContext> concontextlist;
@@ -106,7 +106,7 @@ public class DistributedTransactionalManager {
         conmap = new ConcurrentHashMap<>();
         xaconmap = new ConcurrentHashMap<>();
         transactionsmap = new ConcurrentHashMap<>();
-        utmmap = new ConcurrentHashMap<>();
+        //utmmap = new ConcurrentHashMap<>();
 
         logger.info("Created TransactionManager");
         logger.info("Performing ConnectionPool configuration");
@@ -175,7 +175,7 @@ public class DistributedTransactionalManager {
         conmap = new ConcurrentHashMap<>();
         xaconmap = new ConcurrentHashMap<>();
         transactionsmap = new ConcurrentHashMap<>();
-        utmmap = new ConcurrentHashMap<>();
+        //utmmap = new ConcurrentHashMap<>();
 
         logger.info("Created TransactionManager - Performing ConnectionPool configuration");
 
@@ -287,19 +287,19 @@ public class DistributedTransactionalManager {
     }//EoM      
 
     public void executeCUDQueryDuringTransaction(String query, String resid, String tid) throws SQLException {
-        logger.info("DTManager.executeCUDQueryDuringTransaction--> invoked ");
+        logger.info("DTManager.executeCUDQueryDuringTransaction--> invoked " + tid);
         try {
             BlockingQueue inqueue = getInQueueForTransaction(tid);
             TransactionSegment cudquery = new TransactionSegment(1, query, resid);
             inqueue.put(cudquery);
-            logger.info("DTManager.executeCUDQueryDuringTransaction--> Queued ");
+            logger.info("DTManager.executeCUDQueryDuringTransaction--> Queued " + tid);
         } catch (Exception ex) {
             logger.log(Level.SEVERE, "DTManager.executeCUDQueryDuringTransaction -->  SQL Error during CUD" + ex.getMessage());
         }
     }//EoM           
 
     public List<Object[]> executeRDuringDistributedTransaction(String query, String resid, String tid) throws SQLException {
-        logger.info("TManager.executeRDuringDistributedTransaction--> invoked ");
+        logger.info("DTManager.executeRDuringDistributedTransaction--> invoked " + tid);
         List<Object[]> ret = null;
         try {
             BlockingQueue inqueue = getInQueueForTransaction(tid);
@@ -309,7 +309,7 @@ public class DistributedTransactionalManager {
             BlockingQueue outqueue = getOutQueueForTransaction(tid);
             TransactionSegment message = (TransactionSegment) outqueue.take();
             ret = message.getReturnobjects();
-            logger.info("TManager.executeRDuringDistributedTransaction--> Executed ");
+            logger.info("TManager.executeRDuringDistributedTransaction--> Executed " + tid);
         } catch (Exception ex) {
             logger.log(Level.SEVERE, "TManager.executeRDuringDistributedTransaction -->  SQL Error during R" + ex.getMessage());
         }

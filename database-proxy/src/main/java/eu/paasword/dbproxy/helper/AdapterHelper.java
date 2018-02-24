@@ -70,17 +70,28 @@ public class AdapterHelper {
     }//EoM
 
     public synchronized static DistributedTransactionalManager getDTMByAdapterId(String adapterid) {
+        logger.info("requesting DTM for " + adapterid);
         synchronized (transactmap) {                                                //TODO Transactional Manager has to be booted first
             if (transactmap.get(adapterid) == null) {
                 if (adapterid.equalsIgnoreCase("test")) {
                     initializeTestTransactionManager();
                 } else {
-                    initializeTransactionManager(adapterid);
+                    logger.info("DTM DOES NOT EXIST. I will create one for " + adapterid);
+                    try {
+                        logger.info("DTM will be initialized for adapter ---> " + adapterid);
+                        List<ConnectionContext> concontextlist = new ArrayList();
+                        concontextlist = getContextFromConfiguration(adapterid);
+                        DistributedTransactionalManager tmanager = new DistributedTransactionalManager(adapterid, concontextlist);
+                        transactmap.put(adapterid, tmanager);
+                    } catch (NotSupportedException | SystemException | PropertyVetoException | SQLException ex) {
+                        logger.severe(ex.getMessage());
+                    }
                 }
             }
         }
+        logger.info("returning DTM for " + adapterid);
         return transactmap.get(adapterid);
-    }
+    }//EoM
 
     private static synchronized Adapter initializeTestTransactionManager() {
         Adapter adapter = null;
@@ -94,20 +105,20 @@ public class AdapterHelper {
         return adapter;
     }//EoM       
 
-    private static synchronized void initializeTransactionManager(String adapterid) {
-        try {
-            logger.info("DTM will be initialized for adapter ---> " + adapterid);
-            List<ConnectionContext> concontextlist = new ArrayList();
-            concontextlist = getContextFromConfiguration(adapterid);
-            DistributedTransactionalManager tmanager = new DistributedTransactionalManager(adapterid, concontextlist);
-            transactmap.put(adapterid, tmanager);
-        } catch (NotSupportedException | SystemException | PropertyVetoException | SQLException ex) {
-            logger.severe(ex.getMessage());
-        }
-    }//EoM    
+//    private static synchronized void initializeTransactionManager(String adapterid) {
+//        try {
+//            logger.info("DTM will be initialized for adapter ---> " + adapterid);
+//            List<ConnectionContext> concontextlist = new ArrayList();
+//            concontextlist = getContextFromConfiguration(adapterid);
+//            DistributedTransactionalManager tmanager = new DistributedTransactionalManager(adapterid, concontextlist);
+//            transactmap.put(adapterid, tmanager);
+//        } catch (NotSupportedException | SystemException | PropertyVetoException | SQLException ex) {
+//            logger.severe(ex.getMessage());
+//        }
+//    }//EoM    
 
     public static List<String> getResourcesForAdapter(String adapterid) {
-            List<String> reslist = new ArrayList();
+        List<String> reslist = new ArrayList();
         try {
             logger.info("getting resources for--> for: " + adapterid);
             List<ConnectionContext> concontextlist = getContextFromConfiguration(adapterid);
@@ -119,7 +130,7 @@ public class AdapterHelper {
         }
         return reslist;
     }//EoM      
-    
+
     private static Adapter initializeAdapter(String adapterid, String tenantKey) {
         Adapter adapter = null;
         try {

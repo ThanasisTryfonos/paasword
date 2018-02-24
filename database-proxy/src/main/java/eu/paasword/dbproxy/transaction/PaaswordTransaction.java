@@ -48,6 +48,7 @@ import java.util.logging.Logger;
 import javax.sql.XAConnection;
 import javax.sql.rowset.CachedRowSet;
 import javax.transaction.Transaction;
+import javax.transaction.TransactionManager;
 
 /**
  *
@@ -63,6 +64,7 @@ public class PaaswordTransaction implements Runnable {
     private DistributedTransactionalManager dtm;
     private boolean commited = false;
     private UserTransactionManager utm;
+//    private TransactionManager tm;
     private Transaction tx;
     private ConcurrentHashMap<String, Object> conmap;          // key=tid_resid  value=Connection
     private ConcurrentHashMap<String, Object> xaconmap;          // key=tid_resid  value=XAConnection    
@@ -77,12 +79,16 @@ public class PaaswordTransaction implements Runnable {
         xaconmap = new ConcurrentHashMap<>();
         //initialize transactional manager
         try {
-            //dtm = AdapterHelper.getDTMByAdapterId(adapterid);
+            //this.dtm = AdapterHelper.getDTMByAdapterId(adapterid);
             this.dtm = dtm;
+            //this.dtm = dtm;
+            logger.info("PaaswordTransaction Initiating new Transaction for adapter " + dtm.getAdapterid() + " and tid " + tid);
             //initialize the transaction
             utm = new UserTransactionManager();
-            utm.setTransactionTimeout(DistributedTransactionalManager.TXTIMEOUT);           
+            utm.setTransactionTimeout(DistributedTransactionalManager.TXTIMEOUT);
             utm.setForceShutdown(true);
+//            utm.init();
+            logger.info("PaaswordTransaction Initiation FINISHED SUCCESSFULLY for adapter " + dtm.getAdapterid() + " and tid " + tid);
         } catch (Exception ex) {
             logger.severe("PaaswordTransaction-->Error during the initialization of the transaction" + tid + " \n" + ex.getMessage());
             ex.printStackTrace();
@@ -92,7 +98,14 @@ public class PaaswordTransaction implements Runnable {
     @Override
     public void run() {
         try {
+                                           
             //Start Transaction Manager
+            logger.info("PaaswordTransaction--> run() utm.getStatus(): " + utm.getStatus());
+            utm.setTransactionTimeout(DistributedTransactionalManager.TXTIMEOUT);
+            utm.setForceShutdown(true);
+            utm.setStartupTransactionService(true);
+//            utm.init();
+
             utm.begin();
             tx = utm.getTransaction();
             logger.info("PaaswordTransaction--> New Transaction tx.isNull: " + (tx == null));
@@ -162,20 +175,23 @@ public class PaaswordTransaction implements Runnable {
                         break;
 
                     case 9:     //CachedRowSet executeAtomicRQuery(String query, String rid, StatementFiller filler, List<String> from, List<WhereClause> where, boolean selectAll, boolean updateable)
-                        CachedRowSet outputmessage2 = HandleexecuteAtomicRQuery(message.getQuery(), message.getRid(), message.getFiller(), message.getFromlist(), message.getWhere(), message.isSelectAll(), message.isUpdateable());
+                        CachedRowSet cachedrowset2 = HandleexecuteAtomicRQuery(message.getQuery(), message.getRid(), message.getFiller(), message.getFromlist(), message.getWhere(), message.isSelectAll(), message.isUpdateable());
+                        TransactionSegment outputmessage2 = new TransactionSegment(cachedrowset2);
                         outqueue.put(outputmessage2);
                         break;
 
                     case 10:    //CachedRowSet executeAtomicRQuery(String query, String rid)
-                        CachedRowSet outputmessage3 = HandleexecuteAtomicRQuery(message.getQuery(), message.getRid());
+                        CachedRowSet cachedrowset3 = HandleexecuteAtomicRQuery(message.getQuery(), message.getRid());
+                        TransactionSegment outputmessage3 = new TransactionSegment(cachedrowset3);
                         outqueue.put(outputmessage3);
                         break;
 
                     case 11:    //Map<String, List<Column>> executeLoadSchemaQuery(String rid)
-                        Map<String, List<Column>> outputmessage4 = HandleexecuteLoadSchemaQuery(message.getRid());
+                        Map<String, List<Column>> schema = HandleexecuteLoadSchemaQuery(message.getRid());
+                        TransactionSegment outputmessage4 = new TransactionSegment(schema);
                         outqueue.put(outputmessage4);
-                        break;                        
-                        
+                        break;
+
                     // shoule NEVER be here
                     default:
                         break;
@@ -252,9 +268,9 @@ public class PaaswordTransaction implements Runnable {
             } finally {
                 if (rollback) {
                     logger.severe("PaaswordTransaction.executeAtomicCUDQuery1--> Rollback");
-                    utm.rollback();
+//                    tm.rollback();
                 } else {
-                    utm.commit();
+//                    tm.commit();
                     logger.info("PaaswordTransaction.commitTransaction--> commited status: " + utm.getStatus());
                 }
                 utm.close();
@@ -438,74 +454,73 @@ public class PaaswordTransaction implements Runnable {
     }//EoM        
 
     //Messagetype 11
-    public Map<String, List<Column>> HandleexecuteLoadSchemaQuery(String rid)  throws SQLException{
+    public Map<String, List<Column>> HandleexecuteLoadSchemaQuery(String rid) throws SQLException {
         Map<String, List<Column>> tableToColumns = new TreeMap<String, List<Column>>();
         Connection connection = ((Connection) conmap.get(tid + "_" + rid));
         logger.info("PaaswordTransaction.executeLoadSchemaQuery-->Connection for R: " + tid + " isclosed?: " + connection.isClosed());
-        
-                DatabaseMetaData metadata = connection.getMetaData();
-                String[] types = {"TABLE"};
-                ResultSet tables = metadata.getTables(null, null, "%", types);
 
-                while (tables.next()) {
-                    List<Column> cols = new ArrayList<Column>();
-                    String tableName = tables.getString(3);
+        DatabaseMetaData metadata = connection.getMetaData();
+        String[] types = {"TABLE"};
+        ResultSet tables = metadata.getTables(null, null, "%", types);
 
-                    // That's the only way to get the column names and types
-                    Statement stm = connection.createStatement();
-                    //DEBUG
-                    //System.out.println("tablename: "+tableName);
-                    ResultSet rs = stm.executeQuery("select * from \"" + tableName + "\" limit 1");
+        while (tables.next()) {
+            List<Column> cols = new ArrayList<Column>();
+            String tableName = tables.getString(3);
 
-                    ResultSetMetaData rsMd = rs.getMetaData();
-                    int colCount = rsMd.getColumnCount();
+            // That's the only way to get the column names and types
+            Statement stm = connection.createStatement();
+            //DEBUG
+            //System.out.println("tablename: "+tableName);
+            ResultSet rs = stm.executeQuery("select * from \"" + tableName + "\" limit 1");
 
-                    for (int i = 1; i < colCount + 1; i++) {
-                        String name = rsMd.getColumnName(i);
-                        int type = rsMd.getColumnType(i);
-                        Column c;
-                        switch (type) {
-                            case Types.INTEGER:
-                                c = new Column(Type.Integer, name, -1, false);
-                                cols.add(c);
-                                break;
-                            case Types.DOUBLE:
-                                c = new Column(Type.Double, name, -1, false);
-                                cols.add(c);
-                                break;
-                            case Types.VARCHAR:
-                                c = new Column(Type.String, name, -1, false); // TO check 
-                                cols.add(c);
-                                break;
-                            case Types.DATE:
-                                c = new Column(Type.Date, name, -1, false);
-                                cols.add(c);
-                                break;
-                            case Types.BOOLEAN:
-                                c = new Column(Type.Boolean, name, -1, false);
-                                cols.add(c);
-                                break;
-                            case Types.BIT: //Booleans are Interpretated als Bits sometimes
-                                c = new Column(Type.Boolean, name, -1, false);
-                                cols.add(c);
-                                break;
-                            case Types.CHAR:
-                                c = new Column(Type.String, name, rsMd.getColumnDisplaySize(i), false);
-                                cols.add(c);
-                                break;
-                            default:
-                                throw new UnknownTypeException("Does not support type: " + type);
-                        }
-                    }//for
-                    //close
-                    rs.close();
-                    stm.close();
-                    tableToColumns.put(tableName, cols);
-                }//while
-        
+            ResultSetMetaData rsMd = rs.getMetaData();
+            int colCount = rsMd.getColumnCount();
+
+            for (int i = 1; i < colCount + 1; i++) {
+                String name = rsMd.getColumnName(i);
+                int type = rsMd.getColumnType(i);
+                Column c;
+                switch (type) {
+                    case Types.INTEGER:
+                        c = new Column(Type.Integer, name, -1, false);
+                        cols.add(c);
+                        break;
+                    case Types.DOUBLE:
+                        c = new Column(Type.Double, name, -1, false);
+                        cols.add(c);
+                        break;
+                    case Types.VARCHAR:
+                        c = new Column(Type.String, name, -1, false); // TO check 
+                        cols.add(c);
+                        break;
+                    case Types.DATE:
+                        c = new Column(Type.Date, name, -1, false);
+                        cols.add(c);
+                        break;
+                    case Types.BOOLEAN:
+                        c = new Column(Type.Boolean, name, -1, false);
+                        cols.add(c);
+                        break;
+                    case Types.BIT: //Booleans are Interpretated als Bits sometimes
+                        c = new Column(Type.Boolean, name, -1, false);
+                        cols.add(c);
+                        break;
+                    case Types.CHAR:
+                        c = new Column(Type.String, name, rsMd.getColumnDisplaySize(i), false);
+                        cols.add(c);
+                        break;
+                    default:
+                        throw new UnknownTypeException("Does not support type: " + type);
+                }
+            }//for
+            //close
+            rs.close();
+            stm.close();
+            tableToColumns.put(tableName, cols);
+        }//while
 
         logger.info("PaaswordTransaction-->executeLoadSchemaQuery finished! (" + tid + ")");
-        return tableToColumns;        
+        return tableToColumns;
     }//EoM
-    
+
 }//EoC

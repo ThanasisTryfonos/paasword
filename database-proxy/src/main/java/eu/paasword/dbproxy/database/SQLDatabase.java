@@ -75,6 +75,7 @@ public class SQLDatabase implements Database {
         String user = dbConfig.get("user");
         String pwd = dbConfig.get("password");
         logger.info("SQLDatabase--> Creating new DB for adapter: " + adapterid + "(" + databaseName + ")");
+        
         dtm = AdapterHelper.getDTMByAdapterId(adapterid);
 
         //load the schema once
