@@ -183,7 +183,7 @@ public class Adapter {
      * @throws DatabaseException If an error occurs during query execution
      * @throws StandardException
      */
-    public synchronized OutputHandler query(String query,String sessionid) throws ParseException, DatabaseException, StandardException {
+    public OutputHandler query(String query,String sessionid) throws ParseException, DatabaseException, StandardException {
         //Necessary to remove ; to avoid parser errors with fdb
         if (query.endsWith(";")) {
             query = query.substring(0, query.length() - 1);

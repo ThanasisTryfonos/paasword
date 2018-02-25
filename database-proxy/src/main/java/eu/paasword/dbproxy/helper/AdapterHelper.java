@@ -59,9 +59,9 @@ public class AdapterHelper {
     public static Adapter getAdapter(String adapterid, String tenantKey,String sessionid) {
         Adapter adapter = null;
         if (!adaptermap.containsKey(adapterid)) { //if adapter is not created
-            synchronized (transactmap) {
+            //synchronized (transactmap) {
                 adapter = initializeAdapter(adapterid, tenantKey, sessionid);
-            }
+            //}
         } else { // adapter exists
             logger.info("AdapterHelper-->Adapter EXISTS. It will be fetched ");
             adapter = (Adapter) adaptermap.get(adapterid);
@@ -69,9 +69,9 @@ public class AdapterHelper {
         return adapter;
     }//EoM
 
-    public synchronized static DistributedTransactionalManager getDTMByAdapterId(String adapterid) {
+    public static DistributedTransactionalManager getDTMByAdapterId(String adapterid) {
         logger.info("requesting DTM for " + adapterid);
-        synchronized (transactmap) {                                                //TODO Transactional Manager has to be booted first
+        //synchronized (transactmap) {                                                //TODO Transactional Manager has to be booted first
             if (transactmap.get(adapterid) == null) {
                 if (adapterid.equalsIgnoreCase("test")) {
                     initializeTestTransactionManager();
@@ -88,12 +88,12 @@ public class AdapterHelper {
                     }
                 }
             }
-        }
+        //}
         logger.info("returning DTM for " + adapterid);
         return transactmap.get(adapterid);
     }//EoM
 
-    private static synchronized Adapter initializeTestTransactionManager() {
+    private static Adapter initializeTestTransactionManager() {
         Adapter adapter = null;
         try {
             logger.info("initializeAdapter--> for Testing ");

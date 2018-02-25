@@ -48,7 +48,7 @@ public class DistributedTransactionalManager {
 
     private static final Logger logger = Logger.getLogger(DistributedTransactionalManager.class.getName());
 //    private static DistributedTransactionalManager instance;
-    private ConcurrentHashMap<String, Object> threadmap;     //keeps track of the globar resources that exist  
+//    private ConcurrentHashMap<String, Object> threadmap;     //keeps track of the globar resources that exist  
     private ConcurrentHashMap<String, BlockingQueue<TransactionSegment>> inqueuemap;     //keeps track of the globar resources that exist  
     private ConcurrentHashMap<String, BlockingQueue<TransactionSegment>> outqueuemap;     //keeps track of the globar resources that exist
     private ConcurrentHashMap<String, Object> globalresmap;     //keeps track of the globar resources that exist  
@@ -77,7 +77,7 @@ public class DistributedTransactionalManager {
 //            "root", 
 //            "!r00t!",
 //            "com.mysql.jdbc.jdbc2.optional.MysqlXADataSource"
-//    );
+//    );    
 //--Postgress 
     private final ConnectionContext concontext1 = new ConnectionContext(
             "kit_server_0",
@@ -96,7 +96,7 @@ public class DistributedTransactionalManager {
 
     public DistributedTransactionalManager() throws NotSupportedException, SystemException, PropertyVetoException, SQLException {
         //----- initialize local structures
-        threadmap = new ConcurrentHashMap<>();
+        //threadmap = new ConcurrentHashMap<>();
         inqueuemap = new ConcurrentHashMap<>();
         outqueuemap = new ConcurrentHashMap<>();
         //------
@@ -163,7 +163,7 @@ public class DistributedTransactionalManager {
         this.adapterid = adapterid;
         this.concontextlist = concontextlist;
         //initialize local structures
-        threadmap = new ConcurrentHashMap<>();
+        //threadmap = new ConcurrentHashMap<>();
         inqueuemap = new ConcurrentHashMap<>();
         outqueuemap = new ConcurrentHashMap<>();
         //------------------
@@ -226,21 +226,24 @@ public class DistributedTransactionalManager {
     /**
      * ***************** These methods are called by the REST layer ***
      */
-    public synchronized String initiateTransaction() throws SQLException, SystemException, IllegalStateException, RollbackException, NotSupportedException {
+    public String initiateTransaction() throws SQLException, SystemException, IllegalStateException, RollbackException, NotSupportedException {
         logger.info("DTManager.initiateTransaction--> called");
         Random random = new Random();
-        String tid = ("" + random.nextInt()).substring(1, 6);
-        logger.info("DTManager.initiateTransaction--> asigned tid: " + tid);
-        PaaswordTransaction paastrans = new PaaswordTransaction(adapterid, getResourcesForAdapter(concontextlist), tid,this);
-        Thread thread = new Thread(paastrans);
-        threadmap.put(tid, thread);
+        String tid = ("" + random.nextInt()).substring(1, 6);             
+        logger.info("DTManager.initiateTransaction--> assigned tid: " + tid);
         //Prepare Queues
         BlockingQueue<TransactionSegment> inqueue = new LinkedBlockingQueue<>();
         BlockingQueue<TransactionSegment> outqueue = new LinkedBlockingQueue<>();
-        addQueuesToMap(tid, inqueue, outqueue);
+        addQueuesToMap(tid, inqueue, outqueue);        
+        logger.info("DTManager.initiateTransaction--> Queues prepared for tid: " + tid);
+        PaaswordTransaction paastrans = new PaaswordTransaction(adapterid, getResourcesForAdapter(concontextlist), tid,this);
+        logger.info("DTManager.initiateTransaction--> TransactionThread has been created for tid: " + tid);
+        Thread thread = new Thread(paastrans);
+        //threadmap.put(tid, thread);
+        logger.info("DTManager.initiateTransaction--> Attempting to start Thread for tid: " + tid);
         //start Thread
         thread.start();
-
+        logger.info("DTManager.initiateTransaction--> Thread started for tid: " + tid);
         logger.info("DTManager.initiateTransaction --> Transaction created: " + tid);
         return tid;
     }//EoM       
@@ -279,11 +282,10 @@ public class DistributedTransactionalManager {
             TransactionSegment commitmessage = new TransactionSegment(0);
             inqueue.put(commitmessage);
             logger.info("DTManager.commitTransaction--> Queued ");
-            threadmap.remove(tid);
+            //threadmap.remove(tid);
         } catch (Exception ex) {
             logger.severe("\"DTManager.commitTransaction-->Exception" + ex.getMessage());
         }
-        logger.info("DTManager--> Transaction " + tid + " commited");
     }//EoM      
 
     public void executeCUDQueryDuringTransaction(String query, String resid, String tid) throws SQLException {

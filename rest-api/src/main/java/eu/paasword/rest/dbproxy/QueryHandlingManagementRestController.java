@@ -91,48 +91,24 @@ public class QueryHandlingManagementRestController {
      */
     @RequestMapping(value = "/execute", method = RequestMethod.POST)
     public PaaSwordObjectResponse queryHandling(@RequestBody TQuery query) {
-
-        // TODO Validate user key if exists
-//        if (null != query.getUserKey() && !query.getUserKey().isEmpty()
-//                && null != query.getUserPrincipal() && !query.getUserPrincipal().isEmpty()) {
-//
-//            try {
-//                String appKey = query.getAppInstanceAPIKey();
-//                Application application = ((APIKey) apiKeyService.findByUniqueID(appKey).get()).getApplicationID();
-//
-//                if (null != application) {
-//
-//                    String tenantKey = application.getTenantKey();
-//
-//                    // TODO Call method to check if user key, principal match tenant key
-//                    boolean keyOk = true;
-//                    if (!keyOk) {
-//                        return new PaaSwordObjectResponse(BasicResponseCode.EXCEPTION.name(), Message.DBPROXYERROR, Optional.empty());
-//                    }
-//
-//                } else {
-//                    return new PaaSwordObjectResponse(BasicResponseCode.EXCEPTION.name(), Message.DBPROXYERROR, Optional.empty());
-//                }
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                return new PaaSwordObjectResponse(BasicResponseCode.EXCEPTION.name(), Message.DBPROXYERROR, Optional.empty());
-//            }
-//
-//        }
         try {
             //create transaction
+            logger.info("REST REQUEST+++++++> For TestTransaction ");
             DistributedTransactionalManager dtm = AdapterHelper.getDTMByAdapterId(query.getAppInstanceAPIKey());
             String sessionid = dtm.initiateTransaction();
-            logger.info("Getting adapter for " + query.getAppInstanceAPIKey());
+            logger.info("REST REQUEST+++++++> For TestTransaction "+sessionid+"Getting adapter for " + query.getAppInstanceAPIKey());
             Adapter adapter = AdapterHelper.getAdapter(query.getAppInstanceAPIKey(), null, sessionid);
-//            logger.info("Adapters " + query.getAppInstanceAPIKey());
+            logger.info("REST REQUEST+++++++> For TestTransaction "+sessionid+" querying "+query.getQuery() );
             OutputHandler queryoutput = adapter.query(query.getQuery(), sessionid);
+            List<Map<String, String>> results = QueryHelper.getSerializedOutput(queryoutput);
+            logger.info("REST REQUEST+++++++> For TestTransaction "+sessionid+" "+query.getAppInstanceAPIKey() + "-Query1 '" + query.getQuery() + "' returned #results: " + results.size());
+            logger.info("REST REQUEST+++++++> For TestTransaction "+sessionid+" commiting" );
             //commit
             dtm.commitTransaction(sessionid);
-            //handle results
-            List<Map<String, String>> results = QueryHelper.getSerializedOutput(queryoutput);
-            logger.info(query.getAppInstanceAPIKey() + "-Query1 '" + query.getQuery() + "' returned #results: " + results.size());
+            //handle results            
+            
+            logger.info("REST RESPONSE+++++++> TestTransaction commited: " + sessionid);
+            
             return new PaaSwordObjectResponse(BasicResponseCode.SUCCESS.name(), Message.QUERY_EXECUTED_SUCCESSFULLY, results);
         } catch (Exception ex) {
             Logger.getLogger(QueryHandlingManagementRestController.class.getName()).log(Level.SEVERE, null, ex);

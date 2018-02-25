@@ -201,8 +201,7 @@ public class PaaswordTransaction implements Runnable {
                 logger.severe("PaaswordTransaction->Runtime Exception " + tid + " \n" + ex.getMessage());
                 ex.printStackTrace();
             }
-        }//while not commited (//TODO add timer for thread)        
-        //closeXAConnection();
+        }//while not commited (//TODO add timer for thread)
         logger.info("PaaswordTransaction (" + tid + ") Thread  Exiting.... ");
     }//EoM run
 
